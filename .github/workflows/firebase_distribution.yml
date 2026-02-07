@@ -1,0 +1,68 @@
+name: Firebase App Distribution
+
+on:
+  pull_request:
+    branches: [ "development" ]
+    types: [labeled]
+
+jobs:
+  android:
+    if: github.event.label.name == 'ReadyForTesting'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run Build Runner
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Build APK
+        run: flutter build apk --debug
+
+      - name: Upload Android
+        uses: w9jds/firebase-action@master
+        with:
+          args: appdistribution:distribute build/app/outputs/flutter-apk/app-debug.apk --app ${{ secrets.FIREBASE_APP_ID }} --groups "testers"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+  ios:
+    if: github.event.label.name == 'ReadyForTesting'
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # توليد الملفات للـ iOS برضه
+      - name: Run Build Runner
+        run: dart run build_runner build --delete-conflicting-outputs
+
+
+      - name: Prepare iOS build settings
+        run: flutter build ios --config-only --debug
+
+      - name: Install Pods
+        run: |
+          cd ios
+          pod install
+          cd ..
+
+      - name: Build iOS
+        run: flutter build ios --debug --no-codesign
+
+      - name: Upload iOS
+        uses: w9jds/firebase-action@master
+        with:
+          args: appdistribution:distribute build/ios/iphoneos/Runner.app --app ${{ secrets.FIREBASE_IOS_APP_ID }} --groups "testers"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

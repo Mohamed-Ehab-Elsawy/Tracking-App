@@ -1,0 +1,78 @@
+name: PR Title & Branch Name Validation
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - edited
+      - synchronize
+
+jobs:
+  validate-pr-and-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Show PR & Branch Info
+        run: |
+          echo "🔎 PR title   : ${{ github.event.pull_request.title }}"
+          echo "🌿 Branch name: ${{ github.head_ref }}"
+
+      - name: Validate PR Title
+        run: |
+          set -e
+          TITLE="${{ github.event.pull_request.title }}"
+
+          # Allowed types
+          TYPES="fix|feat|hotfix|release|build|test"
+
+          # Ticket pattern
+          TICKET="(ECOM|APP|POS|MOB|PROJ|[A-Z]{3,10}-[0-9]{1,5}|JIRA-[0-9]+|FA-[0-9]+)"
+
+          # Regex: type(TICKET): task name
+          REGEX="^(${TYPES})\(${TICKET}\):[[:space:]]+[A-Za-z0-9].*$"
+
+          if [[ ! "$TITLE" =~ $REGEX ]]; then
+            echo ""
+            echo "❌ Invalid PR title format"
+            echo "----------------------------------------"
+            echo "Current : $TITLE"
+            echo ""
+            echo "Expected format:"
+            echo "  type(TICKET): task name"
+            echo ""
+            echo "Allowed types: $TYPES"
+            echo "Allowed tickets: ECOM-123, APP-45, JIRA-999, PROJ-8, FA-17"
+            echo ""
+            echo "Valid examples:"
+            echo "  feat(FA-17): Validate PR title action"
+            echo "  fix(APP-145): Handle null user profile"
+            echo "  hotfix(JIRA-918): Fix iOS keyboard overlap"
+            exit 1
+          fi
+
+          echo "✅ PR title format is valid"
+
+      # ────────────────────────────────
+      - name: Validate Branch Name
+        run: |
+          BRANCH="${{ github.head_ref }}"
+          TYPES="feature|fix|hotfix|release|build|test"
+          TICKET="(ECOM|APP|POS|MOB|PROJ|[A-Z]{3,10}-[0-9]{1,5}|JIRA-[0-9]+|FA-[0-9]+)"
+
+          # Regex: feature/TICKET-task-name
+          REGEX="^(${TYPES})/${TICKET}-[a-z0-9-]+$"
+
+          if [[ ! "$BRANCH" =~ $REGEX ]]; then
+            echo "❌ Invalid branch name format"
+            echo "----------------------------------------"
+            echo "Current branch : $BRANCH"
+            echo ""
+            echo "Expected format:"
+            echo "  feature/TICKET-task-name"
+            echo ""
+            echo "Valid example: feature/FA-17-validate-pr-title-action"
+            exit 1
+          fi
+
+          echo "✅ Branch name format is valid"
