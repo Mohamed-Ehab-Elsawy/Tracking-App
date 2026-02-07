@@ -1,0 +1,34 @@
+name: Validate Branch Name
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+
+jobs:
+  validate-branch-name:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate Branch Name
+        run: |
+          echo "Validating branch name..."
+          branch_name=${{ github.head_ref }}
+          
+          # Define the regex pattern for allowed branch names
+          pattern='^(fix|release|feat|hotfix|build|test|feature)\/[a-z0-9-]+$'
+          
+          
+          if [[ "$branch_name" =~ $pattern ]]; then
+            echo "✅ Branch name '$branch_name' is valid."
+          else
+            echo "❌ Branch name '$branch_name' is invalid. Please use the format:"
+            echo "  allowed prefixes: bugfix/, hotfix/, release/, feature/"
+            echo "  example: feature/ECOM-27-Initialize-Project"
+            exit 1
+          fi
