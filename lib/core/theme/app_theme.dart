@@ -20,6 +20,8 @@ abstract class AppTheme {
 
   AppBarTheme get appBarTheme;
 
+  RadioThemeData get radioThemeData;
+
   static AppTheme of(BuildContext context) => _AppThemeProvider.of(context);
 }
 
@@ -58,7 +60,6 @@ class AppThemeProvider extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return _AppThemeProvider(appTheme: appTheme, child: child);
-  }
+  Widget build(BuildContext context) =>
+      _AppThemeProvider(appTheme: appTheme, child: child);
 }

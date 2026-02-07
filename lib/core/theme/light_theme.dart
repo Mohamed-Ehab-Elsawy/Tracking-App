@@ -17,7 +17,34 @@ class LightTheme extends AppTheme {
   @override
   AppColors get colors => const LightColors();
 
-  /// TabBar theme configuration
+  @override
+  RadioThemeData get radioThemeData => RadioThemeData(
+    fillColor: WidgetStateProperty.all(colors.primary),
+    overlayColor: WidgetStateProperty.all(colors.secondary),
+    visualDensity: VisualDensity.compact,
+  );
+
+  @override
+  CheckboxThemeData get checkboxThemeData => CheckboxThemeData(
+    fillColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        return colors.primary;
+      }
+      return colors.secondary;
+    }),
+    overlayColor: WidgetStateProperty.all(colors.secondary),
+    visualDensity: VisualDensity.compact,
+    side: BorderSide(color: colors.grey, width: 2),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+    checkColor: WidgetStateProperty.all(colors.secondary),
+    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  );
+
+  SwitchThemeData get switchThemeData => SwitchThemeData(
+    thumbColor: WidgetStateProperty.all(colors.secondary),
+    trackColor: WidgetStateProperty.all(colors.primary),
+  );
+
   TabBarThemeData get tabBarThemeData => TabBarThemeData(
     labelColor: colors.primary,
     unselectedLabelColor: Colors.grey,
@@ -49,10 +76,7 @@ class LightTheme extends AppTheme {
   @override
   ThemeData get themeData => ThemeData(
     brightness: Brightness.light,
-    switchTheme: SwitchThemeData(
-      thumbColor: WidgetStateProperty.all(colors.secondary),
-      trackColor: WidgetStateProperty.all(colors.primary),
-    ),
+    switchTheme: switchThemeData,
     fontFamily: ThemeConstants.fontFamily,
     useMaterial3: true,
     filledButtonTheme: filledButtonThemeData,
@@ -65,6 +89,7 @@ class LightTheme extends AppTheme {
     primarySwatch: materialColorWithStandardShades(colors.primary),
     appBarTheme: appBarTheme,
     tabBarTheme: tabBarThemeData,
+    radioTheme: radioThemeData,
   );
 
   @override
@@ -117,12 +142,6 @@ class LightTheme extends AppTheme {
     hintStyle: _textStyle(
       AppTypography.medium16,
     ).copyWith(color: colors.secondary[70]),
-  );
-
-  @override
-  CheckboxThemeData get checkboxThemeData => CheckboxThemeData(
-    side: BorderSide(color: colors.grey, width: 2),
-    checkColor: WidgetStateProperty.all(colors.secondary),
   );
 
   @override
