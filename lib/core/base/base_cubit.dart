@@ -11,9 +11,8 @@ abstract class BaseCubit<T, E, N> extends Cubit<T> {
 
   Stream<N> get navigationStream => _streamController.stream;
 
-  void doNavigationAction(N navigationAction) {
-    _streamController.add(navigationAction);
-  }
+  void doNavigationAction(N navigationAction) =>
+      _streamController.add(navigationAction);
 
   @override
   Future<void> close() {

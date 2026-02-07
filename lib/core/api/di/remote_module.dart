@@ -25,7 +25,7 @@ abstract class ApiModule {
     dio.interceptors.add(logger);
 
     final userToken = await AppLocalStorage.getSecuredString(
-      key: AppConstants.userToken,
+      key: AppConstants.userTokenKey,
     );
 
     if (userToken.isNotEmpty) {
@@ -64,7 +64,7 @@ class AuthInterceptor extends Interceptor {
     RequestInterceptorHandler handler,
   ) async {
     final token = await AppLocalStorage.getSecuredString(
-      key: AppConstants.userToken,
+      key: AppConstants.userTokenKey,
     );
 
     if (token.isNotEmpty) {

@@ -38,13 +38,22 @@
     "enterEmail": "Please enter your email",
     "validEmail": "Please enter a valid email address",
     "enterPassword": "Please enter password",
-    "passwordCriteria": "Password must be\nat least 8 characters\nand contain uppercase\nletter number,\nand special character",
-    "passwordValidation": "Password must be\nat least 8 characters\nand contain uppercase\nletter number,\nand special character\n(@$!%*?&)",
+    "passwordCriteria": "Password must be at least 8 characters \ncontains uppercase, letter, number, and special character",
+    "passwordValidation": "Password must be at least 8 characters \ncontains uppercase, letter, number, and special character",
     "enterConfirmPassword": "Please confirm password",
     "confirmPasswordNotMatch": "Passwords do not match",
     "enterPhoneNumber": "Please enter your phone number",
     "validPhoneNumber": "Please enter a valid phone number (10-15 digits)",
     "enterRecipientName": "Please enter recipient name",
     "enterAddress": "Please enter the address"
-  }
+  },
+  "email": "Email",
+  "email_hint": "Enter your email",
+  "password": "Password",
+  "password_hint": "Enter your password",
+  "continue": "Continue",
+  "login": "Login",
+  "remember_me": "Remember me",
+  "forgot_password": "Forgot password?",
+  "logged_in_successfully": "Logged in successfully"
 }
