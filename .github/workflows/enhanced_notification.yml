@@ -1,0 +1,58 @@
+name: Simplified Enhanced Notification
+
+on:
+  push:
+    branches: [ development, master ]
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - edited
+      - synchronize
+      - closed
+
+jobs:
+  slack-notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_CHANNEL: e-commerce-team-1
+          SLACK_USERNAME: CI-Bot 🤖
+          SLACK_ICON_EMOJI: ":rocket:"
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+          SLACK_COLOR: |
+            ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true' && 'good' || 
+                github.event_name == 'pull_request' && github.event.action == 'closed' && 'danger' ||
+                'warning' }}
+
+          SLACK_TITLE: |
+            ${{ github.event_name == 'pull_request' && format('{0} PR: {1}', 
+                github.event.action == 'opened' && '📝 New' ||
+                github.event.action == 'closed' && github.event.pull_request.merged && '✅ Merged' ||
+                github.event.action == 'closed' && '❌ Closed' ||
+                github.event.action == 'reopened' && '🔄 Reopened' ||
+                github.event.action == 'synchronize' && '🔄 Updated' ||
+                '📝', github.event.pull_request.title) || 
+                '🚀 Code Pushed' }}
+
+          SLACK_MESSAGE: |
+            <!channel>
+            👋 *Owner:* <@${{ github.event_name == 'pull_request' && github.event.pull_request.user.login || github.actor }}>
+            *📦 Repository:* `${{ github.repository }}`
+            ${{ github.event_name == 'pull_request' && format('*🌿 Branch:* `{0}` → `{1}`', github.event.pull_request.head.ref, github.event.pull_request.base.ref) || format('*🌿 Branch:* `{0}`', github.ref_name) }}
+
+            ${{ github.event_name == 'pull_request' && format('*📄 PR Title:* {0}', github.event.pull_request.title) }}
+
+            ${{ github.event_name == 'pull_request' && github.event.pull_request.body && format('*📋 Description:* {0}', github.event.pull_request.body) || '' }}
+
+            *🔗 Links:*
+            ${{ github.event_name == 'pull_request' && format('• <{0}|View Pull Request>', github.event.pull_request.html_url) || format('• <https://github.com/{0}/commit/{1}|View Commit>', github.repository, github.sha) }}
+            ${{ github.event_name == 'pull_request' && format('• <https://github.com/{0}/compare/{1}...{2}|View Changes>', github.repository, github.event.pull_request.base.ref, github.event.pull_request.head.ref) || format('• <https://github.com/{0}/tree/{1}|View Branch>', github.repository, github.ref_name) }}
+            • <https://github.com/${{ github.repository }}|Repository Home>
+
+            _Triggered by ${{ github.actor }}_
+
+          MSG_MINIMAL: false

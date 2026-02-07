@@ -1,0 +1,35 @@
+name: Build Sonar Qube
+
+on:
+  push:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - edited
+      - synchronize
+
+jobs:
+  sonarqube:
+    name: SonarQube
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.35.7"
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Generate code
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Run tests with coverage
+        run: |
+          if [ -d "test" ]; then
+            flutter test --coverage
+          else
+            echo "No test directory found. Skipping tests."
+          fi  
