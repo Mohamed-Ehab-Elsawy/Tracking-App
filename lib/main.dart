@@ -4,22 +4,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking_app/core/bloc/my_bloc_observer.dart';
 import 'package:tracking_app/core/constants/asset_constants.dart';
 import 'package:tracking_app/core/constants/localization_constants.dart';
+import 'package:tracking_app/core/di/di.dart';
 import 'package:tracking_app/tracking_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  await configureDependencies();
   Bloc.observer = MyBlocObserver();
-  runApp(
-    EasyLocalization(
-      saveLocale: true,
-      supportedLocales: const [
-        Locale(LocalizationConstants.enLocaleKey),
-        Locale(LocalizationConstants.arLocaleKey),
-      ],
-      path: AssetConstants.translationsPath,
-      fallbackLocale: const Locale(LocalizationConstants.enLocaleKey),
-      child: const TrackingApp(),
-    ),
+  runApp(buildApp());
+}
+
+Widget buildApp() {
+  return EasyLocalization(
+    saveLocale: true,
+    supportedLocales: const [
+      Locale(LocalizationConstants.enLocaleKey),
+      Locale(LocalizationConstants.arLocaleKey),
+    ],
+    path: AssetConstants.translationsPath,
+    fallbackLocale: const Locale(LocalizationConstants.enLocaleKey),
+    child: const TrackingApp(),
   );
 }
