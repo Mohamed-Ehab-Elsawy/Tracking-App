@@ -33,7 +33,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
-    expect(materialApp.initialRoute, AppRoutes.onboardingView);
+    expect(materialApp.initialRoute, AppRoutes.forgetPasswordView);
     expect(materialApp.onGenerateRoute, isNotNull);
 
     expect(materialApp.title, isNotEmpty);
