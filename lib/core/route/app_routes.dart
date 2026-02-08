@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tracking_app/features/auth/presentation/forget_password/forget_password_view.dart';
 
 class AppRoutes {
   // Define app routes
@@ -21,7 +22,7 @@ Route? onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const Scaffold());
 
     case AppRoutes.forgetPasswordView:
-      return MaterialPageRoute(builder: (context) => const Scaffold());
+      return MaterialPageRoute(builder: (context) => ForgetPasswordView());
 
     case AppRoutes.homeView:
       return MaterialPageRoute(builder: (context) => const Scaffold());
