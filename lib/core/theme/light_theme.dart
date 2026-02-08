@@ -140,7 +140,7 @@ class LightTheme extends AppTheme {
       borderSide: BorderSide(color: colors.grey),
     ),
     hintStyle: _textStyle(
-      AppTypography.medium16,
+      AppTypography.regular14,
     ).copyWith(color: colors.secondary[70]),
   );
 
