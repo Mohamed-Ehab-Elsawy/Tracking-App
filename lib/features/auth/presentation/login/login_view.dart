@@ -5,13 +5,15 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:tracking_app/core/di/di.dart';
 import 'package:tracking_app/core/extensions/context_navigation_extension.dart';
 import 'package:tracking_app/core/extensions/context_spacing_extension.dart';
+import 'package:tracking_app/core/presentation/feedback/app_snackbar.dart';
 import 'package:tracking_app/core/route/app_routes.dart';
 import 'package:tracking_app/core/theme/colors/color_extension.dart';
 import 'package:tracking_app/core/theme/dimensions/app_insets.dart';
 import 'package:tracking_app/core/theme/dimensions/app_spacing.dart';
+import 'package:tracking_app/core/theme/typography/typography_extension.dart';
 import 'package:tracking_app/core/validation/form_validator.dart';
 import 'package:tracking_app/features/auth/presentation/login/managers/login_contract.dart';
-import 'package:tracking_app/features/auth/presentation/login/view_model/login_cubit.dart';
+import 'package:tracking_app/features/auth/presentation/login/managers/login_cubit.dart';
 import 'package:tracking_app/features/auth/presentation/widgets/custom_text_form_field.dart';
 import 'package:tracking_app/features/auth/presentation/widgets/remember_me_check_box.dart';
 
@@ -32,21 +34,29 @@ class _LoginViewState extends State<LoginView> {
   @override
   void initState() {
     super.initState();
-    _cubit.navigationStream.listen((event) {
+    _cubit.eventStream.listen((event) {
       switch (event) {
         case LoginNavToHomeEvent():
           if (mounted) context.pushNamed(AppRoutes.homeView);
-        case LoginPopEvent():
-          if (mounted) context.pop();
         case LoginNavToForgetPasswordEvent():
           if (mounted) context.pushNamed(AppRoutes.forgetPasswordView);
+        case LoginFailureEvent():
+          if (mounted) {
+            AppSnackBar.show(
+              context,
+              event.errorMessage ?? 'errors.unknown'.tr(),
+              isError: true,
+            );
+          }
       }
     });
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text('login'.tr())),
+    appBar: AppBar(
+      title: Text('login'.tr(), style: context.textStyles.medium20),
+    ),
     body: Padding(
       padding: AppInsets.screen,
       child: Form(
@@ -78,9 +88,8 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 Spacer(),
                 TextButton(
-                  onPressed: () => _cubit.doNavigationAction(
-                    LoginNavToForgetPasswordEvent(),
-                  ),
+                  onPressed: () =>
+                      _cubit.emitEvent(LoginNavToForgetPasswordEvent()),
                   style: TextButton.styleFrom(
                     foregroundColor: context.colors.surface,
                   ),
@@ -95,7 +104,7 @@ class _LoginViewState extends State<LoginView> {
             BlocBuilder<LoginCubit, LoginViewState>(
               bloc: _cubit,
               builder: (context, state) {
-                if (state.state.isLoading) {
+                if (state.loginState.isLoading) {
                   return SizedBox(
                     height: 50,
                     width: 50,
@@ -111,8 +120,8 @@ class _LoginViewState extends State<LoginView> {
                   return ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        _cubit.doAction(
-                          DriverLoginEvent(
+                        _cubit.doIntent(
+                          DriverLoginIntent(
                             email: _emailText,
                             password: _passwordText,
                             rememberMe: _rememberMe,

@@ -9,9 +9,7 @@ import 'package:tracking_app/core/local/app_local_storage.dart';
 @module
 abstract class ApiModule {
   @lazySingleton
-  ApiClient provideApiClient(Dio dio) {
-    return ApiClient(dio, baseUrl: Env.baseUrl);
-  }
+  ApiClient provideApiClient(Dio dio) => ApiClient(dio, baseUrl: Env.baseUrl);
 
   @preResolve
   @lazySingleton

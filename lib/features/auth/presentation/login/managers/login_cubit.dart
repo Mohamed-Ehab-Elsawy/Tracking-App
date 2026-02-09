@@ -7,29 +7,29 @@ import 'package:tracking_app/features/auth/presentation/login/managers/login_con
 
 @injectable
 class LoginCubit
-    extends
-        BaseCubit<LoginViewState, LoginViewEvent, LoginViewNavigationEvent> {
+    extends BaseCubit<LoginViewState, LoginViewIntent, LoginViewEvent> {
   final DriverLoginUseCase _driverLoginUseCase;
 
   LoginCubit(this._driverLoginUseCase) : super(LoginViewState.init());
 
   @override
-  Future<void> doAction(LoginViewEvent event) async {
-    switch (event) {
-      case DriverLoginEvent():
-        _login(event.email, event.password, event.rememberMe);
+  Future<void> doIntent(LoginViewIntent intent) async {
+    switch (intent) {
+      case DriverLoginIntent():
+        _login(intent.email, intent.password, intent.rememberMe);
     }
   }
 
   _login(String email, String password, bool rememberMe) async {
-    emit(state.copyWith(BaseState.loading()));
+    emit(state.copyWith(loginState: BaseState.loading()));
     var result = await _driverLoginUseCase.call(email, password, rememberMe);
     switch (result) {
       case Success<String>():
-        emit(state.copyWith(BaseState.loaded(result.data)));
-        doNavigationAction(LoginNavToHomeEvent());
+        emit(state.copyWith(loginState: BaseState.loaded(result.data)));
+        emitEvent(LoginNavToHomeEvent());
       case Failure<String>():
-        emit(state.copyWith(BaseState.error(result.errorMessage)));
+        emit(state.copyWith(loginState: BaseState.error(result.errorMessage)));
+        emitEvent(LoginFailureEvent(errorMessage: result.errorMessage));
     }
   }
 }

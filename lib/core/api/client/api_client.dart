@@ -12,6 +12,6 @@ abstract class ApiClient {
   @factoryMethod
   factory ApiClient(Dio dio, {String? baseUrl}) = _ApiClient;
 
-  @GET(ApiEndPointsConstants.login)
+  @POST(ApiEndPointsConstants.login)
   Future<DriverLoginResponseDTO> login(@Body() DriverLoginRequestDTO request);
 }

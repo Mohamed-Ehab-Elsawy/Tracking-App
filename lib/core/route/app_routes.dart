@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking_app/core/di/di.dart';
 import 'package:tracking_app/features/auth/presentation/login/login_view.dart';
-import 'package:tracking_app/features/auth/presentation/login/view_model/login_cubit.dart';
+import 'package:tracking_app/features/auth/presentation/login/managers/login_cubit.dart';
 
 class AppRoutes {
   // Define app routes
@@ -22,10 +22,7 @@ Route? onGenerateRoute(RouteSettings settings) {
       var cubit = getIt.get<LoginCubit>();
       return MaterialPageRoute(
         builder: (context) =>
-            BlocProvider(
-              create: (context) => cubit,
-              child: const LoginView(),
-            ),
+            BlocProvider(create: (context) => cubit, child: const LoginView()),
       );
 
     case AppRoutes.applyView:

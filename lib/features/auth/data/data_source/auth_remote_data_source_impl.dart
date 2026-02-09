@@ -16,9 +16,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<Result<String>> login(String email, String password) async =>
       executeApi(() async {
         var request = DriverLoginRequestDTO(email, password);
-        var response = await _apiClient
-            .login(request)
-            .then((value) => value.token ?? "");
-        return response;
+        var response = await _apiClient.login(request);
+        return response.token ?? '';
       });
 }
