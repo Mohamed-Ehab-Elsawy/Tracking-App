@@ -46,5 +46,9 @@
     "validPhoneNumber": "Please enter a valid phone number (10-15 digits)",
     "enterRecipientName": "Please enter recipient name",
     "enterAddress": "Please enter the address"
-  }
+  },
+  "welcomeTo": "Welcome to",
+  "floweryRiderApp": "Flowery Rider App",
+  "login": "Login",
+  "apply": "Apply"
 }

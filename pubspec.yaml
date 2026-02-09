@@ -72,7 +72,7 @@ flutter:
     - assets/fonts/
     - assets/icons/
     - assets/images/
-    - assets/jsons/
+    - assets/json/
     - assets/translations/
 
   fonts:

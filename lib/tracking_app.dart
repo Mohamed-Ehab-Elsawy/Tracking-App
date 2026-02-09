@@ -19,7 +19,7 @@ class TrackingApp extends StatelessWidget {
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
-        initialRoute: AppRoutes.loginView,
+        initialRoute: AppRoutes.onboardingView,
         onGenerateRoute: onGenerateRoute,
       ),
     );
