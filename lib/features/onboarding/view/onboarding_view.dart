@@ -13,30 +13,32 @@ class OnboardingView extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
 
-          children: [
-            Image.asset(AssetConstants.deliveryMan, fit: BoxFit.contain),
-            Text("welcomeTo".tr(), style: context.textStyles.medium20),
-            Text("floweryRiderApp".tr(), style: context.textStyles.medium20),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              key: const Key(KeysConstants.loginKey),
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.loginView);
-              },
-              child: Text("login".tr()),
-            ),
-            const SizedBox(height: 20),
-            OutlinedButton(
-              key: const Key(KeysConstants.applyKey),
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.applyView);
-              },
-              child: Text("apply".tr()),
-            ),
-          ],
+            children: [
+              Image.asset(AssetConstants.deliveryMan, fit: BoxFit.contain),
+              Text("welcomeTo".tr(), style: context.textStyles.medium20),
+              Text("floweryRiderApp".tr(), style: context.textStyles.medium20),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                key: const Key(KeysConstants.loginKey),
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.loginView);
+                },
+                child: Text("login".tr()),
+              ),
+              const SizedBox(height: 20),
+              OutlinedButton(
+                key: const Key(KeysConstants.applyKey),
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.applyView);
+                },
+                child: Text("apply".tr()),
+              ),
+            ],
+          ),
         ),
       ),
     );

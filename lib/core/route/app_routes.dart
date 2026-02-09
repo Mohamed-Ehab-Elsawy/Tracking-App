@@ -7,7 +7,7 @@ class AppRoutes {
   // Define app routes
   static const String onboardingView = '/onboarding_view';
   static const String loginView = '/login_view';
-  static const String applyView = '/signup_view';
+  static const String applyView = '/apply_view';
   static const String forgetPasswordView = '/forget_password_view';
   static const String homeView = '/home_view';
 }

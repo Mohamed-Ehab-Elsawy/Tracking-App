@@ -22,6 +22,9 @@ void main() {
       ),
     );
     expect(find.byType(OnboardingView), findsOneWidget);
+    expect(find.byType(SingleChildScrollView), findsOneWidget);
+    expect(find.byType(Column), findsOneWidget);
+    expect(find.byType(SizedBox), findsNWidgets(2));
     expect(find.byType(Image), findsOneWidget);
     expect(find.byType(Text), findsNWidgets(4));
     expect(find.text('welcomeTo'), findsOneWidget);
@@ -42,6 +45,9 @@ void main() {
       ),
     );
     expect(find.byType(OnboardingView), findsOneWidget);
+    expect(find.byType(SingleChildScrollView), findsOneWidget);
+    expect(find.byType(Column), findsOneWidget);
+    expect(find.byType(SizedBox), findsNWidgets(2));
     expect(find.byType(Image), findsOneWidget);
     expect(find.byType(Text), findsNWidgets(4));
     expect(find.text('welcomeTo'), findsOneWidget);
@@ -64,6 +70,9 @@ void main() {
       ),
     );
     expect(find.byType(OnboardingView), findsOneWidget);
+    expect(find.byType(SingleChildScrollView), findsOneWidget);
+    expect(find.byType(Column), findsOneWidget);
+    expect(find.byType(SizedBox), findsNWidgets(2));
     expect(find.byType(Image), findsOneWidget);
     expect(find.byType(Text), findsNWidgets(4));
     expect(find.text('welcomeTo'), findsOneWidget);
