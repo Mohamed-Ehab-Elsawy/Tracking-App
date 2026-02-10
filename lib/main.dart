@@ -6,9 +6,12 @@ import 'package:tracking_app/core/constants/asset_constants.dart';
 import 'package:tracking_app/core/constants/localization_constants.dart';
 import 'package:tracking_app/tracking_app.dart';
 
+import 'core/di/di.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  await configureDependencies();
   Bloc.observer = MyBlocObserver();
   runApp(
     EasyLocalization(
