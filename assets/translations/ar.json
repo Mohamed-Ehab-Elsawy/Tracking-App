@@ -47,5 +47,8 @@
     "validPhoneNumber": "يرجى إدخال رقم هاتف صحيح (من 10 إلى 15 رقم)",
     "enterRecipientName": "يرجى إدخال اسم المستلم",
     "enterAddress": "يرجى إدخال العنوان"
-  }
+  },
+  "logout": "تسجيل الخروج",
+  "confirm_logout_message": "تـأكيد تسجيل الخـروج!!",
+  "cancel": "إلغاء"
 }

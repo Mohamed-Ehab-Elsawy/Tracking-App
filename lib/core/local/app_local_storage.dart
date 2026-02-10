@@ -93,6 +93,11 @@ class AppLocalStorage {
     await _secureStorage.delete(key: key);
   }
 
+  static void clearAll() {
+    clearAllData();
+    clearAllSecuredData();
+  }
+
   // --- Test helpers ---
   @visibleForTesting
   static set prefsForTest(SharedPreferences prefs) => _prefs = prefs;
