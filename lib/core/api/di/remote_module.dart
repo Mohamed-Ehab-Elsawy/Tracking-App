@@ -67,9 +67,13 @@ class AuthInterceptor extends Interceptor {
       key: AppConstants.userToken,
     );
 
-    if (token.isNotEmpty) {
-      options.headers['Authorization'] = 'Bearer $token';
-    }
+    //  if (token.isNotEmpty) {
+    options.headers['Authorization'] =
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkcml2ZXIiOiI2OTg3NmJkYmUzNjRlZjYxNDA1MTVmYWYiLCJpYXQiOjE3NzA1NzI1OTJ9.CzhqdVnt2MyfjQkfm0UAfHFs_9pYwe3tHVCik4Y6ARg';
+    options.headers['Content-Type'] = 'multipart/form-data';
+    options.contentType = 'multipart/form-data';
+
+    //}
 
     super.onRequest(options, handler);
   }
