@@ -46,5 +46,27 @@
     "validPhoneNumber": "Please enter a valid phone number (10-15 digits)",
     "enterRecipientName": "Please enter recipient name",
     "enterAddress": "Please enter the address"
-  }
+  },
+  "language": "Language",
+  "English": "English",
+  "Arabic": "Arabic",
+  "logout": "Logout",
+  "profile": "Profile",
+  "Vehicle info":   "Vehicle info",
+  "something went wrong": "something went wrong",
+  "Change Language": "Change Language",
+  "gallery": "gallery",
+  "camera": "camera",
+  "Edit profile": "Edit profile",
+  "Profile updated successfully": "Profile updated successfully",
+  "Photo uploaded successfully": "Photo uploaded successfully",
+  "First name": "First name",
+  "Last name": "Last name",
+  "Email":  "Email",
+  "Phone number": "Phone number",
+  "Password": "Password",
+  "*******": "*******",
+  "Change": "Change",
+  "update": "update",
+  "Profile":  "Profile"
 }

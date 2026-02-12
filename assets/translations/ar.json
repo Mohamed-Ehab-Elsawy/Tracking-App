@@ -47,5 +47,26 @@
     "validPhoneNumber": "يرجى إدخال رقم هاتف صحيح (من 10 إلى 15 رقم)",
     "enterRecipientName": "يرجى إدخال اسم المستلم",
     "enterAddress": "يرجى إدخال العنوان"
-  }
+  },
+  "language": "اللغة",
+  "English": "الإنجليزية",
+  "Arabic": "العربية",
+  "logout": "تسجيل الخروج",
+  "profile": "الملف الشخصي",
+  "Vehicle info": "معلومات السيارة",
+  "something went wrong": "حدث خطأ ما",
+  "Change Language": "تغيير اللغة",
+  "gallery": "المعرض",
+  "camera": "الكاميرا",
+  "Edit profile": "تعديل الملف الشخصي",
+  "Profile updated successfully": "تم تحديث الملف الشخصي بنجاح",
+  "Photo uploaded successfully": "تم رفع الصورة بنجاح",
+  "First name": "الاسم الأول",
+  "Last name": "اسم العائلة",
+  "Email": "البريد الإلكتروني",
+  "Phone number": "رقم الهاتف",
+  "Password": "كلمة المرور",
+  "*******": "*******",
+  "Change": "تغيير",
+  "Profile": "الملف الشخصي"
 }

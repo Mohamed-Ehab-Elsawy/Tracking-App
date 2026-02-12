@@ -27,7 +27,7 @@ class DriverCard extends StatelessWidget {
       color: context.colors.backgroundColor,
       elevation: 2,
       child: Padding(
-        padding: EdgeInsetsGeometry.all(12),
+        padding: EdgeInsets.all(8.0),
         child: Row(
           children: [
             CustomImageView(
@@ -36,19 +36,31 @@ class DriverCard extends StatelessWidget {
               height: 80,
               radius: const BorderRadius.all(Radius.circular(40)),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "${firstName ?? ""} ${lastName ?? ""}",
-                  style: context.textStyles.medium20.copyWith(fontSize: 16),
-                ),
-                Text(email ?? "", style: context.textStyles.regular16),
-                Text(phone ?? "", style: context.textStyles.regular16),
-              ],
+            SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${firstName ?? ""} ${lastName ?? ""}",
+                    style: context.textStyles.medium20.copyWith(fontSize: 16),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    email ?? "",
+                    style: context.textStyles.regular16,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    phone ?? "",
+                    style: context.textStyles.regular16,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
-            Spacer(),
+            const SizedBox(width: 8),
             InkWell(onTap: onTap, child: Icon(Icons.arrow_forward_ios)),
           ],
         ),

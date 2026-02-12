@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tracking_app/core/theme/colors/color_extension.dart';
 import 'package:tracking_app/core/theme/typography/typography_extension.dart';
@@ -29,7 +30,7 @@ class VehicleInfoCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Vehicle info",
+                  "Vehicle info".tr(),
                   style: context.textStyles.medium20.copyWith(fontSize: 16),
                 ),
                 Text(vehicleType ?? "", style: context.textStyles.regular16),
