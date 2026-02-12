@@ -25,7 +25,7 @@ class EmailVerificationResponseDto extends Equatable {
 
 @JsonSerializable()
 class VerificationCodeResponseDto extends Equatable {
-  const VerificationCodeResponseDto(this.status);
+  const VerificationCodeResponseDto({this.status});
 
   factory VerificationCodeResponseDto.fromJson(Map<String, dynamic> json) {
     return _$VerificationCodeResponseDtoFromJson(json);
