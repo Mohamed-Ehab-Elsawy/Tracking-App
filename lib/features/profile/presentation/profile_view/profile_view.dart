@@ -53,7 +53,9 @@ class _ProfileViewState extends State<ProfileView> {
               context,
               '/update_driver_view',
               arguments: profileViewModel.state.driverData?.data,
-            );
+            ).then((_) {
+              context.read<ProfileViewModel>().doIntent(GetDriverDataEvent());
+            });
           }
         case OnVehicleInfoClickIntent():
           {
@@ -72,12 +74,13 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     AppLanguage currentLanguage = AppLanguage.values.firstWhere(
-      (lang) => lang.locale.languageCode == context.locale.languageCode,
+      (lang) => lang.locale.languageCode == (context.locale.languageCode),
+      orElse: () => AppLanguage.english,
     );
     final profileViewModel = context.read<ProfileViewModel>();
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile", style: context.textStyles.medium20),
+        title: Text("Profile", style: context.textStyles.medium20).tr(),
         actions: [
           InkWell(
             child: Padding(
@@ -100,7 +103,10 @@ class _ProfileViewState extends State<ProfileView> {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state.driverData?.requestState ==
                     RequestState.error) {
-                  return Text(state.driverData?.errorMessage ?? "");
+                  return Text(
+                    state.driverData?.errorMessage ??
+                        "something went wrong".tr(),
+                  );
                 } else {
                   var state = profileViewModel.state.driverData?.data;
                   return Column(
