@@ -43,7 +43,6 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # توليد الملفات للـ iOS برضه
       - name: Run Build Runner
         run: dart run build_runner build --delete-conflicting-outputs
 
