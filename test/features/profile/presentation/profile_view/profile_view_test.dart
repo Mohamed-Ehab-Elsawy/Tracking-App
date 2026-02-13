@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,11 +11,13 @@ import 'package:tracking_app/core/bloc/base_state.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/core/theme/app_theme.dart';
 import 'package:tracking_app/core/theme/light_theme.dart';
+import 'package:tracking_app/features/localization/view/language_bottom_sheet.dart';
 import 'package:tracking_app/features/profile/domain/entity/driver_entity.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view/profile_view.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view/widget/driver_card.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view/widget/main_profile_item.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view/widget/vehicle_info_card.dart';
+import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_events.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_states.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_view_model.dart';
 import 'profile_view_test.mocks.dart';
@@ -44,7 +48,10 @@ void main() async {
     provideDummy<Result<DriverEntity>>(Success<DriverEntity>(entity));
     when(cubit.stream).thenAnswer((_) => const Stream.empty());
     when(cubit.doIntent(any)).thenReturn(null);
-    when(cubit.uiEvents).thenAnswer((_) => const Stream.empty());
+    when(cubit.doEvent(any)).thenReturn(null);
+    when(
+      cubit.uiEvents,
+    ).thenAnswer((_) => const Stream<ProfileUiEvents>.empty());
   });
   Widget buildTestableWidget() {
     return EasyLocalization(
@@ -129,96 +136,72 @@ void main() async {
     expect(find.text("logout"), findsOneWidget);
     expect(find.text("something went wrong"), findsOneWidget);
   });
-  // testWidgets('test on language click', (WidgetTester tester) async {
-  //   when(cubit.state).thenReturn(
-  //     ProfileStates(
-  //       driverData: BaseState(requestState: RequestState.loaded, data: entity),
-  //     ),
-  //   );
-  //
-  //   await tester.pumpWidget(buildTestableWidget());
-  //   await tester.pumpAndSettle();
-  //
-  //   final languageItemFinder = find.byWidgetPredicate(
-  //         (widget) => widget is MainProfileItem && widget.title == 'language',
-  //   );
-  //   expect(languageItemFinder, findsOneWidget);
-  //
-  //
-  //   await tester.tap(languageItemFinder);
-  //   await tester.pump();
-  //   await tester.pump(const Duration(seconds: 1));
-  //
-  //
-  //   expect(find.byType(BottomSheet), findsOneWidget);
-  //   expect(find.byType(LanguageBottomSheet), findsOneWidget);
-  // });
+  testWidgets('test language click shows bottom sheet', (
+    WidgetTester tester,
+  ) async {
+    // arrange
+    final streamController = StreamController<ProfileUiEvents>.broadcast();
 
-  // testWidgets('test on logout click', (WidgetTester tester) async {
-  //   when(cubit.state).thenReturn(
-  //     ProfileStates(
-  //       driverData: BaseState(requestState: RequestState.loaded, data: entity),
-  //     ),
-  //   );
-  //   await tester.pumpWidget(buildTestableWidget());
-  //   await tester.pump();
-  //   await tester.pump(const Duration(seconds: 1));
-  //   final logoutItemFinder = find.byWidgetPredicate(
-  //         (widget) =>
-  //     widget is MainProfileItem &&
-  //         widget.title == 'logout',
-  //   );
-  //   expect(logoutItemFinder, findsOneWidget);
-  //
-  //   await tester.tap(logoutItemFinder);
-  //   await tester.pump();
-  //   await tester.pump(const Duration(seconds: 1));
-  //
-  //   expect(find.byType(AlertDialog), findsOneWidget);
-  //   expect(find.text("Are you sure you want to logout?"), findsOneWidget);
-  //   expect(find.text("Yes"), findsOneWidget);
-  //   expect(find.text("No"), findsOneWidget);
-  //
-  //   await tester.tap(find.text("Yes"));
-  //   await tester.pumpAndSettle();
-  // });
-  // testWidgets('test on profile click', (WidgetTester tester) async {
-  //   when(cubit.state).thenReturn(
-  //     ProfileStates(
-  //       driverData: BaseState(requestState: RequestState.loaded, data: entity),
-  //     ),
-  //   );
-  //
-  //   await tester.pumpWidget(buildTestableWidget());
-  //   await tester.pumpAndSettle();
-  //
-  //   final driverCardFinder = find.byType(DriverCard);
-  //   expect(driverCardFinder, findsOneWidget);
-  //
-  //   await tester.tap(driverCardFinder);
-  //   await tester.pumpAndSettle();
-  //   verify(cubit.doEvent(argThat(isA<OnProfileClickIntent>()))).called(1);
-  // });
+    when(cubit.state).thenReturn(
+      ProfileStates(
+        driverData: BaseState(requestState: RequestState.loaded, data: entity),
+      ),
+    );
 
-  // testWidgets('test on vehicle info click', (WidgetTester tester) async {
-  //   when(cubit.state).thenReturn(
-  //     ProfileStates(
-  //       driverData: BaseState(requestState: RequestState.loaded, data: entity),
-  //     ),
-  //   );
-  //
-  //   await tester.pumpWidget(buildTestableWidget());
-  //   await tester.pumpAndSettle();
-  //
-  //   final vehicleInfoCardFinder = find.byType(VehicleInfoCard);
-  //   expect(vehicleInfoCardFinder, findsOneWidget);
-  //
-  //   await tester.tap(vehicleInfoCardFinder);
-  //   await tester.pumpAndSettle();
-  //   verify(cubit.doEvent(argThat(isA<OnVehicleInfoClickIntent>()))).called(1);
-  // });
+    when(cubit.uiEvents).thenAnswer((_) => streamController.stream);
+    await tester.pumpWidget(buildTestableWidget());
+    await tester.pump(const Duration(seconds: 5));
+    streamController.add(OnLanguageClickIntent());
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 5));
+    expect(find.byType(LanguageBottomSheet), findsOneWidget);
+    await streamController.close();
+  });
+  testWidgets('test on driver info click', (WidgetTester tester) async {
+    // arrange
+    final streamController = StreamController<ProfileUiEvents>.broadcast();
 
-  // testWidgets('test on notification click', (WidgetTester tester) async {
-  //
-  // });
+    when(cubit.state).thenReturn(
+      ProfileStates(
+        driverData: BaseState(requestState: RequestState.loaded, data: entity),
+      ),
+    );
+
+    when(cubit.uiEvents).thenAnswer((_) => streamController.stream);
+    await tester.pumpWidget(buildTestableWidget());
+    await tester.pump(const Duration(seconds: 5));
+    final arrowIcon = find.descendant(
+      of: find.byType(DriverCard),
+      matching: find.byIcon(Icons.arrow_forward_ios),
+    );
+
+    expect(arrowIcon, findsOneWidget);
+    await tester.tap(arrowIcon);
+    await tester.pump(const Duration(seconds: 5));
+    verify(cubit.doEvent(argThat(isA<OnProfileClickIntent>()))).called(1);
+    await streamController.close();
+  });
+  testWidgets('test on vehicle info click', (WidgetTester tester) async {
+    final streamController = StreamController<ProfileUiEvents>.broadcast();
+
+    when(cubit.state).thenReturn(
+      ProfileStates(
+        driverData: BaseState(requestState: RequestState.loaded, data: entity),
+      ),
+    );
+
+    when(cubit.uiEvents).thenAnswer((_) => streamController.stream);
+    await tester.pumpWidget(buildTestableWidget());
+    await tester.pump(const Duration(seconds: 5));
+    final arrowIcon = find.descendant(
+      of: find.byType(VehicleInfoCard),
+      matching: find.byIcon(Icons.arrow_forward_ios),
+    );
+
+    expect(arrowIcon, findsOneWidget);
+    await tester.tap(arrowIcon);
+    await tester.pump(const Duration(seconds: 5));
+    verify(cubit.doEvent(argThat(isA<OnVehicleInfoClickIntent>()))).called(1);
+    await streamController.close();
+  });
 }

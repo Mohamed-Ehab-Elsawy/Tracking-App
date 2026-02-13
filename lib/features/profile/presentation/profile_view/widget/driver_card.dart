@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tracking_app/core/presentation/reusable_widgets/custom_image_view.dart';
 import 'package:tracking_app/core/theme/colors/color_extension.dart';
@@ -31,7 +32,7 @@ class DriverCard extends StatelessWidget {
         child: Row(
           children: [
             CustomImageView(
-              imagePath: photo ?? "assets/image/splash_android_12.png",
+              imagePath: photo ?? "assets/images/splash_android_12.png",
               width: 80,
               height: 80,
               radius: const BorderRadius.all(Radius.circular(40)),
@@ -43,17 +44,17 @@ class DriverCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${firstName ?? ""} ${lastName ?? ""}",
+                    "${firstName ?? "unknown name".tr()} ${lastName ?? ""}",
                     style: context.textStyles.medium20.copyWith(fontSize: 16),
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    email ?? "",
+                    email ?? "unknown email".tr(),
                     style: context.textStyles.regular16,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    phone ?? "",
+                    phone ?? "unknown phone".tr(),
                     style: context.textStyles.regular16,
                     overflow: TextOverflow.ellipsis,
                   ),
