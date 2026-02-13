@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tracking_app/core/api/client/api_client.dart';
@@ -17,15 +19,24 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<Result<ApplyResponse>> apply(
     ApplyRequest applyRequest, {
-    required MultipartFile? nidImage,
-    required MultipartFile? vehicleLicense,
-  }) {
+    required File? nidImage,
+    required File? vehicleLicense,
+  }) async {
+    final nidMultipart = await MultipartFile.fromFile(
+      nidImage?.path ?? '',
+
+      filename: nidImage?.path.split('/').last,
+    );
+    final vehicleLicenseMultipart = await MultipartFile.fromFile(
+      vehicleLicense?.path ?? '',
+      filename: vehicleLicense?.path.split('/').last,
+    );
     return executeApi(
       () => apiClient.apply(
         applyRequest.country,
         applyRequest.firstName,
         applyRequest.lastName,
-        applyRequest.vehicleType?.type,
+        applyRequest.vehicleType?.id,
         applyRequest.vehicleNumber,
         applyRequest.nID,
         applyRequest.email,
@@ -33,8 +44,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         applyRequest.rePassword,
         applyRequest.gender,
         applyRequest.phone,
-        nidImage,
-        vehicleLicense,
+        nidMultipart,
+        vehicleLicenseMultipart,
       ),
     );
   }

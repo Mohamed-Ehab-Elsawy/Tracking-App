@@ -1,4 +1,5 @@
-import 'package:dio/dio.dart';
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:tracking_app/features/auth/domain/entity/vehicles_entity.dart';
 
@@ -14,8 +15,8 @@ class DriverEntity extends Equatable {
   final VehicleEntity? vehicleType;
   final String? password;
   final String? rePassword;
-  final MultipartFile? vehicleLicense;
-  final MultipartFile? nidImages;
+  final File? vehicleLicense;
+  final File? nidImage;
 
   const DriverEntity({
     this.firstName,
@@ -30,7 +31,7 @@ class DriverEntity extends Equatable {
     this.password,
     this.rePassword,
     this.vehicleLicense,
-    this.nidImages,
+    this.nidImage,
   });
 
   @override
@@ -47,6 +48,6 @@ class DriverEntity extends Equatable {
     password,
     rePassword,
     vehicleLicense,
-    nidImages,
+    nidImage,
   ];
 }

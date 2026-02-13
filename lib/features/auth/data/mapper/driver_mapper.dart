@@ -7,7 +7,7 @@ extension DriverMapperX on DriverEntity {
     country: country,
     firstName: firstName,
     lastName: lastName,
-    vehicleType: vehicleType?.toEntity(),
+    vehicleType: vehicleType?.toModel(),
     vehicleNumber: vehicleNumber,
     nID: nid,
     email: email,

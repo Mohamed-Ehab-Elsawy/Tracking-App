@@ -1,4 +1,5 @@
-import 'package:dio/dio.dart';
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/features/auth/domain/entity/apply_response_entity.dart';
@@ -12,8 +13,8 @@ class ApplyUseCase {
 
   Future<Result<ApplyResponseEntity>> invoke({
     required DriverEntity applyEntity,
-    MultipartFile? nidImage,
-    MultipartFile? vehicleLicense,
+    required File? nidImage,
+    required File? vehicleLicense,
   }) => authRepository.apply(
     applyEntity,
     nidImage: nidImage,
