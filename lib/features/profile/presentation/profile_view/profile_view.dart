@@ -49,13 +49,16 @@ class _ProfileViewState extends State<ProfileView> {
         case OnProfileClickIntent():
           {
             if (!mounted) return;
-            Navigator.pushNamed(
-              context,
-              '/update_driver_view',
-              arguments: profileViewModel.state.driverData?.data,
-            ).then((_) {
-              context.read<ProfileViewModel>().doIntent(GetDriverDataEvent());
-            });
+            {
+              Navigator.pushNamed(
+                context,
+                '/update_driver_view',
+                arguments: profileViewModel.state.driverData?.data,
+              ).then((_) {
+                // ignore: use_build_context_synchronously
+                context.read<ProfileViewModel>().doIntent(GetDriverDataEvent());
+              });
+            }
           }
         case OnVehicleInfoClickIntent():
           {

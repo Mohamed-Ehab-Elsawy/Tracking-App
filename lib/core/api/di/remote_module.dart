@@ -63,9 +63,9 @@ class AuthInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    final token = await AppLocalStorage.getSecuredString(
-      key: AppConstants.userToken,
-    );
+    // final token = await AppLocalStorage.getSecuredString(
+    //    key: AppConstants.userToken,
+    //  );
 
     //  if (token.isNotEmpty) {
     options.headers['Authorization'] =
