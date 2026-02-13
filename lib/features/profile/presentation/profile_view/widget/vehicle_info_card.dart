@@ -33,8 +33,14 @@ class VehicleInfoCard extends StatelessWidget {
                   "Vehicle info".tr(),
                   style: context.textStyles.medium20.copyWith(fontSize: 16),
                 ),
-                Text(vehicleType ?? "", style: context.textStyles.regular16),
-                Text(vehicleNumber ?? "", style: context.textStyles.regular16),
+                Text(
+                  vehicleType ?? "unknown Type".tr(),
+                  style: context.textStyles.regular16,
+                ),
+                Text(
+                  vehicleNumber ?? "unknown Number".tr(),
+                  style: context.textStyles.regular16,
+                ),
               ],
             ),
             Spacer(),

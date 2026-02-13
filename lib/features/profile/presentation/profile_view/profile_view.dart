@@ -127,6 +127,9 @@ class _ProfileViewState extends State<ProfileView> {
                       VehicleInfoCard(
                         vehicleType: state?.vehicleType,
                         vehicleNumber: state?.vehicleNumber,
+                        onTap: () => profileViewModel.doEvent(
+                          OnVehicleInfoClickIntent(),
+                        ),
                       ),
                       SizedBox(height: 20),
                     ],
