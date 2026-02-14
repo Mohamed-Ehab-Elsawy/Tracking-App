@@ -41,6 +41,7 @@ class _ApplyFormWidgetState extends State<ApplyFormWidget> {
 
   late final ApplyViewModel _viewModel;
   File? file;
+  String? _selectedVehicleId;
   @override
   void initState() {
     _formKey = GlobalKey<FormState>();
@@ -185,14 +186,14 @@ class _ApplyFormWidgetState extends State<ApplyFormWidget> {
                 expandedInsets: EdgeInsets.zero,
 
                 onSelected: (String? value) {
-                  _vehicleTypeController.text = value!;
+                  _selectedVehicleId = value!;
                   context.read<ApplyViewModel>().doAction(GetVehiclesIntent());
                 },
                 dropdownMenuEntries: [
                   if (state.vehicleState!.isLoaded)
                     ...?state.vehicleState?.data?.map((key) {
                       return DropdownMenuEntry<String>(
-                        value: key.type,
+                        value: key.id,
                         label: key.type,
                       );
                     })
@@ -377,36 +378,41 @@ class _ApplyFormWidgetState extends State<ApplyFormWidget> {
   void validateSignUP() {
     FocusScope.of(context).unfocus();
 
-    if (_formKey.currentState!.validate()) {
-      final currentState = _viewModel.state;
+    if (!_formKey.currentState!.validate()) return;
 
-      if (currentState.nidImage == null ||
-          currentState.vehicleLicense == null) {
-        return;
-      }
+    final currentState = _viewModel.state;
 
-      final selectedVehicle = currentState.vehicleState?.data?.firstWhere(
-        (v) => v.id == _vehicleTypeController.text,
-        orElse: () => currentState.vehicleState!.data!.first, // fallback
+    if (_vehicleTypeController.text.isEmpty) {
+      _viewModel.doNavigationAction(
+        ShowSnackBarEvent(message: 'selectVehicleType'.tr(), isError: true),
       );
-
-      DriverEntity driverEntity = DriverEntity(
-        country: _countryController.text.trim(),
-        firstName: _firstNameController.text.trim(),
-        lastName: _lastNameController.text.trim(),
-        vehicleType: selectedVehicle,
-        vehicleLicense: currentState.vehicleLicense!,
-        vehicleNumber: _vehicleNumberController.text.trim(),
-        email: _emailController.text.trim(),
-        phone: _phoneController.text.trim(),
-        nid: _idNumberController.text.trim(),
-        nidImage: currentState.nidImage!,
-        password: _passwordController.text.trim(),
-        rePassword: _confirmPasswordController.text.trim(),
-        gender: currentState.selectedGender,
-      );
-
-      _viewModel.doAction(SubmitApplyIntent(driverEntity: driverEntity));
+      return;
     }
+
+    final vehicleData = currentState.vehicleState?.data;
+
+    if (vehicleData == null || vehicleData.isEmpty) return;
+
+    final selectedVehicle = vehicleData.firstWhere(
+      (v) => v.id == _selectedVehicleId,
+    );
+
+    DriverEntity driverEntity = DriverEntity(
+      country: _countryController.text.trim(),
+      firstName: _firstNameController.text.trim(),
+      lastName: _lastNameController.text.trim(),
+      vehicleType: selectedVehicle,
+      vehicleLicense: currentState.vehicleLicense!,
+      vehicleNumber: _vehicleNumberController.text.trim(),
+      email: _emailController.text.trim(),
+      phone: _phoneController.text.trim(),
+      nid: _idNumberController.text.trim(),
+      nidImage: currentState.nidImage!,
+      password: _passwordController.text.trim(),
+      rePassword: _confirmPasswordController.text.trim(),
+      gender: currentState.selectedGender,
+    );
+
+    _viewModel.doAction(SubmitApplyIntent(driverEntity: driverEntity));
   }
 }
