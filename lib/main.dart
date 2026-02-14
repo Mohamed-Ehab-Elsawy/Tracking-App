@@ -10,6 +10,7 @@ import 'package:tracking_app/tracking_app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  await configureDependencies();
   Bloc.observer = MyBlocObserver();
   await configureDependencies();
   runApp(
