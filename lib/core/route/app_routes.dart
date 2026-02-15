@@ -28,7 +28,7 @@ Route? onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (context) =>
-              getIt<ApplyViewModel>()..doAction(GetVehiclesIntent()),
+              getIt<ApplyViewModel>()..doIntent(GetVehiclesIntent()),
           child: const ApplyView(),
         ),
       );

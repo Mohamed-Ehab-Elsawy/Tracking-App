@@ -89,7 +89,7 @@ class _ApplyFormWidgetState extends State<ApplyFormWidget> {
     if (pickedFile == null) return;
     final file = File(pickedFile.path);
 
-    _viewModel.doAction(UploadImageIntent(image: file, isNid: isID));
+    _viewModel.doIntent(UploadImageIntent(image: file, isNid: isID));
   }
 
   Future<ImageSource?> _showImageSourceBottomSheet(BuildContext context) {
@@ -187,7 +187,7 @@ class _ApplyFormWidgetState extends State<ApplyFormWidget> {
 
                 onSelected: (String? value) {
                   _selectedVehicleId = value!;
-                  context.read<ApplyViewModel>().doAction(GetVehiclesIntent());
+                  context.read<ApplyViewModel>().doIntent(GetVehiclesIntent());
                 },
                 dropdownMenuEntries: [
                   if (state.vehicleState!.isLoaded)
@@ -209,7 +209,7 @@ class _ApplyFormWidgetState extends State<ApplyFormWidget> {
                       labelWidget: AppErrorView(
                         message: state.vehicleState!.errorMessage.toString(),
                         onRetry: () {
-                          context.read<ApplyViewModel>().doAction(
+                          context.read<ApplyViewModel>().doIntent(
                             GetVehiclesIntent(),
                           );
                         },
@@ -413,6 +413,6 @@ class _ApplyFormWidgetState extends State<ApplyFormWidget> {
       gender: currentState.selectedGender,
     );
 
-    _viewModel.doAction(SubmitApplyIntent(driverEntity: driverEntity));
+    _viewModel.doIntent(SubmitApplyIntent(driverEntity: driverEntity));
   }
 }

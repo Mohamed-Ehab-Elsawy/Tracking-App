@@ -43,7 +43,7 @@ void main() {
         ).thenAnswer((_) async => Success(tVehicles));
         return viewModel;
       },
-      act: (bloc) => bloc.doAction(GetVehiclesIntent()),
+      act: (bloc) => bloc.doIntent(GetVehiclesIntent()),
       expect: () => [
         isA<ApplyState>().having(
           (s) => s.vehicleState.toString().toLowerCase(),
@@ -66,7 +66,7 @@ void main() {
         ).thenAnswer((_) async => Failure("network error"));
         return viewModel;
       },
-      act: (bloc) => bloc.doAction(GetVehiclesIntent()),
+      act: (bloc) => bloc.doIntent(GetVehiclesIntent()),
       expect: () => [
         isA<ApplyState>().having(
           (s) => s.vehicleState.toString().toLowerCase(),
@@ -105,7 +105,7 @@ void main() {
         ).thenAnswer((_) async => Success(tResponse));
         return viewModel;
       },
-      act: (bloc) => bloc.doAction(SubmitApplyIntent(driverEntity: tDriver)),
+      act: (bloc) => bloc.doIntent(SubmitApplyIntent(driverEntity: tDriver)),
       expect: () => [
         isA<ApplyState>().having(
           (s) => s.applyState.toString().toLowerCase(),
@@ -123,7 +123,7 @@ void main() {
     blocTest<ApplyViewModel, ApplyState>(
       'not emit any state when images are missing',
       build: () => viewModel,
-      act: (bloc) => bloc.doAction(SubmitApplyIntent(driverEntity: tDriver)),
+      act: (bloc) => bloc.doIntent(SubmitApplyIntent(driverEntity: tDriver)),
       expect: () => [],
     );
   });
@@ -135,7 +135,7 @@ void main() {
       'update nidImage in state when UploadImageIntent is called',
       build: () => viewModel,
       act: (bloc) =>
-          bloc.doAction(UploadImageIntent(image: tFile, isNid: true)),
+          bloc.doIntent(UploadImageIntent(image: tFile, isNid: true)),
       expect: () => [
         isA<ApplyState>().having((s) => s.nidImage, 'nidImage', tFile),
       ],
@@ -144,7 +144,7 @@ void main() {
     blocTest<ApplyViewModel, ApplyState>(
       'update vehicleLicense in state when ChoseImageFromGalleryIntent is called',
       build: () => viewModel,
-      act: (bloc) => bloc.doAction(
+      act: (bloc) => bloc.doIntent(
         ChoseImageFromGalleryIntent(image: tFile, isNid: false),
       ),
       expect: () => [
@@ -159,7 +159,7 @@ void main() {
     blocTest<ApplyViewModel, ApplyState>(
       'update selectedGender when SelectGender is called',
       build: () => viewModel,
-      act: (bloc) => bloc.doAction(SelectGender("female")),
+      act: (bloc) => bloc.doIntent(SelectGender("female")),
       expect: () => [
         isA<ApplyState>().having((s) => s.selectedGender, 'gender', "female"),
       ],

@@ -20,7 +20,7 @@ class ApplyViewModel extends BaseCubit<ApplyState, ApplyIntent, ApplyEvent> {
     : super(ApplyState.initial());
 
   @override
-  Future<void> doAction(ApplyIntent event) {
+  Future<void> doIntent(ApplyIntent event) {
     switch (event) {
       case GetVehiclesIntent():
         return _getVehicles();

@@ -24,7 +24,7 @@ class GenderRadioButtonWidget extends StatelessWidget {
                 groupValue: state.selectedGender ?? '',
                 onChanged: (value) {
                   if (value != null) {
-                    context.read<ApplyViewModel>().doAction(
+                    context.read<ApplyViewModel>().doIntent(
                       SelectGender(value),
                     );
                   }
