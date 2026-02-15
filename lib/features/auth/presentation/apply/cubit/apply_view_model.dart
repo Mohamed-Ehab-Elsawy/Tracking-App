@@ -56,7 +56,7 @@ class ApplyViewModel extends BaseCubit<ApplyState, ApplyIntent, ApplyEvent> {
         emit(
           state.copyWith(vehicleState: BaseState.error(result.errorMessage)),
         );
-        doNavigationAction(
+        emitEvent(
           ShowSnackBarEvent(message: result.errorMessage, isError: true),
         );
     }
@@ -68,7 +68,7 @@ class ApplyViewModel extends BaseCubit<ApplyState, ApplyIntent, ApplyEvent> {
         event.driverEntity.vehicleLicense ?? state.vehicleLicense;
 
     if (nidFile == null || licenseFile == null) {
-      doNavigationAction(
+      emitEvent(
         ShowSnackBarEvent(message: 'image_required'.tr(), isError: true),
       );
       return;
@@ -85,16 +85,16 @@ class ApplyViewModel extends BaseCubit<ApplyState, ApplyIntent, ApplyEvent> {
     switch (result) {
       case Success<ApplyResponseEntity>():
         emit(state.copyWith(applyState: BaseState.loaded(result.data)));
-        doNavigationAction(
+        emitEvent(
           ShowSnackBarEvent(
             message: result.data.message ?? 'success'.tr(),
             isError: false,
           ),
         );
-        doNavigationAction(NavigateSuccessApplyIntent());
+        emitEvent(NavigateSuccessApplyIntent());
       case Failure<ApplyResponseEntity>():
         emit(state.copyWith(applyState: BaseState.error(result.errorMessage)));
-        doNavigationAction(
+        emitEvent(
           ShowSnackBarEvent(message: result.errorMessage, isError: true),
         );
     }

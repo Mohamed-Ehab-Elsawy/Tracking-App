@@ -59,7 +59,7 @@ class _ApplyFormWidgetState extends State<ApplyFormWidget> {
     _confirmPasswordController = TextEditingController();
 
     _viewModel = context.read<ApplyViewModel>();
-    _viewModel.navigationStream.listen((event) {
+    _viewModel.eventStream.listen((event) {
       switch (event) {
         case NavigateSuccessApplyIntent():
           if (!mounted) return;
@@ -342,20 +342,20 @@ class _ApplyFormWidgetState extends State<ApplyFormWidget> {
           BlocConsumer<ApplyViewModel, ApplyState>(
             listener: (context, state) {
               if (state.applyState.isError) {
-                return _viewModel.doNavigationAction(
+                return _viewModel.emitEvent(
                   ShowSnackBarEvent(
                     message: state.applyState.errorMessage.toString(),
                     isError: true,
                   ),
                 );
               } else if (state.applyState.isLoaded) {
-                _viewModel.doNavigationAction(
+                _viewModel.emitEvent(
                   ShowSnackBarEvent(
                     message: state.applyState.data!.message ?? 'success'.tr(),
                     isError: false,
                   ),
                 );
-                _viewModel.doNavigationAction(NavigateSuccessApplyIntent());
+                _viewModel.emitEvent(NavigateSuccessApplyIntent());
               }
             },
             builder: (context, state) => ElevatedButton(
@@ -383,7 +383,7 @@ class _ApplyFormWidgetState extends State<ApplyFormWidget> {
     final currentState = _viewModel.state;
 
     if (_vehicleTypeController.text.isEmpty) {
-      _viewModel.doNavigationAction(
+      _viewModel.emitEvent(
         ShowSnackBarEvent(message: 'selectVehicleType'.tr(), isError: true),
       );
       return;

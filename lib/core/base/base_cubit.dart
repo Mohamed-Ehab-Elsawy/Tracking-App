@@ -2,22 +2,24 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-abstract class BaseCubit<T, E, N> extends Cubit<T> {
+abstract class BaseCubit<T, I, E> extends Cubit<T> {
   BaseCubit(super.initialState);
 
-  Future<void> doIntent(E event);
+  Future<void> doIntent(I intent);
 
-  final StreamController<N> _streamController = StreamController.broadcast();
+  final StreamController<E> _eventController = StreamController<E>.broadcast();
 
-  Stream<N> get navigationStream => _streamController.stream;
+  Stream<E> get eventStream => _eventController.stream;
 
-  void doNavigationAction(N navigationAction) {
-    _streamController.add(navigationAction);
+  void emitEvent(E event) {
+    if (!_eventController.isClosed) {
+      _eventController.add(event);
+    }
   }
 
   @override
-  Future<void> close() {
-    _streamController.close();
+  Future<void> close() async {
+    await _eventController.close();
     return super.close();
   }
 }

@@ -17,9 +17,7 @@ class ApplyView extends StatelessWidget {
 
         leading: IconButton(
           onPressed: () {
-            context.read<ApplyViewModel>().doNavigationAction(
-              NavigateBackIntent(),
-            );
+            context.read<ApplyViewModel>().emitEvent(NavigateBackIntent());
           },
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
