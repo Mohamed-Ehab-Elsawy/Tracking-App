@@ -61,12 +61,12 @@ class AuthInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    final token = await AppLocalStorage.getSecuredString(
-      key: AppConstants.userTokenKey,
-    );
+    final token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkcml2ZXIiOiI2OTg3NmJkYmUzNjRlZjYxNDA1MTVmYWYiLCJpYXQiOjE3NzEyMDE3OTd9.E7yTCCU-TfX8cq0DF_sxW12QxOhtQo3cd4uA8bpQJPo";
 
     if (token.isNotEmpty) {
-      options.headers['Authorization'] = 'Bearer $token';
+      options.headers['Authorization'] =
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkcml2ZXIiOiI2OTg3NmJkYmUzNjRlZjYxNDA1MTVmYWYiLCJpYXQiOjE3NzEyMDE3OTd9.E7yTCCU-TfX8cq0DF_sxW12QxOhtQo3cd4uA8bpQJPo';
     }
 
     super.onRequest(options, handler);

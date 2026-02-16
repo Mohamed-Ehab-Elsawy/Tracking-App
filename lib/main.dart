@@ -17,13 +17,17 @@ void main() async {
 
 Widget buildApp() {
   return EasyLocalization(
-    saveLocale: true,
+    saveLocale: false,
     supportedLocales: const [
       Locale(LocalizationConstants.enLocaleKey),
       Locale(LocalizationConstants.arLocaleKey),
     ],
     path: AssetConstants.translationsPath,
     fallbackLocale: const Locale(LocalizationConstants.enLocaleKey),
+    startLocale: const Locale(
+      LocalizationConstants.enLocaleKey,
+    ), // 👈 اللغة الافتراضية
+
     child: const TrackingApp(),
   );
 }
