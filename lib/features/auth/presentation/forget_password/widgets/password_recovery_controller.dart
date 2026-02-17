@@ -4,7 +4,6 @@ class PasswordRecoveryController {
   PageController pageController;
   TextEditingController emailController;
   TextEditingController newPasswordController;
-  TextEditingController newPasswordConfirmationController;
   GlobalKey<FormState> emailFormKey;
   GlobalKey<FormState> confirmPasswordFormKey;
 
@@ -12,15 +11,14 @@ class PasswordRecoveryController {
     : pageController = PageController(initialPage: 0),
       emailController = TextEditingController(),
       newPasswordController = TextEditingController(),
-      newPasswordConfirmationController = TextEditingController(),
       emailFormKey = GlobalKey<FormState>(),
+
       confirmPasswordFormKey = GlobalKey<FormState>();
 
   void dispose() {
     pageController.dispose();
     emailController.dispose();
     newPasswordController.dispose();
-    newPasswordConfirmationController.dispose();
   }
 
   void nextPage() {

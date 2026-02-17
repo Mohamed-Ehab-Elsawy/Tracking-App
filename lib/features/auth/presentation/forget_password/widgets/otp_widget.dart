@@ -6,12 +6,12 @@ class OTPWidget extends StatelessWidget {
     super.key,
     required this.hasError,
     required this.isLoading,
-    // required this.cubit,
+    required this.onCompleted,
   });
 
   final bool hasError;
   final bool isLoading;
-  //final ForgetPasswordCubit cubit;
+  final void Function(String)? onCompleted;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class OTPWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
       ),
-      onCompleted: isLoading ? null : (pin) {},
+      onCompleted: isLoading ? null : onCompleted,
       keyboardType: TextInputType.number,
       hapticFeedbackType: HapticFeedbackType.lightImpact,
     );
