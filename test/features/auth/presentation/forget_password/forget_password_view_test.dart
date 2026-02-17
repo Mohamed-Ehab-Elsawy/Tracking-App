@@ -36,7 +36,7 @@ void main() {
     when(mockViewModel.state).thenReturn(initialState);
     when(mockViewModel.stream).thenAnswer((_) => const Stream.empty());
     when(
-      mockViewModel.navigationStream,
+      mockViewModel.eventStream,
     ).thenAnswer((_) => navigationStreamController.stream);
     when(mockViewModel.close()).thenAnswer((_) async => {});
   });
@@ -129,7 +129,7 @@ void main() {
       await tester.tap(confirmButton);
       await tester.pump();
 
-      verify(mockViewModel.doAction(any)).called(1);
+      verify(mockViewModel.doIntent(any)).called(1);
     },
   );
 }
