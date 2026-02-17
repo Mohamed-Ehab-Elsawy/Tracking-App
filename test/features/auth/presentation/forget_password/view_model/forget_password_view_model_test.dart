@@ -51,7 +51,7 @@ void main() {
           mockAuthRepository.sendResetPasswordCode(any),
         ).thenAnswer((_) async => Success(tEmailResponse));
       },
-      act: (cubit) => cubit.doAction(EmailVerificationIntent(user: tUser)),
+      act: (cubit) => cubit.doIntent(EmailVerificationIntent(user: tUser)),
       expect: () => [
         initialState.copyWith(emailVerificationState: BaseState.loading()),
         initialState.copyWith(
@@ -73,7 +73,7 @@ void main() {
           mockAuthRepository.sendResetPasswordCode(any),
         ).thenAnswer((_) async => Failure('Error'));
       },
-      act: (cubit) => cubit.doAction(EmailVerificationIntent(user: tUser)),
+      act: (cubit) => cubit.doIntent(EmailVerificationIntent(user: tUser)),
       expect: () => [
         initialState.copyWith(emailVerificationState: BaseState.loading()),
         initialState.copyWith(emailVerificationState: BaseState.error('Error')),
@@ -93,7 +93,7 @@ void main() {
           mockAuthRepository.sendResetPasswordCode(any),
         ).thenAnswer((_) async => Success(tEmailResponse));
       },
-      act: (cubit) => cubit.doAction(ReSendCodeIntent(user: tUser)),
+      act: (cubit) => cubit.doIntent(ReSendCodeIntent(user: tUser)),
       expect: () => [
         initialState.copyWith(emailVerificationState: BaseState.loading()),
         initialState.copyWith(
@@ -116,7 +116,7 @@ void main() {
           mockAuthRepository.verifyResetPasswordCode(any),
         ).thenAnswer((_) async => Success(tCodeResponse));
       },
-      act: (cubit) => cubit.doAction(CodeVerificationIntent(user: tUser)),
+      act: (cubit) => cubit.doIntent(CodeVerificationIntent(user: tUser)),
       expect: () => [
         initialState.copyWith(codeVerificationState: BaseState.loading()),
         initialState.copyWith(
@@ -138,7 +138,7 @@ void main() {
           mockAuthRepository.resetPassword(any),
         ).thenAnswer((_) async => Success(tPasswordResponse));
       },
-      act: (cubit) => cubit.doAction(ConfirmPasswordIntent(user: tUser)),
+      act: (cubit) => cubit.doIntent(ConfirmPasswordIntent(user: tUser)),
       expect: () => [
         initialState.copyWith(resetPasswordState: BaseState.loading()),
         initialState.copyWith(

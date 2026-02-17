@@ -24,7 +24,7 @@ class ForgetPasswordViewModel
   final AuthRepository _authRepository;
 
   @override
-  Future<void> doAction(intent) async {
+  Future<void> doIntent(intent) async {
     switch (intent) {
       case CodeVerificationIntent():
         _codeVerification(intent.user);
@@ -49,7 +49,7 @@ class ForgetPasswordViewModel
           ),
         );
         log("Success");
-        doNavigationAction(ConfirmEmailEvent());
+        emitEvent(ConfirmEmailEvent());
 
       case Failure<EmailVerificationResponseEntity>():
         emit(
@@ -57,7 +57,7 @@ class ForgetPasswordViewModel
             emailVerificationState: BaseState.error(response.errorMessage),
           ),
         );
-        doNavigationAction(ShowSnackBarEvent(response.errorMessage));
+        emitEvent(ShowSnackBarEvent(response.errorMessage));
         log("failure");
     }
   }
@@ -74,7 +74,7 @@ class ForgetPasswordViewModel
           ),
         );
         log("Success");
-        doNavigationAction(ReSendCodeEvent());
+        emitEvent(ReSendCodeEvent());
 
       case Failure<EmailVerificationResponseEntity>():
         emit(
@@ -82,7 +82,7 @@ class ForgetPasswordViewModel
             emailVerificationState: BaseState.error(response.errorMessage),
           ),
         );
-        doNavigationAction(ShowSnackBarEvent(response.errorMessage));
+        emitEvent(ShowSnackBarEvent(response.errorMessage));
         log("failure");
     }
   }
@@ -98,7 +98,7 @@ class ForgetPasswordViewModel
           ),
         );
         log("Success");
-        doNavigationAction(SendCodeEvent());
+        emitEvent(SendCodeEvent());
 
       case Failure<VerificationCodeResponseEntity>():
         emit(
@@ -106,7 +106,7 @@ class ForgetPasswordViewModel
             codeVerificationState: BaseState.error(response.errorMessage),
           ),
         );
-        doNavigationAction(ShowSnackBarEvent(response.errorMessage));
+        emitEvent(ShowSnackBarEvent(response.errorMessage));
         log("failure");
     }
   }
@@ -123,7 +123,7 @@ class ForgetPasswordViewModel
           ),
         );
         log("Success");
-        doNavigationAction(ConfirmPasswordEvent());
+        emitEvent(ConfirmPasswordEvent());
 
       case Failure<ResetPasswordResponseEntity>():
         emit(
@@ -131,7 +131,7 @@ class ForgetPasswordViewModel
             resetPasswordState: BaseState.error(response.errorMessage),
           ),
         );
-        doNavigationAction(ShowSnackBarEvent(response.errorMessage));
+        emitEvent(ShowSnackBarEvent(response.errorMessage));
         log("failure");
     }
   }
