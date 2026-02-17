@@ -19,7 +19,9 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
     EmailVerificationStep(
       passwordRecoveryController: passwordRecoveryController,
     ),
-    CodeVerificationStep(),
+    CodeVerificationStep(
+      passwordRecoveryController: passwordRecoveryController,
+    ),
     PasswordResetStep(passwordRecoveryController: passwordRecoveryController),
   ];
 
@@ -42,10 +44,27 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: PageView(
-            controller: passwordRecoveryController.pageController,
-            // physics: NeverScrollableScrollPhysics(),
-            children: pages,
+          child: PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) {
+              final controller = passwordRecoveryController.pageController;
+
+              if (!controller.hasClients) return;
+
+              final currentPage = controller.page?.round() ?? 0;
+
+              if (currentPage == 0 || currentPage == 2) {
+                Navigator.of(context).pop();
+              }
+              if (currentPage == 1) {
+                passwordRecoveryController.previousPage();
+              }
+            },
+            child: PageView(
+              controller: passwordRecoveryController.pageController,
+              physics: NeverScrollableScrollPhysics(),
+              children: pages,
+            ),
           ),
         ),
       ),
