@@ -30,20 +30,19 @@ class _EmailVerificationStepState extends State<EmailVerificationStep> {
   @override
   void initState() {
     super.initState();
-    streamEvent = context
-        .read<ForgetPasswordViewModel>()
-        .navigationStream
-        .listen((events) {
-          if (events is ConfirmEmailEvent) {
-            widget.passwordRecoveryController.pageController.nextPage(
-              duration: Duration(milliseconds: 300),
-              curve: Curves.ease,
-            );
-          }
-          if (events is ShowSnackBarEvent && mounted) {
-            AppSnackBar.show(context, events.message, isError: true);
-          }
-        });
+    streamEvent = context.read<ForgetPasswordViewModel>().eventStream.listen((
+      events,
+    ) {
+      if (events is ConfirmEmailEvent) {
+        widget.passwordRecoveryController.pageController.nextPage(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.ease,
+        );
+      }
+      if (events is ShowSnackBarEvent && mounted) {
+        AppSnackBar.show(context, events.message, isError: true);
+      }
+    });
   }
 
   @override
@@ -59,7 +58,7 @@ class _EmailVerificationStepState extends State<EmailVerificationStep> {
     return Form(
       key: widget.passwordRecoveryController.emailFormKey,
       child: Column(
-        crossAxisAlignment: .center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           context.h(40),
           Text(
@@ -70,7 +69,7 @@ class _EmailVerificationStepState extends State<EmailVerificationStep> {
           Text(
             "forgetPassword.emailVerificationDesc".tr(),
             style: theme.regular14.copyWith(color: color.grey),
-            textAlign: .center,
+            textAlign: TextAlign.center,
           ),
           context.h(32),
           _emailField(),
@@ -114,7 +113,7 @@ class _EmailVerificationStepState extends State<EmailVerificationStep> {
           .state
           .user!
           .copyWith(email: email);
-      context.read<ForgetPasswordViewModel>().doAction(
+      context.read<ForgetPasswordViewModel>().doIntent(
         EmailVerificationIntent(user: user),
       );
     }

@@ -7,8 +7,6 @@ import 'package:tracking_app/core/constants/localization_constants.dart';
 import 'package:tracking_app/core/di/di.dart';
 import 'package:tracking_app/tracking_app.dart';
 
-import 'core/di/di.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();

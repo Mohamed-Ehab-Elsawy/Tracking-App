@@ -27,23 +27,22 @@ class _CodeVerificationStepState extends State<CodeVerificationStep> {
   @override
   void initState() {
     super.initState();
-    streamEvent = context
-        .read<ForgetPasswordViewModel>()
-        .navigationStream
-        .listen((events) {
-          if (events is SendCodeEvent) {
-            widget.passwordRecoveryController.pageController.nextPage(
-              duration: Duration(milliseconds: 300),
-              curve: Curves.ease,
-            );
-          }
-          if (events is ReSendCodeEvent && mounted) {
-            AppSnackBar.show(context, "forgetPassword.codeSend".tr());
-          }
-          if (events is ShowSnackBarEvent && mounted) {
-            AppSnackBar.show(context, events.message, isError: true);
-          }
-        });
+    streamEvent = context.read<ForgetPasswordViewModel>().eventStream.listen((
+      events,
+    ) {
+      if (events is SendCodeEvent) {
+        widget.passwordRecoveryController.pageController.nextPage(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.ease,
+        );
+      }
+      if (events is ReSendCodeEvent && mounted) {
+        AppSnackBar.show(context, "forgetPassword.codeSend".tr());
+      }
+      if (events is ShowSnackBarEvent && mounted) {
+        AppSnackBar.show(context, events.message, isError: true);
+      }
+    });
   }
 
   @override
@@ -77,7 +76,7 @@ class _CodeVerificationStepState extends State<CodeVerificationStep> {
           underLineText: "forgetPassword.resend".tr(),
           baseText: "forgetPassword.didNotReceiveCode".tr(),
           onTap: () {
-            context.read<ForgetPasswordViewModel>().doAction(
+            context.read<ForgetPasswordViewModel>().doIntent(
               ReSendCodeIntent(
                 user: context.read<ForgetPasswordViewModel>().state.user!,
               ),
@@ -92,7 +91,7 @@ class _CodeVerificationStepState extends State<CodeVerificationStep> {
     builder: (context, state) {
       return OTPWidget(
         onCompleted: (pin) {
-          context.read<ForgetPasswordViewModel>().doAction(
+          context.read<ForgetPasswordViewModel>().doIntent(
             CodeVerificationIntent(user: state.user!.copyWith(code: pin)),
           );
         },

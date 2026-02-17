@@ -28,19 +28,18 @@ class _PasswordResetStepState extends State<PasswordResetStep> {
   @override
   void initState() {
     super.initState();
-    streamEvent = context
-        .read<ForgetPasswordViewModel>()
-        .navigationStream
-        .listen((events) {
-          if (events is ConfirmPasswordEvent && mounted) {
-            Navigator.of(
-              context,
-            ).pushNamedAndRemoveUntil(AppRoutes.loginView, (route) => false);
-          }
-          if (events is ShowSnackBarEvent && mounted) {
-            AppSnackBar.show(context, events.message, isError: true);
-          }
-        });
+    streamEvent = context.read<ForgetPasswordViewModel>().eventStream.listen((
+      events,
+    ) {
+      if (events is ConfirmPasswordEvent && mounted) {
+        Navigator.of(
+          context,
+        ).pushNamedAndRemoveUntil(AppRoutes.loginView, (route) => false);
+      }
+      if (events is ShowSnackBarEvent && mounted) {
+        AppSnackBar.show(context, events.message, isError: true);
+      }
+    });
   }
 
   @override
@@ -106,7 +105,7 @@ class _PasswordResetStepState extends State<PasswordResetStep> {
         password: newPassword,
         code: null,
       );
-      context.read<ForgetPasswordViewModel>().doAction(
+      context.read<ForgetPasswordViewModel>().doIntent(
         ConfirmPasswordIntent(user: user),
       );
     }
