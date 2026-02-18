@@ -2,7 +2,9 @@ import 'package:injectable/injectable.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/features/orders/data/data_source/order_data_source.dart';
 import 'package:tracking_app/features/orders/data/models/response/orders_list_dto.dart';
+import 'package:tracking_app/features/orders/data/models/response/product_dto.dart';
 import 'package:tracking_app/features/orders/domain/entity/order_list_entity.dart';
+import 'package:tracking_app/features/orders/domain/entity/product_entity.dart';
 import 'package:tracking_app/features/orders/domain/repository/order_repo.dart';
 
 @Injectable(as: OrderRepo)
@@ -24,6 +26,25 @@ class OrderRepoImpl implements OrderRepo {
       case Failure<List<OrdersListDto>>():
         {
           return Failure(orderListDto.errorMessage);
+        }
+    }
+  }
+
+  @override
+  Future<Result<ProductEntity>> getProductDetails(String productId) async {
+    Result<ProductDto> productDto = await dataSource.getProductDetails(
+      productId,
+    );
+    switch (productDto) {
+      case Success<ProductDto>():
+        {
+          final items = productDto.data;
+          final product = items.toEntity();
+          return Success(product);
+        }
+      case Failure<ProductDto>():
+        {
+          return Failure(productDto.errorMessage);
         }
     }
   }

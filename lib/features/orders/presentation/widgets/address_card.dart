@@ -4,10 +4,10 @@ import 'package:tracking_app/core/presentation/reusable_widgets/custom_image_vie
 import 'package:tracking_app/core/theme/typography/typography_extension.dart';
 
 class AddressCard extends StatelessWidget {
-  String? imagePath;
-  String? address;
-  String? name;
-  AddressCard({
+  final String? imagePath;
+  final String? address;
+  final String? name;
+  const AddressCard({
     super.key,
     required this.imagePath,
     required this.address,
@@ -28,7 +28,7 @@ class AddressCard extends StatelessWidget {
               width: 70,
               height: 70,
               radius: const BorderRadius.all(Radius.circular(40)),
-              imagePath: imagePath,
+              imagePath: imagePath ?? "assets/images/Flowery logo.png",
             ),
             SizedBox(width: 10),
             Column(

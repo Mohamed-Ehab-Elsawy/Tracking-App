@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking_app/core/di/di.dart';
-import 'package:tracking_app/features/orders/presentation/order_history/view/order_details.dart';
-import 'package:tracking_app/features/orders/presentation/order_history/view/order_history_view.dart';
-import 'package:tracking_app/features/orders/presentation/order_history/view_model/order_history_cubit.dart';
+import 'package:tracking_app/features/orders/presentation/order_details/view/order_details.dart';
+import 'package:tracking_app/features/orders/presentation/order_details/view_model/order_details_view_model.dart';
+import 'package:tracking_app/features/orders/presentation/orders_history/view/order_history_view.dart';
+import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_cubit.dart';
 
 class AppRoutes {
   // Define app routes
@@ -27,9 +28,13 @@ Route? onGenerateRoute(RouteSettings settings) {
       }
     case AppRoutes.orderDetails:
       {
+        var cubit = getIt.get<OrderItemNameCubit>();
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => OrderDetailsView(),
+          builder: (_) => BlocProvider<OrderItemNameCubit>(
+            create: (context) => cubit,
+            child: OrderDetailsView(),
+          ),
         );
       }
 

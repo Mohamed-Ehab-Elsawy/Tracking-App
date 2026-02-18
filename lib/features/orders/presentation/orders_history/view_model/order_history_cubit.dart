@@ -7,13 +7,13 @@ import 'package:tracking_app/core/bloc/base_state.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/features/orders/domain/entity/order_list_entity.dart';
 import 'package:tracking_app/features/orders/domain/use_cases/get_orders_history.dart';
-import 'package:tracking_app/features/orders/presentation/order_history/view_model/order_history_events.dart';
-import 'package:tracking_app/features/orders/presentation/order_history/view_model/order_history_states.dart';
+import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_events.dart';
+import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_states.dart';
 
 @injectable
 // ignore: must_be_immutable
 class OrderHistoryCubit extends Cubit<OrderHistoryStates> with EquatableMixin {
-  final GetOrdersHistoryUsecase _getOrdersHistoryUseCase;
+  final GetOrdersHistoryUseCase _getOrdersHistoryUseCase;
   OrderHistoryCubit(this._getOrdersHistoryUseCase)
     : super(const OrderHistoryStates());
   final StreamController<OrderHistoryUiEvents> _orderHistoryUiEvent =
@@ -27,10 +27,10 @@ class OrderHistoryCubit extends Cubit<OrderHistoryStates> with EquatableMixin {
     return [state];
   }
 
-  void doIntent(OrderHistoryEvents event) {
+  Future<void> doIntent(OrderHistoryEvents event) async {
     switch (event) {
       case GetOrdersHistoryEvents():
-        _getOrdersHistory();
+        await _getOrdersHistory();
     }
   }
 

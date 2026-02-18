@@ -1,18 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tracking_app/core/theme/typography/typography_extension.dart';
-import 'package:tracking_app/features/orders/presentation/order_history/view/widgets/address_card.dart';
+import 'package:tracking_app/features/orders/presentation/widgets/address_card.dart';
 
 class OrderCard extends StatelessWidget {
-  String? orderNumber;
-  String? status;
-  String? shopImagePath;
-  String? shopAddress;
-  String? shopName;
-  String? userImagePath;
-  String? userAddress;
-  String? userName;
-  OrderCard({
+  final String? orderNumber;
+  final String? status;
+  final String? shopImagePath;
+  final String? shopAddress;
+  final String? shopName;
+  final String? userImagePath;
+  final String? userAddress;
+  final String? userName;
+  const OrderCard({
     super.key,
     required this.orderNumber,
     required this.status,

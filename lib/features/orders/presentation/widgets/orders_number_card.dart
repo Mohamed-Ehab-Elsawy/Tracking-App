@@ -3,9 +3,13 @@ import 'package:tracking_app/core/theme/colors/color_extension.dart';
 import 'package:tracking_app/core/theme/typography/typography_extension.dart';
 
 class OrdersNumberCard extends StatelessWidget {
-  OrdersNumberCard({super.key, required this.state, required this.number});
-  String? state;
-  int? number;
+  const OrdersNumberCard({
+    super.key,
+    required this.state,
+    required this.number,
+  });
+  final String? state;
+  final int? number;
   @override
   Widget build(BuildContext context) {
     return Padding(

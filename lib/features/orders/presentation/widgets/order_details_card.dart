@@ -1,18 +1,21 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tracking_app/core/presentation/reusable_widgets/custom_image_view.dart';
 import 'package:tracking_app/core/theme/colors/color_extension.dart';
 import 'package:tracking_app/core/theme/typography/typography_extension.dart';
 
 class OrderDetailsCard extends StatelessWidget {
-  String name;
-  int price;
-  int quantity;
+  final String? name;
+  final int? price;
+  final int? quantity;
+  final String? imagePath;
 
-  OrderDetailsCard({
+  const OrderDetailsCard({
     super.key,
     required this.name,
     required this.price,
     required this.quantity,
+    required this.imagePath,
   });
 
   @override
@@ -29,7 +32,7 @@ class OrderDetailsCard extends StatelessWidget {
               width: 70,
               height: 70,
               radius: const BorderRadius.all(Radius.circular(40)),
-              imagePath: "assets/images/splash_android_12.png",
+              imagePath: imagePath,
             ),
             SizedBox(width: 10),
             Expanded(
@@ -41,7 +44,7 @@ class OrderDetailsCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        name,
+                        name ?? "un known name".tr(),
                         style: context.textStyles.regular14.copyWith(
                           color: context.colors.grey,
                           fontSize: 13,
@@ -49,7 +52,7 @@ class OrderDetailsCard extends StatelessWidget {
                       ),
                       Spacer(),
                       Text(
-                        "X$quantity",
+                        "X${quantity ?? 0}",
                         style: context.textStyles.regular14.copyWith(
                           color: context.colors.error,
                           fontSize: 13,
@@ -58,7 +61,7 @@ class OrderDetailsCard extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    "EGP $price",
+                    "EGP ${price ?? 0}",
                     style: context.textStyles.medium16.copyWith(fontSize: 13),
                   ),
                 ],

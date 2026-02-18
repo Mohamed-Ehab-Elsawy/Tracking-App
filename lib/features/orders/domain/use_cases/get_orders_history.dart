@@ -4,10 +4,10 @@ import 'package:tracking_app/features/orders/domain/entity/order_list_entity.dar
 import 'package:tracking_app/features/orders/domain/repository/order_repo.dart';
 
 @injectable
-class GetOrdersHistoryUsecase {
+class GetOrdersHistoryUseCase {
   OrderRepo orderRepo;
 
-  GetOrdersHistoryUsecase(this.orderRepo);
+  GetOrdersHistoryUseCase(this.orderRepo);
 
   Future<Result<List<OrdersListEntity>>> call() =>
       orderRepo.getAllDriverOrders();
