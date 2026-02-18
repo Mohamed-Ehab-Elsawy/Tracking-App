@@ -46,7 +46,6 @@
     "enterPhoneNumber": "يرجى إدخال رقم الهاتف",
     "validPhoneNumber": "يرجى إدخال رقم هاتف صحيح (من 10 إلى 15 رقم)",
     "enterRecipientName": "يرجى إدخال اسم المستلم",
-    "enterAddress": "يرجى إدخال العنوان",
     "Flower order": "طلب زهور",
     "completed": "مكتمل",
     "Pickup address": "عنوان الاستلام",
@@ -68,5 +67,28 @@
     "canceled": "ملغي",
     " Recent orders : ": " الطلبات الأخيرة : ",
     "un known order number": "رقم طلب غير معروف"
+    "enterAddress": "يرجى إدخال العنوان"
+  },
+
+
+  "forgetPassword": {
+    "password": "كلمة المرور",
+    "forgetPassword": "نسيت كلمة المرور",
+    "emailVerificationDesc": "من فضلك أدخل بريدك الإلكتروني المرتبط \nبحسابك",
+    "emailHint": "أدخل بريدك الإلكتروني",
+    "emailLabel": "البريد الإلكتروني",
+    "emailVerification": "التحقق من البريد الإلكتروني",
+    "codeVerificationDesc": "من فضلك أدخل الكود المرسل إلى \nبريدك الإلكتروني",
+    "resend": "إعادة إرسال",
+    "didNotReceiveCode": "لم تستلم الكود؟ ",
+    "newPasswordLabel": "كلمة المرور الجديدة",
+    "confirmPasswordLabel": "تأكيد كلمة المرور",
+    "newPasswordHint": "أدخل كلمة المرور",
+    "confirmPasswordHint": "تأكيد كلمة المرور",
+    "confirmBtn": "تأكيد ",
+    "codeSend": "تم إرسال الكود بنجاح",
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "ResetPasswordDesc": "كلمة المرور يجب ألا تكون فارغة ويجب أن تحتوي على \n6 أحرف على الأقل مع حرف كبير ورقم واحد \nعلى الأقل"
   }
+
 }

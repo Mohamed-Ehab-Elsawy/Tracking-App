@@ -45,7 +45,6 @@
     "enterPhoneNumber": "Please enter your phone number",
     "validPhoneNumber": "Please enter a valid phone number (10-15 digits)",
     "enterRecipientName": "Please enter recipient name",
-    "enterAddress": "Please enter the address",
 
 
     "Flower order": "Flower order",
@@ -71,5 +70,26 @@
     "un known order number": "un known order number"
 
 
+    "enterAddress": "Please enter the address"
+  },
+  "forgetPassword": {
+    "password": "Password",
+    "forgetPassword": "Forget Password",
+    "emailVerificationDesc": "Please enter your email associated \nto your account",
+    "emailHint": "Enter your email",
+    "emailLabel": "Email",
+    "emailVerification": "Email Verification",
+    "codeVerificationDesc": "Please enter your code that send to your \nemail address",
+    "resend": "Resend",
+    "codeSend": "Code send successfully",
+    "didNotReceiveCode": "Didn't receive code? ",
+    "newPasswordLabel": "New Password",
+    "confirmPasswordLabel": "Confirm Password",
+    "newPasswordHint": "Enter you password",
+    "confirmPasswordHint": "Confirm password",
+    "confirmBtn": "Confirm ",
+    "resetPassword": "Reset Password",
+    "ResetPasswordDesc": "Password must not be empty and must contain \n6 characters with upper case letter and one \nnumber at least "
   }
+
 }

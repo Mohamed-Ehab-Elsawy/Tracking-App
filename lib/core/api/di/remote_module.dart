@@ -9,7 +9,9 @@ import 'package:tracking_app/core/local/app_local_storage.dart';
 @module
 abstract class ApiModule {
   @lazySingleton
-  ApiClient provideApiClient(Dio dio) => ApiClient(dio, baseUrl: Env.baseUrl);
+  ApiClient provideApiClient(Dio dio) {
+    return ApiClient(dio, baseUrl: Env.baseUrl);
+  }
 
   @preResolve
   @lazySingleton
@@ -23,7 +25,7 @@ abstract class ApiModule {
     dio.interceptors.add(logger);
 
     final userToken = await AppLocalStorage.getSecuredString(
-      key: AppConstants.userTokenKey,
+      key: AppConstants.userToken,
     );
 
     if (userToken.isNotEmpty) {
@@ -61,8 +63,9 @@ class AuthInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    final token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkcml2ZXIiOiI2OTg3NmJkYmUzNjRlZjYxNDA1MTVmYWYiLCJpYXQiOjE3NzEyMDE3OTd9.E7yTCCU-TfX8cq0DF_sxW12QxOhtQo3cd4uA8bpQJPo";
+    final token = await AppLocalStorage.getSecuredString(
+      key: AppConstants.userToken,
+    );
 
     if (token.isNotEmpty) {
       options.headers['Authorization'] =
