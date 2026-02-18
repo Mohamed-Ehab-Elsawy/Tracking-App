@@ -39,6 +39,12 @@ dependencies:
   badges: ^3.1.2
   location: ^8.0.1
   geocoding: ^4.0.0
+  firebase_core: ^4.4.0
+  firebase_messaging: ^16.1.1
+  googleapis_auth: ^2.0.0
+  http: ^1.6.0
+  cloud_firestore: ^6.1.2
+
 
 dev_dependencies:
   flutter_test:
@@ -68,10 +74,12 @@ flutter:
   uses-material-design: true
 
   assets:
+
     - assets/fonts/
     - assets/icons/
     - assets/images/
     - assets/translations/
+    - assets/
 
   fonts:
     - family: Inter
