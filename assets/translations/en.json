@@ -45,6 +45,12 @@
     "enterPhoneNumber": "Please enter your phone number",
     "validPhoneNumber": "Please enter a valid phone number (10-15 digits)",
     "enterRecipientName": "Please enter recipient name",
-    "enterAddress": "Please enter the address"
+    "enterAddress": "Please enter the address",
+    "changePassword": "Change Password",
+    "password": "Password",
+    "newPassword": "New Password",
+    "updatePassword": "Update Password",
+    "enterCurrentPassword": "Enter Current Password",
+    "enterNewPassword": "Enter New Password"
   }
 }
