@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking_app/core/di/di.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/forget_password_view.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/view_model/forget_password_view_model.dart';
-import 'package:tracking_app/features/orders/presentation/order_details/view/order_details.dart';
+import 'package:tracking_app/features/orders/presentation/order_details/view/order_details_view.dart';
 import 'package:tracking_app/features/orders/presentation/order_details/view_model/order_details_view_model.dart';
 import 'package:tracking_app/features/orders/presentation/orders_history/view/order_history_view.dart';
 import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_cubit.dart';
