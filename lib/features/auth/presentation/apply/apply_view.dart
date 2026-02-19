@@ -8,4 +8,3 @@ class ApplyView extends StatelessWidget {
     return const Scaffold();
   }
 }
-
