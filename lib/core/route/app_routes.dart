@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking_app/features/sections/presentation/managers/sections_cubit.dart';
 import 'package:tracking_app/features/sections/presentation/sections_view.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking_app/core/di/di.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/forget_password_view.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/view_model/forget_password_view_model.dart';
@@ -25,7 +24,7 @@ class AppRoutes {
 
 Route? onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
-    case AppRoutes.home:
+    case AppRoutes.homeView:
       return MaterialPageRoute(
         builder: (context) => BlocProvider<SectionsCubit>(
           create: (context) => SectionsCubit(),
@@ -48,9 +47,6 @@ Route? onGenerateRoute(RouteSettings settings) {
           child: const ForgetPasswordView(),
         ),
       );
-
-    case AppRoutes.homeView:
-      return MaterialPageRoute(builder: (context) => const Scaffold());
 
     case AppRoutes.profileView:
       return MaterialPageRoute(
