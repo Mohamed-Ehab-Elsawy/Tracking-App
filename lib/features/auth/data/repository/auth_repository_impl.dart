@@ -4,9 +4,7 @@ import 'package:tracking_app/features/auth/data/data_source/auth_remote_data_sou
 import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
 import 'package:tracking_app/features/auth/domain/entities/forget_password_entity.dart';
 import 'package:tracking_app/core/constants/app_constants.dart';
-import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/core/local/app_local_storage.dart';
-import 'package:tracking_app/features/auth/data/data_source/auth_remote_data_source.dart';
 import 'package:tracking_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:tracking_app/features/auth/mapper/forget_password_mapper.dart';
 
@@ -31,11 +29,11 @@ class AuthRepositoryImpl implements AuthRepository {
         return result;
     }
   }
-  @override
+
   Future<void> _storeTokenAndRememberMe(String token) async {
     await AppLocalStorage.set(AppConstants.rememberMeKey, true);
     await AppLocalStorage.setSecuredString(
-      key: AppConstants.userTokenKey,
+      key: AppConstants.userToken,
       value: token,
     );
   }

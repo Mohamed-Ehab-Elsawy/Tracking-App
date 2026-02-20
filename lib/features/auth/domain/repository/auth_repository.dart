@@ -1,5 +1,4 @@
 import 'package:tracking_app/core/error_handling/result.dart';
-import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/features/auth/domain/entities/forget_password_entity.dart';
 
 abstract interface class AuthRepository {
