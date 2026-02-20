@@ -105,4 +105,9 @@
     "ResetPasswordDesc": "Password must not be empty and must contain \n6 characters with upper case letter and one \nnumber at least "
   }
 
+  ,
+  "welcomeTo": "Welcome to",
+  "floweryRiderApp": "Flowery Rider App",
+  "login": "Login",
+  "apply": "Apply"
 }
