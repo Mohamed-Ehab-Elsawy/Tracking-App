@@ -3,8 +3,6 @@ import 'package:injectable/injectable.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:tracking_app/core/api/client/api_client.dart';
 import 'package:tracking_app/core/api/env/env.dart';
-import 'package:tracking_app/core/constants/app_constants.dart';
-import 'package:tracking_app/core/local/app_local_storage.dart';
 
 @module
 abstract class ApiModule {
@@ -22,14 +20,14 @@ abstract class ApiModule {
     dio.interceptors.add(authInterceptor);
     dio.interceptors.add(logger);
 
-    final userToken = await AppLocalStorage.getSecuredString(
-      key: AppConstants.userTokenKey,
-    );
+    final userToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkcml2ZXIiOiI2OTk2M2IyZWUzNjRlZjYxNDA1YTE4YjgiLCJpYXQiOjE3NzE0NTMyMzB9.LdARWEewkVqCUblUxy7NNWOXg7tpjN-kLal613ytEH4';
 
     if (userToken.isNotEmpty) {
       dio.options.headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $userToken',
+        'Authorization':
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkcml2ZXIiOiI2OTk2M2IyZWUzNjRlZjYxNDA1YTE4YjgiLCJpYXQiOjE3NzE0NTMyMzB9.LdARWEewkVqCUblUxy7NNWOXg7tpjN-kLal613ytEH4',
       };
     }
 
@@ -61,12 +59,11 @@ class AuthInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    final token = await AppLocalStorage.getSecuredString(
-      key: AppConstants.userTokenKey,
-    );
+    final token = '';
 
     if (token.isNotEmpty) {
-      options.headers['Authorization'] = 'Bearer $token';
+      options.headers['Authorization'] =
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkcml2ZXIiOiI2OTk2M2IyZWUzNjRlZjYxNDA1YTE4YjgiLCJpYXQiOjE3NzE0NTMyMzB9.LdARWEewkVqCUblUxy7NNWOXg7tpjN-kLal613ytEH4';
     }
 
     super.onRequest(options, handler);

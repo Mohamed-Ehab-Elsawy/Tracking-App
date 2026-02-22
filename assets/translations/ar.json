@@ -46,6 +46,13 @@
     "enterPhoneNumber": "يرجى إدخال رقم الهاتف",
     "validPhoneNumber": "يرجى إدخال رقم هاتف صحيح (من 10 إلى 15 رقم)",
     "enterRecipientName": "يرجى إدخال اسم المستلم",
-    "enterAddress": "يرجى إدخال العنوان"
+    "enterAddress": "يرجى إدخال العنوان",
+    "floweryRider": "سائق فلاوري",
+    "noNameProvided": "لا يوجد اسم ",
+    "noAddressProvided": "لا يوجد عنوان",
+    "flowerOrder": "طلب الزهور",
+    "pickupAddress": "عنوان التسليم",
+    "userAddress": "عنوان المستلم",
+    "orderRejectedSuccessfully": "تم رفض الطلب بنجاح"
   }
 }
