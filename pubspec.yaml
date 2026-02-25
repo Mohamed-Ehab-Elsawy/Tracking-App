@@ -44,7 +44,7 @@ dependencies:
   googleapis_auth: ^2.0.0
   http: ^1.6.0
   cloud_firestore: ^6.1.2
-
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

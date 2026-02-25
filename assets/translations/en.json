@@ -65,6 +65,11 @@
     "confirmBtn": "Confirm ",
     "resetPassword": "Reset Password",
     "ResetPasswordDesc": "Password must not be empty and must contain \n6 characters with upper case letter and one \nnumber at least "
-  }
-
+  },
+  "order_details": "Order Details",
+  "status": "Status: ",
+  "order_id": "Order ID: ",
+  "pickup_address": "Pickup Address",
+  "user_address": "User Address",
+  "egp": "EGP "
 }
