@@ -2,6 +2,7 @@ import 'package:dio/dio.dart' hide Headers;
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:tracking_app/core/api/utils/api_end_points_constants.dart';
+import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/services/notification_dto.dart';
 import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
 part 'api_client.g.dart';
@@ -29,6 +30,6 @@ abstract class ApiClient {
   @POST(ApiEndPointsConstants.callFirebaseServer)
   Future<void> sendNotification({
     @Body() required SendNotificationRequest notificationDto,
-    @Header('Authorization') required String authorization,
+    @Header(AppConstants.authorizationKey) required String authorization,
   });
 }

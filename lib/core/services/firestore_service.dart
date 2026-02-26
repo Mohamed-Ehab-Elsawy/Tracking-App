@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:injectable/injectable.dart';
 
-abstract class FirebaseStoreService {
+abstract interface class FirebaseStoreService {
   Future<void> set({
     required String collectionPath,
     required String userId,
@@ -12,8 +13,11 @@ abstract class FirebaseStoreService {
   });
 }
 
-class DatabaseServiceImpl extends FirebaseStoreService {
-  final FirebaseFirestore dbFirestore = FirebaseFirestore.instance;
+@LazySingleton(as: FirebaseStoreService)
+class DatabaseServiceImpl implements FirebaseStoreService {
+  final FirebaseFirestore _dbFirestore;
+
+  DatabaseServiceImpl(this._dbFirestore);
 
   @override
   Future<void> set({
@@ -21,7 +25,7 @@ class DatabaseServiceImpl extends FirebaseStoreService {
     required String userId,
     required Map<String, dynamic> data,
   }) async {
-    await dbFirestore.collection(collectionPath).doc(userId).set(data);
+    await _dbFirestore.collection(collectionPath).doc(userId).set(data);
   }
 
   @override
@@ -29,10 +33,10 @@ class DatabaseServiceImpl extends FirebaseStoreService {
     required String collectionPath,
     required String userId,
   }) async {
-    return await dbFirestore.collection(collectionPath).doc(userId).get().then((
-      doc,
-    ) {
-      return doc.data() as Map<String, dynamic>;
-    });
+    return await _dbFirestore.collection(collectionPath).doc(userId).get().then(
+      (doc) {
+        return doc.data() as Map<String, dynamic>;
+      },
+    );
   }
 }
