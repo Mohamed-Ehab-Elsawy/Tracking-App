@@ -15,10 +15,10 @@ import 'package:tracking_app/features/orders/presentation/orders_history/view/or
 import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_cubit.dart';
 import 'package:tracking_app/features/auth/presentation/login/login_view.dart';
 import 'package:tracking_app/features/auth/presentation/login/managers/login_cubit.dart';
+import 'package:tracking_app/features/auth/presentation/logout/logout_cubit.dart';
 import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
 import 'package:tracking_app/features/profile/presentation/edit_profile_data_view/update_driver_view.dart';
 import 'package:tracking_app/features/profile/presentation/edit_profile_data_view_model/update_profile_view_model.dart';
-import 'package:tracking_app/features/profile/presentation/profile_view/profile_view.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_events.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_view_model.dart';
 import 'package:tracking_app/features/sections/presentation/managers/sections_cubit.dart';
@@ -42,12 +42,24 @@ class AppRoutes {
 Route? onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
     case AppRoutes.homeView:
+      var sectionsCubit = SectionsCubit();
+      var profileViewModel = getIt<ProfileViewModel>();
+      var logoutCubit = getIt.get<LogoutCubit>();
+
       return MaterialPageRoute(
-        builder: (context) => BlocProvider<SectionsCubit>(
-          create: (context) => SectionsCubit(),
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<SectionsCubit>(create: (context) => sectionsCubit),
+            BlocProvider<LogoutCubit>(create: (context) => logoutCubit),
+            BlocProvider<ProfileViewModel>(
+              create: (context) =>
+                  profileViewModel..doIntent(GetDriverDataEvent()),
+            ),
+          ],
           child: const SectionsView(),
         ),
       );
+
     case AppRoutes.onboardingView:
       return MaterialPageRoute(builder: (context) => const OnboardingView());
 
