@@ -5,11 +5,12 @@ import 'package:tracking_app/core/bloc/base_state.dart';
 import 'package:tracking_app/core/di/di.dart';
 import 'package:tracking_app/core/theme/colors/color_extension.dart';
 import 'package:tracking_app/core/theme/typography/typography_extension.dart';
+import 'package:tracking_app/features/auth/presentation/logout/logout_dialog.dart';
 import 'package:tracking_app/features/localization/model/app_language.dart';
 import 'package:tracking_app/features/localization/view/language_bottom_sheet.dart';
-import 'package:tracking_app/features/profile/presentation/profile_view/widget/vehicle_info_card.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view/widget/driver_card.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view/widget/main_profile_item.dart';
+import 'package:tracking_app/features/profile/presentation/profile_view/widget/vehicle_info_card.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_events.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_states.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_view_model.dart';
@@ -29,26 +30,19 @@ class _ProfileViewState extends State<ProfileView> {
     final profileViewModel = context.read<ProfileViewModel>();
     super.initState();
     profileViewModel.uiEvents.listen((event) {
+      if (!mounted) return;
       switch (event) {
         case GetDriverDataEvent():
-          {
-            if (!mounted) return;
-            //
-          }
+          {}
+
         case OnLanguageClickIntent():
-          {
-            if (!mounted) return;
-            showLanguageBottomSheet();
-          }
+          showLanguageBottomSheet();
+
         case OnLogoutClickIntent():
-          {
-            if (!mounted) return;
-            //
-          }
+          showLogoutDialog(context);
 
         case OnProfileClickIntent():
           {
-            if (!mounted) return;
             {
               Navigator.pushNamed(
                 context,
@@ -61,15 +55,9 @@ class _ProfileViewState extends State<ProfileView> {
             }
           }
         case OnVehicleInfoClickIntent():
-          {
-            if (!mounted) return;
-            //
-          }
+          {}
         case NavigateToNotification():
-          {
-            if (!mounted) return;
-            //
-          }
+          {}
       }
     });
   }

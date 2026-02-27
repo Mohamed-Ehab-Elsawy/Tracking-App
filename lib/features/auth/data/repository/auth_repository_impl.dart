@@ -36,6 +36,7 @@ class AuthRepositoryImpl implements AuthRepository {
     );
     switch (response) {
       case Success<ChangePasswordResponse>():
+        await _storeTokenAndRememberMe(response.data.token ?? "");
         return Success<ChangePasswordResponse>(response.data);
       case Failure<ChangePasswordResponse>():
         return Failure<ChangePasswordResponse>(response.errorMessage);
