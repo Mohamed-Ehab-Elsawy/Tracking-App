@@ -9,14 +9,13 @@ import 'package:tracking_app/features/auth/presentation/change_password/view_mod
 import 'package:tracking_app/features/auth/presentation/change_password/views/change_password_view.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/forget_password_view.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/view_model/forget_password_view_model.dart';
-import 'package:tracking_app/features/orders/presentation/order_details/view/order_details_view.dart';
-import 'package:tracking_app/features/orders/presentation/order_details/view_model/order_details_view_model.dart';
-import 'package:tracking_app/features/orders/presentation/orders_history/view/order_history_view.dart';
-import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_cubit.dart';
 import 'package:tracking_app/features/auth/presentation/login/login_view.dart';
 import 'package:tracking_app/features/auth/presentation/login/managers/login_cubit.dart';
 import 'package:tracking_app/features/auth/presentation/logout/logout_cubit.dart';
 import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
+import 'package:tracking_app/features/orders/presentation/order_details/view/order_details_view.dart';
+import 'package:tracking_app/features/orders/presentation/order_details/view_model/order_details_view_model.dart';
+import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_cubit.dart';
 import 'package:tracking_app/features/profile/presentation/edit_profile_data_view/update_driver_view.dart';
 import 'package:tracking_app/features/profile/presentation/edit_profile_data_view_model/update_profile_view_model.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_events.dart';
@@ -45,7 +44,7 @@ Route? onGenerateRoute(RouteSettings settings) {
       var sectionsCubit = SectionsCubit();
       var profileViewModel = getIt<ProfileViewModel>();
       var logoutCubit = getIt.get<LogoutCubit>();
-
+      var orderHistoryCubit = getIt.get<OrderHistoryCubit>();
       return MaterialPageRoute(
         builder: (context) => MultiBlocProvider(
           providers: [
@@ -54,6 +53,9 @@ Route? onGenerateRoute(RouteSettings settings) {
             BlocProvider<ProfileViewModel>(
               create: (context) =>
                   profileViewModel..doIntent(GetDriverDataEvent()),
+            ),
+            BlocProvider<OrderHistoryCubit>(
+              create: (context) => orderHistoryCubit,
             ),
           ],
           child: const SectionsView(),
@@ -87,16 +89,6 @@ Route? onGenerateRoute(RouteSettings settings) {
         ),
       );
 
-    case AppRoutes.homeView:
-      {
-        var cubit = getIt.get<OrderHistoryCubit>();
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider<OrderHistoryCubit>(
-            create: (context) => cubit,
-            child: OrderHistoryView(),
-          ),
-        );
-      }
     case AppRoutes.orderDetails:
       {
         var cubit = getIt.get<OrderItemNameCubit>();
@@ -115,15 +107,7 @@ Route? onGenerateRoute(RouteSettings settings) {
     //       value: getIt.get<OrderHistoryCubit>(),
     //       child:  OrderHistoryView(),
     //     ),
-    //   );
-    case AppRoutes.profileView:
-      return MaterialPageRoute(
-        builder: (_) => BlocProvider(
-          create: (_) =>
-              getIt<ProfileViewModel>()..doIntent(GetDriverDataEvent()),
-          child: const ProfileView(),
-        ),
-      );
+
     case AppRoutes.updateDriverView:
       return MaterialPageRoute(
         settings: RouteSettings(arguments: settings.arguments),
