@@ -1,9 +1,11 @@
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' hide Headers;
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:tracking_app/core/api/models/requests/driver_login_request_dto.dart';
 import 'package:tracking_app/core/api/models/responses/driver_login_response_dto.dart';
 import 'package:tracking_app/core/api/utils/api_end_points_constants.dart';
+import 'package:tracking_app/core/constants/app_constants.dart';
+import 'package:tracking_app/core/services/notification_dto.dart';
 import 'package:tracking_app/features/auth/data/model/response/apply_response.dart';
 import 'package:tracking_app/features/auth/data/model/response/get_all_vehicles_response.dart';
 import 'package:tracking_app/features/auth/data/models/change_password/change_password_response.dart';
@@ -37,6 +39,11 @@ abstract class ApiClient {
     @Body() required UserDto userDto,
   });
 
+  @POST(ApiEndPointsConstants.callFirebaseServer)
+  Future<void> sendNotification({
+    @Body() required SendNotificationRequest notificationDto,
+    @Header(AppConstants.authorizationKey) required String authorization,
+  });
   @GET(ApiEndPointsConstants.getProfile)
   Future<DriverDataResponse> getDriverData();
   @PUT(ApiEndPointsConstants.updateProfile)

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "23120426797",
+    "project_id": "flower-app-8de14",
+    "storage_bucket": "flower-app-8de14.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23120426797:android:70dcb418de658d629805a4",
+        "android_client_info": {
+          "package_name": "com.elevate.tracking_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOl_7uVhyVC9MdpWsGkfH5P5X2Q3x_qv0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23120426797:android:34874d68d79076c39805a4",
+        "android_client_info": {
+          "package_name": "com.example.flower_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOl_7uVhyVC9MdpWsGkfH5P5X2Q3x_qv0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
