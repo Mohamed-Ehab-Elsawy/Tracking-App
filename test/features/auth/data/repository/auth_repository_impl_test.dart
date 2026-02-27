@@ -55,7 +55,7 @@ void main() {
 
     test(
       'should return Success when the call to remote data source is successful',
-          () async {
+      () async {
         // Arrange
         when(
           mockAuthRemoteDataSource.emailVerification(any),
@@ -76,7 +76,7 @@ void main() {
 
     test(
       'should return Failure when the call to remote data source is unsuccessful',
-          () async {
+      () async {
         // Arrange
         when(
           mockAuthRemoteDataSource.emailVerification(any),
@@ -110,7 +110,7 @@ void main() {
     );
     test(
       'should return Success when the call to remote data source is successful',
-          () async {
+      () async {
         // Arrange
         when(
           mockAuthRemoteDataSource.codeVerification(any),
@@ -131,7 +131,7 @@ void main() {
 
     test(
       'should return Failure when the call to remote data source is unsuccessful',
-          () async {
+      () async {
         // Arrange
         when(
           mockAuthRemoteDataSource.codeVerification(any),
@@ -172,7 +172,7 @@ void main() {
 
     test(
       'should return Success when the call to remote data source is successful',
-          () async {
+      () async {
         // Arrange
         when(
           mockAuthRemoteDataSource.resetPassword(any),
@@ -191,7 +191,7 @@ void main() {
 
     test(
       'should return Failure when the call to remote data source is unsuccessful',
-          () async {
+      () async {
         // Arrange
         when(
           mockAuthRemoteDataSource.resetPassword(any),
@@ -243,7 +243,7 @@ void main() {
 
     test(
       "Success login without rememberMe returns success message and does not store token",
-          () async {
+      () async {
         // arrange
         provideDummy<Result<String>>(Success(tToken));
         when(
@@ -290,7 +290,7 @@ void main() {
 
     test(
       'should return Success<List<VehicleEntity>> when dataSource returns success',
-          () async {
+      () async {
         final tVehiclesModel = [Vehicles(id: "1", type: "Car")];
         final tResponse = GetAllVehiclesResponse(vehicles: tVehiclesModel);
 
@@ -330,7 +330,7 @@ void main() {
 
     test(
       'should return Success<ApplyResponseEntity> when dataSource returns success',
-          () async {
+      () async {
         final tApplyResponse = ApplyResponse(
           message: "success",
           token: "token123",
@@ -379,28 +379,15 @@ void main() {
   });
 
   group('AuthRepositoryImpl Logout Test', () {
-    late AuthRepositoryImpl authRepository;
-    late MockSharedPreferences mockPrefs;
-    late MockFlutterSecureStorage mockSecureStorage;
-
-    setUp(() {
-      mockPrefs = MockSharedPreferences();
-      mockSecureStorage = MockFlutterSecureStorage();
-
-      AppLocalStorage.prefsForTest = mockPrefs;
-      AppLocalStorage.secureStorageForTest = mockSecureStorage;
-
-      authRepository = AuthRepositoryImpl();
-    });
     test(
       "Should clear all data from SharedPreferences and FlutterSecureStorage",
-          () async {
+      () async {
         // Arrange
         when(mockPrefs.clear()).thenAnswer((_) async => true);
         when(mockSecureStorage.deleteAll()).thenAnswer((_) async => {});
 
         // Act
-        authRepository.logout();
+        authRepositoryImpl.logout();
 
         // Assert
         verify(AppLocalStorage.clearAll()).called(1);
