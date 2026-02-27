@@ -69,6 +69,33 @@
     "un known order number": "رقم طلب غير معروف",
     "enterAddress": "يرجى إدخال العنوان"
   },
+  "language": "اللغة",
+  "English": "الإنجليزية",
+  "Arabic": "العربية",
+  "logout": "تسجيل الخروج",
+  "profile": "الملف الشخصي",
+  "Vehicle info": "معلومات السيارة",
+  "something went wrong": "حدث خطأ ما",
+  "Change Language": "تغيير اللغة",
+  "gallery": "المعرض",
+  "camera": "الكاميرا",
+  "Edit profile": "تعديل الملف الشخصي",
+  "Profile updated successfully": "تم تحديث الملف الشخصي بنجاح",
+  "Photo uploaded successfully": "تم رفع الصورة بنجاح",
+  "First name": "الاسم الأول",
+  "Last name": "اسم العائلة",
+  "Email": "البريد الإلكتروني",
+  "Phone number": "رقم الهاتف",
+  "Password": "كلمة المرور",
+  "*******": "*******",
+  "Change": "تغيير",
+  "Profile": "الملف الشخصي",
+  "unknown Type": "نوع غير معروف",
+  "unknown Number": "رقم غير معروف",
+  "unknown name": "اسم غير معروف",
+  "unknown email": "بريد إلكتروني غير معروف",
+  "unknown phone": "رقم هاتف غير معروف",
+
 
 
   "forgetPassword": {

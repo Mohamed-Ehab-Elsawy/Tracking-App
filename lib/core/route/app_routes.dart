@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tracking_app/features/sections/presentation/managers/sections_cubit.dart';
+import 'package:tracking_app/features/sections/presentation/sections_view.dart';
 import 'package:tracking_app/core/di/di.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/forget_password_view.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/view_model/forget_password_view_model.dart';
@@ -7,6 +9,11 @@ import 'package:tracking_app/features/orders/presentation/order_details/view/ord
 import 'package:tracking_app/features/orders/presentation/order_details/view_model/order_details_view_model.dart';
 import 'package:tracking_app/features/orders/presentation/orders_history/view/order_history_view.dart';
 import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_cubit.dart';
+import 'package:tracking_app/features/profile/presentation/edit_profile_data_view/update_driver_view.dart';
+import 'package:tracking_app/features/profile/presentation/edit_profile_data_view_model/update_profile_view_model.dart';
+import 'package:tracking_app/features/profile/presentation/profile_view/profile_view.dart';
+import '../../features/profile/presentation/profile_view_model/profile_events.dart';
+import '../../features/profile/presentation/profile_view_model/profile_view_model.dart';
 
 class AppRoutes {
   // Define app routes
@@ -17,10 +24,19 @@ class AppRoutes {
   static const String homeView = '/home_view';
   static const String orderHistory = '/orderHistory';
   static const String orderDetails = '/orderDetails';
+  static const String profileView = '/profile_view';
+  static const String updateDriverView = '/update_driver_view';
 }
 
 Route? onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
+    case AppRoutes.homeView:
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider<SectionsCubit>(
+          create: (context) => SectionsCubit(),
+          child: const SectionsView(),
+        ),
+      );
     case AppRoutes.onboardingView:
       return MaterialPageRoute(builder: (context) => const Scaffold());
 
@@ -67,6 +83,22 @@ Route? onGenerateRoute(RouteSettings settings) {
     //       child:  OrderHistoryView(),
     //     ),
     //   );
+    case AppRoutes.profileView:
+      return MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) =>
+              getIt<ProfileViewModel>()..doIntent(GetDriverDataEvent()),
+          child: const ProfileView(),
+        ),
+      );
+    case AppRoutes.updateDriverView:
+      return MaterialPageRoute(
+        settings: RouteSettings(arguments: settings.arguments),
+        builder: (_) => BlocProvider(
+          create: (_) => getIt<UpdateProfileViewModel>(),
+          child: const UpdateDriverView(),
+        ),
+      );
   }
   return null;
 }
