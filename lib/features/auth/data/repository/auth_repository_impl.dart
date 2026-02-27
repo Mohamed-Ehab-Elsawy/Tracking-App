@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:injectable/injectable.dart';
+import 'package:tracking_app/core/local/app_local_storage.dart';
 import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
-import 'package:tracking_app/core/local/app_local_storage.dart';
 import 'package:tracking_app/features/auth/data/data_source/auth_remote_data_source.dart';
 import 'package:tracking_app/features/auth/data/mapper/apply_rsponse_mappr.dart';
 import 'package:tracking_app/features/auth/data/mapper/driver_mapper.dart';
@@ -23,6 +23,9 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _authRemoteDataSource;
 
   AuthRepositoryImpl(this._authRemoteDataSource);
+
+  @override
+  void logout() => AppLocalStorage.clearAll();
 
   @override
   Future<Result<ApplyResponseEntity>> apply(

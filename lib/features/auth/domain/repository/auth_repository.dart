@@ -26,4 +26,6 @@ abstract interface class AuthRepository {
   });
 
   Future<Result<List<VehicleEntity>>> getAllVehicles();
+
+  void logout();
 }

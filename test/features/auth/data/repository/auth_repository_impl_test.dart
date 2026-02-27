@@ -377,4 +377,21 @@ void main() {
       expect((result as Failure).errorMessage, "server_error");
     });
   });
+
+  group('AuthRepositoryImpl Logout Test', () {
+    test(
+      "Should clear all data from SharedPreferences and FlutterSecureStorage",
+      () async {
+        // Arrange
+        when(mockPrefs.clear()).thenAnswer((_) async => true);
+        when(mockSecureStorage.deleteAll()).thenAnswer((_) async => {});
+
+        // Act
+        authRepositoryImpl.logout();
+
+        // Assert
+        verify(AppLocalStorage.clearAll()).called(1);
+      },
+    );
+  });
 }
