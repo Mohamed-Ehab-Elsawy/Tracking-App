@@ -6,7 +6,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.10.8
+  sdk: ^3.10.4
 
 dependencies:
   flutter:
@@ -39,6 +39,13 @@ dependencies:
   badges: ^3.1.2
   location: ^8.0.1
   geocoding: ^4.0.0
+  firebase_core: ^4.4.0
+  firebase_messaging: ^16.1.1
+  googleapis_auth: ^2.0.0
+  http: ^1.6.0
+  cloud_firestore: ^6.1.2
+
+  country_picker: ^2.0.27
 
 dev_dependencies:
   flutter_test:
@@ -60,7 +67,6 @@ flutter_launcher_icons:
   ios: true
   remove_alpha_ios: true
   image_path: "assets/icons/app_icon.png"
-
   adaptive_icon_background: "#F9ECF0"
   adaptive_icon_foreground: "assets/icons/app_icon.png"
 
@@ -68,10 +74,12 @@ flutter:
   uses-material-design: true
 
   assets:
+
     - assets/fonts/
     - assets/icons/
     - assets/images/
     - assets/translations/
+    - assets/
 
   fonts:
     - family: Inter
