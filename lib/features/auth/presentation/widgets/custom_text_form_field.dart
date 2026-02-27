@@ -6,9 +6,13 @@ class CustomTextFormField extends StatefulWidget {
   final FormFieldValidator<String>? validator;
   final String hint;
   final String label;
+  final Widget? suffixIcon;
+  final Function()? onTap;
   final TextInputType? keyboardType;
   final int maxLines;
+  final bool? readOnly;
   final Function(String value) onTextChange;
+  final TextEditingController? controller;
 
   const CustomTextFormField({
     super.key,
@@ -16,6 +20,10 @@ class CustomTextFormField extends StatefulWidget {
     this.hint = "",
     this.label = "",
     this.maxLines = 1,
+    this.readOnly,
+    this.suffixIcon,
+    this.onTap,
+    this.controller,
     this.textInputAction = TextInputAction.next,
     required this.keyboardType,
     required this.onTextChange,
@@ -26,36 +34,44 @@ class CustomTextFormField extends StatefulWidget {
 }
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
-  final TextEditingController controller = TextEditingController();
   late bool obscureText;
 
   @override
   void initState() {
+    widget.controller;
     super.initState();
     if (widget.keyboardType == TextInputType.visiblePassword) {
       obscureText = true;
     } else {
       obscureText = false;
     }
+    widget.controller?.addListener(
+      () => widget.onTextChange(widget.controller!.text),
+    );
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    widget.controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) => TextFormField(
     validator: widget.validator,
-    controller: controller,
+    controller: widget.controller,
+    readOnly: widget.readOnly ?? false,
+    onChanged: widget.onTextChange,
+    onTap: widget.onTap,
     keyboardType: widget.keyboardType,
     maxLines: widget.maxLines,
+
     obscureText: obscureText,
     textInputAction: widget.textInputAction,
     decoration: InputDecoration(
       hint: Text(widget.hint),
       label: Text(widget.label),
+
       suffixIcon: widget.keyboardType == TextInputType.visiblePassword
           ? InkWell(
               splashColor: Colors.transparent,
@@ -69,7 +85,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 color: context.colors.grey,
               ),
             )
-          : null,
+          : widget.suffixIcon ?? widget.suffixIcon,
     ),
   );
 }
