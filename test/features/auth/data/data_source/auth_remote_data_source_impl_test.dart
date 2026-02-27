@@ -14,6 +14,7 @@ import 'package:tracking_app/features/auth/data/model/response/apply_response.da
 import 'package:tracking_app/features/auth/data/model/response/get_all_vehicles_response.dart';
 import 'package:tracking_app/features/auth/data/model/response/metadata.dart';
 import 'package:tracking_app/features/auth/data/model/response/vehicles.dart';
+import 'package:tracking_app/features/auth/data/models/change_password/change_password_response.dart';
 import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
 
 import 'auth_remote_data_source_impl_test.mocks.dart';
@@ -23,6 +24,7 @@ void main() {
   late ApiClient mockApiClient;
   late AuthRemoteDataSourceImpl authRemoteDataSourceImpl;
   late DioException dioException;
+
   setUp(() {
     mockApiClient = MockApiClient();
     authRemoteDataSourceImpl = AuthRemoteDataSourceImpl(mockApiClient);
@@ -397,5 +399,82 @@ void main() {
       verify(mockApiClient.login(requestDTO)).called(1);
       verifyNoMoreInteractions(mockApiClient);
     });
+  });
+
+  group("Change Password Function Test Cases", () {
+    late String password;
+    late String newPassword;
+    late ChangePasswordResponse changePasswordResponse;
+
+    setUp(() {
+      password = "oldPassword123";
+      newPassword = "newPassword456";
+      changePasswordResponse = ChangePasswordResponse(
+        message: "Password changed successfully",
+      );
+    });
+
+    test("when call changePassword it should return Success", () async {
+      // Arrange
+      when(
+        mockApiClient.changePassword(
+          password: password,
+          newPassword: newPassword,
+        ),
+      ).thenAnswer((_) async => changePasswordResponse);
+
+      // Act
+      final result = await authRemoteDataSourceImpl.changePassword(
+        password: password,
+        newPassword: newPassword,
+      );
+
+      // Assertion And Verification
+      expect(result, isA<Success<ChangePasswordResponse>>());
+      expect(
+        (result as Success<ChangePasswordResponse>).data.message,
+        equals(changePasswordResponse.message),
+      );
+      verify(
+        mockApiClient.changePassword(
+          password: password,
+          newPassword: newPassword,
+        ),
+      ).called(1);
+      verifyNoMoreInteractions(mockApiClient);
+    });
+
+    test(
+      "when changePassword throws exception it should return Failure",
+      () async {
+        // Arrange
+        when(
+          mockApiClient.changePassword(
+            password: password,
+            newPassword: newPassword,
+          ),
+        ).thenThrow(dioException);
+
+        // Act
+        final result = await authRemoteDataSourceImpl.changePassword(
+          password: password,
+          newPassword: newPassword,
+        );
+
+        // Assertion And Verifications
+        expect(result, isA<Failure>());
+        expect(
+          (result as Failure).errorMessage,
+          equals("errors.connectionError"),
+        );
+        verify(
+          mockApiClient.changePassword(
+            password: password,
+            newPassword: newPassword,
+          ),
+        ).called(1);
+        verifyNoMoreInteractions(mockApiClient);
+      },
+    );
   });
 }

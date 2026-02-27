@@ -6,6 +6,7 @@ import 'package:tracking_app/core/api/models/responses/driver_login_response_dto
 import 'package:tracking_app/core/api/utils/api_end_points_constants.dart';
 import 'package:tracking_app/features/auth/data/model/response/apply_response.dart';
 import 'package:tracking_app/features/auth/data/model/response/get_all_vehicles_response.dart';
+import 'package:tracking_app/features/auth/data/models/change_password/change_password_response.dart';
 import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
 import 'package:tracking_app/features/profile/data/model/request/update_profile_request.dart';
 import 'package:tracking_app/features/profile/data/model/response/driver_data_response.dart';
@@ -67,4 +68,10 @@ abstract class ApiClient {
   );
   @GET(ApiEndPointsConstants.getAllVehicles)
   Future<GetAllVehiclesResponse> getAllVehicles();
+
+  @POST(ApiEndPointsConstants.changePassword)
+  Future<ChangePasswordResponse> changePassword({
+    @Field("password") required String password,
+    @Field("newPassword") required String newPassword,
+  });
 }

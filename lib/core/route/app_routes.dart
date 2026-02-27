@@ -5,6 +5,8 @@ import 'package:tracking_app/features/auth/presentation/apply/cubit/apply_intent
 import 'package:tracking_app/features/auth/presentation/apply/cubit/apply_view_model.dart';
 import 'package:tracking_app/features/auth/presentation/apply/view/apply_success_view.dart';
 import 'package:tracking_app/features/auth/presentation/apply/view/apply_view.dart';
+import 'package:tracking_app/features/auth/presentation/change_password/view_model/change_password_view_model.dart';
+import 'package:tracking_app/features/auth/presentation/change_password/views/change_password_view.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/forget_password_view.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/view_model/forget_password_view_model.dart';
 import 'package:tracking_app/features/auth/presentation/login/login_view.dart';
@@ -25,6 +27,7 @@ class AppRoutes {
   static const String applyView = '/apply_view';
   static const String forgetPasswordView = '/forget_password_view';
   static const String homeView = '/home_view';
+  static const String changePassword = '/change_password';
   static const String applySuccessView = '/apply_success_view';
   static const String profileView = '/profile_view';
   static const String updateDriverView = '/update_driver_view';
@@ -85,6 +88,14 @@ Route? onGenerateRoute(RouteSettings settings) {
 
     case AppRoutes.applySuccessView:
       return MaterialPageRoute(builder: (context) => const ApplySuccessView());
+
+    case AppRoutes.changePassword:
+      return MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (context) => getIt<ChangePasswordViewModel>(),
+          child: const ChangePasswordView(),
+        ),
+      );
   }
   return null;
 }

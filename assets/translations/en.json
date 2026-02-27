@@ -146,5 +146,12 @@
   "welcomeTo": "Welcome to",
   "floweryRiderApp": "Flowery Rider App",
   "confirm_logout_message": "Confirm logout!!",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "enterAddress": "Please enter the address",
+  "changePassword": "Change Password",
+  "password": "Password",
+  "newPassword": "New Password",
+  "updatePassword": "Update Password",
+  "enterCurrentPassword": "Enter Current Password",
+  "enterNewPassword": "Enter New Password"
 }
