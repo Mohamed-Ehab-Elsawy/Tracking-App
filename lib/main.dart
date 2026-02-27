@@ -35,9 +35,9 @@ Widget _buildApp() => EasyLocalization(
   ],
   path: AssetConstants.translationsPath,
   fallbackLocale: const Locale(LocalizationConstants.enLocaleKey),
-    startLocale: const Locale(
-      LocalizationConstants.enLocaleKey,
-    ), // 👈 اللغة الافتراضية
+  startLocale: const Locale(
+    LocalizationConstants.enLocaleKey,
+  ), // 👈 اللغة الافتراضية
 
   child: const TrackingApp(),
 );
