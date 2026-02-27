@@ -21,7 +21,7 @@ jobs:
           branch_name=${{ github.head_ref }}
           
           # Define the regex pattern for allowed branch names
-          pattern='^(fix|release|feat|hotfix|build|test|feature)\/[a-z0-9-]+$'
+          pattern='^(fix|release|feat|hotfix|refactor|build|test|feature)\/[a-z0-9-]+$'
           
           
           if [[ "$branch_name" =~ $pattern ]]; then
