@@ -16,14 +16,11 @@ import 'package:tracking_app/features/auth/presentation/forget_password/forget_p
 import 'package:tracking_app/features/auth/presentation/forget_password/view_model/forget_password_view_model.dart';
 import 'package:tracking_app/features/auth/presentation/login/login_view.dart';
 import 'package:tracking_app/features/auth/presentation/login/managers/login_cubit.dart';
-import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
 import 'package:tracking_app/features/profile/presentation/edit_profile_data_view/update_driver_view.dart';
 import 'package:tracking_app/features/profile/presentation/edit_profile_data_view_model/update_profile_view_model.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view/profile_view.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_events.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_view_model.dart';
-import 'package:tracking_app/features/sections/presentation/managers/sections_cubit.dart';
-import 'package:tracking_app/features/sections/presentation/sections_view.dart';
 
 class AppRoutes {
   // Define app routes
@@ -34,7 +31,6 @@ class AppRoutes {
   static const String applyView = '/apply_view';
   static const String forgetPasswordView = '/forget_password_view';
   static const String homeView = '/home';
-  static const String homeView = '/home_view';
   static const String changePassword = '/change_password';
   static const String applySuccessView = '/apply_success_view';
   static const String profileView = '/profile_view';
@@ -60,7 +56,6 @@ Route? onGenerateRoute(RouteSettings settings) {
           child: const HomeView(),
         ),
       );
-      return MaterialPageRoute(builder: (context) => const OnboardingView());
 
     case AppRoutes.loginView:
       var cubit = getIt.get<LoginCubit>();
