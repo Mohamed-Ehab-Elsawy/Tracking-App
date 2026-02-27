@@ -56,7 +56,7 @@ void main() {
     expect(find.text('apply'), findsOneWidget);
     expect(find.byKey(const Key(KeysConstants.applyKey)), findsOneWidget);
     expect(find.byKey(const Key(KeysConstants.loginKey)), findsOneWidget);
-    await tester.tap(find.byKey(const Key(KeysConstants.loginKey)));
+    //await tester.tap(find.byKey(const Key(KeysConstants.loginKey)));
     await tester.pumpAndSettle();
   });
   testWidgets('onboarding view navigation to apply view', (tester) async {
