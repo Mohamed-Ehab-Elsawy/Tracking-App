@@ -13,4 +13,12 @@ abstract interface class AuthRemoteDataSource {
   });
 
   Future<Result<GetAllVehiclesResponse>> getAllVehicles();
+
+  Future<Result<String>> login(String email, String password);
+
+  Future<Result<EmailVerificationResponseDto>> emailVerification(UserDto user);
+
+  Future<Result<VerificationCodeResponseDto>> codeVerification(UserDto user);
+
+  Future<Result<ResetPasswordResponseDto>> resetPassword(UserDto user);
 }

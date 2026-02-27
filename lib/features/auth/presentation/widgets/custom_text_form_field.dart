@@ -45,6 +45,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     } else {
       obscureText = false;
     }
+    controller.addListener(() => widget.onTextChange(controller.text));
   }
 
   @override
