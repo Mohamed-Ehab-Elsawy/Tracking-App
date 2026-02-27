@@ -14,8 +14,8 @@ import 'package:tracking_app/features/auth/data/model/response/apply_response.da
 import 'package:tracking_app/features/auth/data/model/response/get_all_vehicles_response.dart';
 import 'package:tracking_app/features/auth/data/model/response/metadata.dart';
 import 'package:tracking_app/features/auth/data/model/response/vehicles.dart';
-import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
 import 'package:tracking_app/features/auth/data/models/change_password/change_password_response.dart';
+import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
 
 import 'auth_remote_data_source_impl_test.mocks.dart';
 
@@ -401,7 +401,6 @@ void main() {
     });
   });
 
-
   group("Change Password Function Test Cases", () {
     late String password;
     late String newPassword;
@@ -447,7 +446,7 @@ void main() {
 
     test(
       "when changePassword throws exception it should return Failure",
-          () async {
+      () async {
         // Arrange
         when(
           mockApiClient.changePassword(

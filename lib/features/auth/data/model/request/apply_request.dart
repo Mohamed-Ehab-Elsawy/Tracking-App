@@ -29,7 +29,7 @@ class ApplyRequest extends Equatable {
   @JsonKey(name: "phone")
   final String? phone;
 
-  ApplyRequest({
+  const ApplyRequest({
     this.country,
     this.firstName,
     this.lastName,

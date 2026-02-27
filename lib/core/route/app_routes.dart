@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking_app/core/di/di.dart';
-import 'package:tracking_app/features/auth/presentation/change_password/view_model/change_password_view_model.dart';
-import 'package:tracking_app/features/auth/presentation/change_password/views/change_password_view.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tracking_app/core/di/di.dart';
 import 'package:tracking_app/features/auth/presentation/apply/cubit/apply_intent.dart';
 import 'package:tracking_app/features/auth/presentation/apply/cubit/apply_view_model.dart';
 import 'package:tracking_app/features/auth/presentation/apply/view/apply_success_view.dart';
 import 'package:tracking_app/features/auth/presentation/apply/view/apply_view.dart';
+import 'package:tracking_app/features/auth/presentation/change_password/view_model/change_password_view_model.dart';
+import 'package:tracking_app/features/auth/presentation/change_password/views/change_password_view.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/forget_password_view.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/view_model/forget_password_view_model.dart';
 import 'package:tracking_app/features/auth/presentation/login/login_view.dart';
