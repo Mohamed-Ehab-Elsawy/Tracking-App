@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracking_app/core/theme/app_theme.dart';
 import 'package:tracking_app/core/theme/light_theme.dart';
 import 'package:tracking_app/features/auth/presentation/logout/logout_cubit.dart';
+import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_cubit.dart';
+import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_states.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view/profile_view.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_states.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_view_model.dart';
@@ -21,11 +23,13 @@ import 'sections_view_test.mocks.dart';
   MockSpec<SectionsCubit>(),
   MockSpec<ProfileViewModel>(),
   MockSpec<LogoutCubit>(),
+  MockSpec<OrderHistoryCubit>(),
 ])
 void main() {
   late MockSectionsCubit mockCubit;
   late MockProfileViewModel mockProfileViewModel;
   late MockLogoutCubit mockLogoutCubit;
+  late MockOrderHistoryCubit mockOrderHistoryCubit;
 
   setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
@@ -38,6 +42,7 @@ void main() {
     mockCubit = MockSectionsCubit();
     mockProfileViewModel = MockProfileViewModel();
     mockLogoutCubit = MockLogoutCubit();
+    mockOrderHistoryCubit = MockOrderHistoryCubit();
 
     when(mockCubit.stream).thenAnswer((_) => const Stream.empty());
     when(mockCubit.state).thenReturn(const SectionsViewState());
@@ -47,6 +52,9 @@ void main() {
 
     when(mockLogoutCubit.stream).thenAnswer((_) => const Stream.empty());
     when(mockLogoutCubit.state).thenReturn(LogoutDialogState());
+
+    when(mockOrderHistoryCubit.stream).thenAnswer((_) => const Stream.empty());
+    when(mockOrderHistoryCubit.state).thenReturn(OrderHistoryStates());
   });
 
   Widget buildTestableWidget() => EasyLocalization(
@@ -61,6 +69,7 @@ void main() {
             BlocProvider<SectionsCubit>.value(value: mockCubit),
             BlocProvider<ProfileViewModel>.value(value: mockProfileViewModel),
             BlocProvider<LogoutCubit>.value(value: mockLogoutCubit),
+            BlocProvider<OrderHistoryCubit>.value(value: mockOrderHistoryCubit),
           ],
           child: const SectionsView(),
         ),
