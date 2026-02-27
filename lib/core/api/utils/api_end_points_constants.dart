@@ -13,4 +13,7 @@ abstract class ApiEndPointsConstants {
   static const String callFirebaseServer =
       'https://fcm.googleapis.com/v1/projects/flower-app-8de14/messages:send';
   static const String getAllVehicles = 'vehicles';
+
+  static const String getAllDriverOrders = 'orders/driver-orders';
+  static const String getSpecificProduct = 'products';
 }

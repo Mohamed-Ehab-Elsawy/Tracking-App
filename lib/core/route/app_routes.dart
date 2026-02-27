@@ -9,6 +9,10 @@ import 'package:tracking_app/features/auth/presentation/change_password/view_mod
 import 'package:tracking_app/features/auth/presentation/change_password/views/change_password_view.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/forget_password_view.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/view_model/forget_password_view_model.dart';
+import 'package:tracking_app/features/orders/presentation/order_details/view/order_details_view.dart';
+import 'package:tracking_app/features/orders/presentation/order_details/view_model/order_details_view_model.dart';
+import 'package:tracking_app/features/orders/presentation/orders_history/view/order_history_view.dart';
+import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_cubit.dart';
 import 'package:tracking_app/features/auth/presentation/login/login_view.dart';
 import 'package:tracking_app/features/auth/presentation/login/managers/login_cubit.dart';
 import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
@@ -27,6 +31,8 @@ class AppRoutes {
   static const String applyView = '/apply_view';
   static const String forgetPasswordView = '/forget_password_view';
   static const String homeView = '/home_view';
+  static const String orderHistory = '/orderHistory';
+  static const String orderDetails = '/orderDetails';
   static const String changePassword = '/change_password';
   static const String applySuccessView = '/apply_success_view';
   static const String profileView = '/profile_view';
@@ -69,6 +75,35 @@ Route? onGenerateRoute(RouteSettings settings) {
         ),
       );
 
+    case AppRoutes.homeView:
+      {
+        var cubit = getIt.get<OrderHistoryCubit>();
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<OrderHistoryCubit>(
+            create: (context) => cubit,
+            child: OrderHistoryView(),
+          ),
+        );
+      }
+    case AppRoutes.orderDetails:
+      {
+        var cubit = getIt.get<OrderItemNameCubit>();
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => BlocProvider<OrderItemNameCubit>(
+            create: (context) => cubit,
+            child: OrderDetailsView(),
+          ),
+        );
+      }
+
+    // case AppRoutes.orderHistory:
+    //   return MaterialPageRoute(
+    //     builder: (_) => BlocProvider<OrderHistoryCubit>.value(
+    //       value: getIt.get<OrderHistoryCubit>(),
+    //       child:  OrderHistoryView(),
+    //     ),
+    //   );
     case AppRoutes.profileView:
       return MaterialPageRoute(
         builder: (_) => BlocProvider(

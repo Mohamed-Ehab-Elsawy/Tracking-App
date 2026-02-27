@@ -10,6 +10,8 @@ import 'package:tracking_app/features/auth/data/model/response/apply_response.da
 import 'package:tracking_app/features/auth/data/model/response/get_all_vehicles_response.dart';
 import 'package:tracking_app/features/auth/data/models/change_password/change_password_response.dart';
 import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
+import 'package:tracking_app/features/orders/data/models/response/order_response_dto.dart';
+import 'package:tracking_app/features/orders/data/models/response/product_response.dart';
 import 'package:tracking_app/features/profile/data/model/request/update_profile_request.dart';
 import 'package:tracking_app/features/profile/data/model/response/driver_data_response.dart';
 import 'package:tracking_app/features/profile/data/model/response/upload_photo_response.dart';
@@ -38,6 +40,11 @@ abstract class ApiClient {
   Future<ResetPasswordResponseDto> resetPassword({
     @Body() required UserDto userDto,
   });
+  @GET(ApiEndPointsConstants.getAllDriverOrders)
+  Future<OrderResponseDto> getAllDriverOrders();
+
+  @GET("${ApiEndPointsConstants.getSpecificProduct}/{id}")
+  Future<ProductResponse> getProductDetails(@Path("id") String productId);
 
   @POST(ApiEndPointsConstants.callFirebaseServer)
   Future<void> sendNotification({
