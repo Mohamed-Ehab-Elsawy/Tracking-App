@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,12 +9,11 @@ import 'package:tracking_app/core/constants/localization_constants.dart';
 import 'package:tracking_app/core/di/di.dart';
 import 'package:tracking_app/core/local/app_local_storage.dart';
 import 'package:tracking_app/core/services/fcm_service.dart';
-import 'package:tracking_app/firebase_options.dart';
 import 'package:tracking_app/tracking_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  //await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseMessaging.instance.requestPermission();
   await FCMService.getAccessToken().then((fcmAccessToken) {
     AppLocalStorage.setSecuredString(
