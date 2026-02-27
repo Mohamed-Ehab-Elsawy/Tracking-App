@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tracking_app/features/auth/data/model/response/vehicles.dart';
 
 part 'apply_request.g.dart';
 
 @JsonSerializable()
-class ApplyRequest {
+class ApplyRequest extends Equatable {
   @JsonKey(name: "country")
   final String? country;
   @JsonKey(name: "firstName")
@@ -49,4 +50,19 @@ class ApplyRequest {
   Map<String, dynamic> toJson() {
     return _$ApplyRequestToJson(this);
   }
+
+  @override
+  List<Object?> get props => [
+    country,
+    firstName,
+    lastName,
+    vehicleType,
+    vehicleNumber,
+    nID,
+    email,
+    password,
+    rePassword,
+    gender,
+    phone,
+  ];
 }

@@ -4,6 +4,7 @@ import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/features/auth/data/model/request/apply_request.dart';
 import 'package:tracking_app/features/auth/data/model/response/apply_response.dart';
 import 'package:tracking_app/features/auth/data/model/response/get_all_vehicles_response.dart';
+import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
 
 abstract interface class AuthRemoteDataSource {
   Future<Result<ApplyResponse>> apply(

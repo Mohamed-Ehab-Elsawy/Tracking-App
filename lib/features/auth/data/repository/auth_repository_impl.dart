@@ -1,19 +1,17 @@
 import 'dart:io';
 
 import 'package:injectable/injectable.dart';
-import 'package:tracking_app/core/error_handling/result.dart';
-import 'package:tracking_app/features/auth/data/data_source/auth_remote_data_source.dart';
-import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
-import 'package:tracking_app/features/auth/domain/entities/forget_password_entity.dart';
 import 'package:tracking_app/core/constants/app_constants.dart';
-import 'package:tracking_app/core/local/app_local_storage.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
+import 'package:tracking_app/core/local/app_local_storage.dart';
 import 'package:tracking_app/features/auth/data/data_source/auth_remote_data_source.dart';
 import 'package:tracking_app/features/auth/data/mapper/apply_rsponse_mappr.dart';
 import 'package:tracking_app/features/auth/data/mapper/driver_mapper.dart';
 import 'package:tracking_app/features/auth/data/mapper/vehicles_mapper.dart';
 import 'package:tracking_app/features/auth/data/model/response/apply_response.dart';
 import 'package:tracking_app/features/auth/data/model/response/get_all_vehicles_response.dart';
+import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
+import 'package:tracking_app/features/auth/domain/entities/forget_password_entity.dart';
 import 'package:tracking_app/features/auth/domain/entity/apply_response_entity.dart';
 import 'package:tracking_app/features/auth/domain/entity/driver_entity.dart';
 import 'package:tracking_app/features/auth/domain/entity/vehicles_entity.dart';
@@ -22,8 +20,9 @@ import 'package:tracking_app/features/auth/mapper/forget_password_mapper.dart';
 
 @Injectable(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
-  AuthRemoteDataSource authRemoteDataSource;
-  AuthRepositoryImpl(this.authRemoteDataSource);
+  final AuthRemoteDataSource _authRemoteDataSource;
+
+  AuthRepositoryImpl(this._authRemoteDataSource);
 
   @override
   Future<Result<ApplyResponseEntity>> apply(
@@ -33,7 +32,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     final requestDto = applyEntity.toRequest();
 
-    var result = await authRemoteDataSource.apply(
+    var result = await _authRemoteDataSource.apply(
       requestDto,
       nidImage: nidImage,
       vehicleLicense: vehicleLicense,
@@ -48,7 +47,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Result<List<VehicleEntity>>> getAllVehicles() async {
-    var result = await authRemoteDataSource.getAllVehicles();
+    var result = await _authRemoteDataSource.getAllVehicles();
 
     switch (result) {
       case Success<GetAllVehiclesResponse>():
@@ -62,11 +61,6 @@ class AuthRepositoryImpl implements AuthRepository {
         return Failure(result.errorMessage);
     }
   }
-}
-class AuthRepositoryImpl implements AuthRepository {
-  final AuthRemoteDataSource _authRemoteDataSource;
-
-  AuthRepositoryImpl(this._authRemoteDataSource);
 
   @override
   Future<Result<String>> login(

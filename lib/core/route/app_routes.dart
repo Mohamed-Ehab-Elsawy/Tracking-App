@@ -5,9 +5,6 @@ import 'package:tracking_app/features/auth/presentation/apply/cubit/apply_intent
 import 'package:tracking_app/features/auth/presentation/apply/cubit/apply_view_model.dart';
 import 'package:tracking_app/features/auth/presentation/apply/view/apply_success_view.dart';
 import 'package:tracking_app/features/auth/presentation/apply/view/apply_view.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tracking_app/core/di/di.dart';
-import 'package:tracking_app/features/auth/presentation/apply/apply_view.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/forget_password_view.dart';
 import 'package:tracking_app/features/auth/presentation/forget_password/view_model/forget_password_view_model.dart';
 import 'package:tracking_app/features/auth/presentation/login/login_view.dart';
@@ -16,11 +13,10 @@ import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
 import 'package:tracking_app/features/profile/presentation/edit_profile_data_view/update_driver_view.dart';
 import 'package:tracking_app/features/profile/presentation/edit_profile_data_view_model/update_profile_view_model.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view/profile_view.dart';
+import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_events.dart';
+import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_view_model.dart';
 import 'package:tracking_app/features/sections/presentation/managers/sections_cubit.dart';
 import 'package:tracking_app/features/sections/presentation/sections_view.dart';
-
-import '../../features/profile/presentation/profile_view_model/profile_events.dart';
-import '../../features/profile/presentation/profile_view_model/profile_view_model.dart';
 
 class AppRoutes {
   // Define app routes
@@ -54,7 +50,6 @@ Route? onGenerateRoute(RouteSettings settings) {
       );
 
     case AppRoutes.applyView:
-      return MaterialPageRoute(builder: (context) => const ApplyView());
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (context) =>

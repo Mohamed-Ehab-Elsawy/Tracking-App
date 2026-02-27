@@ -8,7 +8,6 @@ import 'package:tracking_app/core/api/client/api_client.dart';
 import 'package:tracking_app/core/api/models/requests/driver_login_request_dto.dart';
 import 'package:tracking_app/core/api/models/responses/driver_login_response_dto.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
-import 'package:tracking_app/features/auth/data/data_source/auth_remote_data_source.dart';
 import 'package:tracking_app/features/auth/data/data_source/auth_remote_data_source_impl.dart';
 import 'package:tracking_app/features/auth/data/model/request/apply_request.dart';
 import 'package:tracking_app/features/auth/data/model/response/apply_response.dart';
@@ -18,7 +17,6 @@ import 'package:tracking_app/features/auth/data/model/response/vehicles.dart';
 import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
 
 import 'auth_remote_data_source_impl_test.mocks.dart';
-import '../../../profile/data/data_source/profile_data_source_impl_test.mocks.dart';
 
 @GenerateMocks([ApiClient])
 void main() {
@@ -116,7 +114,8 @@ void main() {
           any,
           any,
           any,
-          any, // الـ nidMultipart
+          any,
+          // الـ nidMultipart
           any, // الـ vehicleLicenseMultipart
         ),
       ).thenAnswer((_) async => tResponse);
@@ -233,14 +232,16 @@ void main() {
 
     test(
       'should return Success when the call to ApiClient is successful',
-          () async {
+      () async {
         // Arrange
         when(
           mockApiClient.emailVerification(userDto: tUserDto),
         ).thenAnswer((_) async => tResponse);
 
         // Act
-        final result = await dataSource.emailVerification(tUserDto);
+        final result = await authRemoteDataSourceImpl.emailVerification(
+          tUserDto,
+        );
 
         // Assert
         expect(result, isA<Success<EmailVerificationResponseDto>>());
@@ -252,14 +253,16 @@ void main() {
 
     test(
       'should return Failure when the call to ApiClient throws an exception',
-          () async {
+      () async {
         // Arrange
         when(
           mockApiClient.emailVerification(userDto: tUserDto),
         ).thenThrow(Exception());
 
         // Act
-        final result = await dataSource.emailVerification(tUserDto);
+        final result = await authRemoteDataSourceImpl.emailVerification(
+          tUserDto,
+        );
 
         // Assert
         expect(result, isA<Failure>());
@@ -273,14 +276,16 @@ void main() {
 
     test(
       'should return Success when the call to ApiClient is successful',
-          () async {
+      () async {
         // Arrange
         when(
           mockApiClient.verifyResetPasswordCode(userDto: tUserDto),
         ).thenAnswer((_) async => tResponse);
 
         // Act
-        final result = await dataSource.codeVerification(tUserDto);
+        final result = await authRemoteDataSourceImpl.codeVerification(
+          tUserDto,
+        );
 
         // Assert
         expect(result, isA<Success<VerificationCodeResponseDto>>());
@@ -292,14 +297,16 @@ void main() {
 
     test(
       'should return Failure when the call to ApiClient throws an exception',
-          () async {
+      () async {
         // Arrange
         when(
           mockApiClient.verifyResetPasswordCode(userDto: tUserDto),
         ).thenThrow(Exception());
 
         // Act
-        final result = await dataSource.codeVerification(tUserDto);
+        final result = await authRemoteDataSourceImpl.codeVerification(
+          tUserDto,
+        );
 
         // Assert
         expect(result, isA<Failure>());
@@ -316,14 +323,14 @@ void main() {
 
     test(
       'should return Success when the call to ApiClient is successful',
-          () async {
+      () async {
         // Arrange
         when(
           mockApiClient.resetPassword(userDto: tUserDto),
         ).thenAnswer((_) async => tResponse);
 
         // Act
-        final result = await dataSource.resetPassword(tUserDto);
+        final result = await authRemoteDataSourceImpl.resetPassword(tUserDto);
 
         // Assert
         expect(result, isA<Success<ResetPasswordResponseDto>>());
@@ -335,14 +342,14 @@ void main() {
 
     test(
       'should return Failure when the call to ApiClient throws an exception',
-          () async {
+      () async {
         // Arrange
         when(
           mockApiClient.resetPassword(userDto: tUserDto),
         ).thenThrow(Exception());
 
         // Act
-        final result = await dataSource.resetPassword(tUserDto);
+        final result = await authRemoteDataSourceImpl.resetPassword(tUserDto);
 
         // Assert
         expect(result, isA<Failure>());
@@ -366,7 +373,9 @@ void main() {
         mockApiClient.login(requestDTO),
       ).thenAnswer((_) async => responseDTO);
       // act
-      final result = await dataSource.login(email, password) as Success<String>;
+      final result =
+          await authRemoteDataSourceImpl.login(email, password)
+              as Success<String>;
       // assert
       expect(result, isA<Success<String>>());
       expect(result.data, responseDTO.token);
@@ -378,7 +387,7 @@ void main() {
       // arrange
       when(mockApiClient.login(requestDTO)).thenThrow(dioException);
       // act
-      final result = await dataSource.login(email, password);
+      final result = await authRemoteDataSourceImpl.login(email, password);
       // assert
       expect(result, isA<Failure<String>>());
       expect(
@@ -389,5 +398,4 @@ void main() {
       verifyNoMoreInteractions(mockApiClient);
     });
   });
-
 }
