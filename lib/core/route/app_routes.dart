@@ -11,10 +11,10 @@ import 'package:tracking_app/features/auth/presentation/forget_password/forget_p
 import 'package:tracking_app/features/auth/presentation/forget_password/view_model/forget_password_view_model.dart';
 import 'package:tracking_app/features/auth/presentation/login/login_view.dart';
 import 'package:tracking_app/features/auth/presentation/login/managers/login_cubit.dart';
+import 'package:tracking_app/features/auth/presentation/logout/logout_cubit.dart';
 import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
 import 'package:tracking_app/features/profile/presentation/edit_profile_data_view/update_driver_view.dart';
 import 'package:tracking_app/features/profile/presentation/edit_profile_data_view_model/update_profile_view_model.dart';
-import 'package:tracking_app/features/profile/presentation/profile_view/profile_view.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_events.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_view_model.dart';
 import 'package:tracking_app/features/sections/presentation/managers/sections_cubit.dart';
@@ -36,9 +36,20 @@ class AppRoutes {
 Route? onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
     case AppRoutes.homeView:
+      var sectionsCubit = SectionsCubit();
+      var profileViewModel = getIt<ProfileViewModel>();
+      var logoutCubit = getIt.get<LogoutCubit>();
+
       return MaterialPageRoute(
-        builder: (context) => BlocProvider<SectionsCubit>(
-          create: (context) => SectionsCubit(),
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<SectionsCubit>(create: (context) => sectionsCubit),
+            BlocProvider<LogoutCubit>(create: (context) => logoutCubit),
+            BlocProvider<ProfileViewModel>(
+              create: (context) =>
+                  profileViewModel..doIntent(GetDriverDataEvent()),
+            ),
+          ],
           child: const SectionsView(),
         ),
       );
@@ -69,14 +80,6 @@ Route? onGenerateRoute(RouteSettings settings) {
         ),
       );
 
-    case AppRoutes.profileView:
-      return MaterialPageRoute(
-        builder: (_) => BlocProvider(
-          create: (_) =>
-              getIt<ProfileViewModel>()..doIntent(GetDriverDataEvent()),
-          child: const ProfileView(),
-        ),
-      );
     case AppRoutes.updateDriverView:
       return MaterialPageRoute(
         settings: RouteSettings(arguments: settings.arguments),
