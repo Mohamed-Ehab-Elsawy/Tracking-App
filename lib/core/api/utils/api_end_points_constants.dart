@@ -9,4 +9,5 @@ abstract class ApiEndPointsConstants {
   static const String updateProfile = 'drivers/editProfile';
   static const String uploadProfileImage = 'drivers/upload-photo';
   static const String logout = 'drivers/logout';
+  static const String getAllVehicles = 'vehicles';
 }
