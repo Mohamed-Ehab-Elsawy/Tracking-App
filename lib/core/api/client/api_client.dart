@@ -4,10 +4,13 @@ import 'package:retrofit/retrofit.dart';
 import 'package:tracking_app/core/api/models/requests/driver_login_request_dto.dart';
 import 'package:tracking_app/core/api/models/responses/driver_login_response_dto.dart';
 import 'package:tracking_app/core/api/utils/api_end_points_constants.dart';
+import 'package:tracking_app/features/auth/data/model/response/apply_response.dart';
+import 'package:tracking_app/features/auth/data/model/response/get_all_vehicles_response.dart';
+import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
 import 'package:tracking_app/features/profile/data/model/request/update_profile_request.dart';
 import 'package:tracking_app/features/profile/data/model/response/driver_data_response.dart';
 import 'package:tracking_app/features/profile/data/model/response/upload_photo_response.dart';
-import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
+
 part 'api_client.g.dart';
 
 @RestApi()
@@ -44,4 +47,24 @@ abstract class ApiClient {
   Future<UploadPhotoResponse> uploadPhoto(
     @Part(name: 'photo') MultipartFile photo,
   );
+
+  @POST(ApiEndPointsConstants.apply)
+  @MultiPart()
+  Future<ApplyResponse> apply(
+    @Part(name: "country") String? country,
+    @Part(name: "firstName") String? firstName,
+    @Part(name: "lastName") String? lastName,
+    @Part(name: "vehicleType") String? vehicleType,
+    @Part(name: "vehicleNumber") String? vehicleNumber,
+    @Part(name: "NID") String? nid,
+    @Part(name: "email") String? email,
+    @Part(name: "password") String? password,
+    @Part(name: "rePassword") String? rePassword,
+    @Part(name: "gender") String? gender,
+    @Part(name: "phone") String? phone,
+    @Part(name: "NIDImg") MultipartFile? nidImages,
+    @Part(name: "vehicleLicense") MultipartFile? vehicleLicense,
+  );
+  @GET(ApiEndPointsConstants.getAllVehicles)
+  Future<GetAllVehiclesResponse> getAllVehicles();
 }

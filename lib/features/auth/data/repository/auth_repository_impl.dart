@@ -1,10 +1,20 @@
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
+import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
+import 'package:tracking_app/core/local/app_local_storage.dart';
 import 'package:tracking_app/features/auth/data/data_source/auth_remote_data_source.dart';
+import 'package:tracking_app/features/auth/data/mapper/apply_rsponse_mappr.dart';
+import 'package:tracking_app/features/auth/data/mapper/driver_mapper.dart';
+import 'package:tracking_app/features/auth/data/mapper/vehicles_mapper.dart';
+import 'package:tracking_app/features/auth/data/model/response/apply_response.dart';
+import 'package:tracking_app/features/auth/data/model/response/get_all_vehicles_response.dart';
 import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
 import 'package:tracking_app/features/auth/domain/entities/forget_password_entity.dart';
-import 'package:tracking_app/core/constants/app_constants.dart';
-import 'package:tracking_app/core/local/app_local_storage.dart';
+import 'package:tracking_app/features/auth/domain/entity/apply_response_entity.dart';
+import 'package:tracking_app/features/auth/domain/entity/driver_entity.dart';
+import 'package:tracking_app/features/auth/domain/entity/vehicles_entity.dart';
 import 'package:tracking_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:tracking_app/features/auth/mapper/forget_password_mapper.dart';
 
@@ -13,6 +23,44 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _authRemoteDataSource;
 
   AuthRepositoryImpl(this._authRemoteDataSource);
+
+  @override
+  Future<Result<ApplyResponseEntity>> apply(
+    DriverEntity applyEntity, {
+    required File? nidImage,
+    required File? vehicleLicense,
+  }) async {
+    final requestDto = applyEntity.toRequest();
+
+    var result = await _authRemoteDataSource.apply(
+      requestDto,
+      nidImage: nidImage,
+      vehicleLicense: vehicleLicense,
+    );
+    switch (result) {
+      case Success<ApplyResponse>():
+        return Success(result.data.toEntity());
+      case Failure<ApplyResponse>():
+        return Failure(result.errorMessage);
+    }
+  }
+
+  @override
+  Future<Result<List<VehicleEntity>>> getAllVehicles() async {
+    var result = await _authRemoteDataSource.getAllVehicles();
+
+    switch (result) {
+      case Success<GetAllVehiclesResponse>():
+        final entities =
+            result.data.vehicles
+                ?.map((vehicleModel) => vehicleModel.toEntity())
+                .toList() ??
+            [];
+        return Success(entities);
+      case Failure<GetAllVehiclesResponse>():
+        return Failure(result.errorMessage);
+    }
+  }
 
   @override
   Future<Result<String>> login(
