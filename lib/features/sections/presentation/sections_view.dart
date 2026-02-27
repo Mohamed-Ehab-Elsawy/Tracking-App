@@ -17,7 +17,7 @@ class _SectionsViewState extends State<SectionsView> {
   List<Widget> get pages => [
     const Center(child: Text('Home')),
     const Center(child: Text('Orders')),
-    const ProfileView()
+    const ProfileView(),
   ];
 
   @override

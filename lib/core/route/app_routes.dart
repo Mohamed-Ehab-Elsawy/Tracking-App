@@ -53,6 +53,7 @@ Route? onGenerateRoute(RouteSettings settings) {
           child: const SectionsView(),
         ),
       );
+
     case AppRoutes.onboardingView:
       return MaterialPageRoute(builder: (context) => const OnboardingView());
 
