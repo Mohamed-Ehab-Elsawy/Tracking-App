@@ -12,4 +12,5 @@ abstract class ApiEndPointsConstants {
   static const String projectId = 'flower-app-8de14';
   static const String callFirebaseServer =
       'https://fcm.googleapis.com/v1/projects/flower-app-8de14/messages:send';
+  static const String getAllVehicles = 'vehicles';
 }
