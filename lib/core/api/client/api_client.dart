@@ -19,6 +19,7 @@ abstract class ApiClient {
   Future<HomeResponseDto> getOrders(
     @Query('page') int page,
     @Query('limit') int limit,
+  );
   @POST(ApiEndPointsConstants.forgetPassword)
   Future<EmailVerificationResponseDto> emailVerification({
     @Body() required UserDto userDto,
