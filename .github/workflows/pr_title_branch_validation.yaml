@@ -22,7 +22,7 @@ jobs:
           PR_title="${{ github.event.pull_request.title }}"
 
           # Define regex to validate PR title format
-          pattern='^(fix|release|feat|hotfix|refactor|build|test|feature)\/[a-z0-9-]+$'
+          pattern='^(fix|release|refactor|feat|hotfix|build|test|feature)\/[a-z0-9-]+$'
 
           # Validate PR title using regex
           if ! [[ "$PR_title" =~ $pattern ]]; then

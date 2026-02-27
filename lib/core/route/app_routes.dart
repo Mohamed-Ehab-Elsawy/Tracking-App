@@ -13,6 +13,9 @@ import 'package:tracking_app/features/auth/presentation/login/login_view.dart';
 import 'package:tracking_app/features/auth/presentation/login/managers/login_cubit.dart';
 import 'package:tracking_app/features/auth/presentation/logout/logout_cubit.dart';
 import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
+import 'package:tracking_app/features/orders/presentation/order_details/view/order_details_view.dart';
+import 'package:tracking_app/features/orders/presentation/order_details/view_model/order_details_view_model.dart';
+import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_cubit.dart';
 import 'package:tracking_app/features/profile/presentation/edit_profile_data_view/update_driver_view.dart';
 import 'package:tracking_app/features/profile/presentation/edit_profile_data_view_model/update_profile_view_model.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_events.dart';
@@ -27,6 +30,8 @@ class AppRoutes {
   static const String applyView = '/apply_view';
   static const String forgetPasswordView = '/forget_password_view';
   static const String homeView = '/home_view';
+  static const String orderHistory = '/orderHistory';
+  static const String orderDetails = '/orderDetails';
   static const String changePassword = '/change_password';
   static const String applySuccessView = '/apply_success_view';
   static const String profileView = '/profile_view';
@@ -39,7 +44,7 @@ Route? onGenerateRoute(RouteSettings settings) {
       var sectionsCubit = SectionsCubit();
       var profileViewModel = getIt<ProfileViewModel>();
       var logoutCubit = getIt.get<LogoutCubit>();
-
+      var orderHistoryCubit = getIt.get<OrderHistoryCubit>();
       return MaterialPageRoute(
         builder: (context) => MultiBlocProvider(
           providers: [
@@ -48,6 +53,9 @@ Route? onGenerateRoute(RouteSettings settings) {
             BlocProvider<ProfileViewModel>(
               create: (context) =>
                   profileViewModel..doIntent(GetDriverDataEvent()),
+            ),
+            BlocProvider<OrderHistoryCubit>(
+              create: (context) => orderHistoryCubit,
             ),
           ],
           child: const SectionsView(),
@@ -80,6 +88,25 @@ Route? onGenerateRoute(RouteSettings settings) {
           child: const ForgetPasswordView(),
         ),
       );
+
+    case AppRoutes.orderDetails:
+      {
+        var cubit = getIt.get<OrderItemNameCubit>();
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => BlocProvider<OrderItemNameCubit>(
+            create: (context) => cubit,
+            child: OrderDetailsView(),
+          ),
+        );
+      }
+
+    // case AppRoutes.orderHistory:
+    //   return MaterialPageRoute(
+    //     builder: (_) => BlocProvider<OrderHistoryCubit>.value(
+    //       value: getIt.get<OrderHistoryCubit>(),
+    //       child:  OrderHistoryView(),
+    //     ),
 
     case AppRoutes.updateDriverView:
       return MaterialPageRoute(
