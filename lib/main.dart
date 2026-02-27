@@ -12,18 +12,16 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   await configureDependencies();
   Bloc.observer = MyBlocObserver();
-  runApp(buildApp());
+  runApp(_buildApp());
 }
 
-Widget buildApp() {
-  return EasyLocalization(
-    saveLocale: true,
-    supportedLocales: const [
-      Locale(LocalizationConstants.enLocaleKey),
-      Locale(LocalizationConstants.arLocaleKey),
-    ],
-    path: AssetConstants.translationsPath,
-    fallbackLocale: const Locale(LocalizationConstants.enLocaleKey),
-    child: const TrackingApp(),
-  );
-}
+Widget _buildApp() => EasyLocalization(
+  saveLocale: true,
+  supportedLocales: const [
+    Locale(LocalizationConstants.enLocaleKey),
+    Locale(LocalizationConstants.arLocaleKey),
+  ],
+  path: AssetConstants.translationsPath,
+  fallbackLocale: const Locale(LocalizationConstants.enLocaleKey),
+  child: const TrackingApp(),
+);
