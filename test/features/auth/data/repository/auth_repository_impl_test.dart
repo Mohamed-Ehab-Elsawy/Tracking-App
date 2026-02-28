@@ -1,38 +1,56 @@
+import 'dart:io';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
+import 'package:tracking_app/core/local/app_local_storage.dart';
 import 'package:tracking_app/features/auth/data/data_source/auth_remote_data_source.dart';
+import 'package:tracking_app/features/auth/data/model/response/apply_response.dart';
+import 'package:tracking_app/features/auth/data/model/response/get_all_vehicles_response.dart';
+import 'package:tracking_app/features/auth/data/model/response/vehicles.dart';
+import 'package:tracking_app/features/auth/data/models/change_password/change_password_response.dart';
 import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
 import 'package:tracking_app/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:tracking_app/features/auth/domain/entities/forget_password_entity.dart';
+import 'package:tracking_app/features/auth/domain/entity/apply_response_entity.dart';
+import 'package:tracking_app/features/auth/domain/entity/driver_entity.dart';
+import 'package:tracking_app/features/auth/domain/entity/vehicles_entity.dart';
 
 import 'auth_repository_impl_test.mocks.dart';
 
-@GenerateMocks([AuthRemoteDataSource])
+@GenerateMocks([AuthRemoteDataSource, SharedPreferences, FlutterSecureStorage])
 void main() {
-  provideDummy<Result<EmailVerificationResponseDto>>(
-    Success(const EmailVerificationResponseDto()),
-  );
-  provideDummy<Result<VerificationCodeResponseDto>>(
-    Success(const VerificationCodeResponseDto()),
-  );
-  provideDummy<Result<ResetPasswordResponseDto>>(
-    Success(const ResetPasswordResponseDto()),
-  );
-
-  late AuthRepositoryImpl repository;
+  late AuthRepositoryImpl authRepositoryImpl;
   late MockAuthRemoteDataSource mockAuthRemoteDataSource;
+  late MockSharedPreferences mockPrefs;
+  late MockFlutterSecureStorage mockSecureStorage;
 
   setUp(() {
     mockAuthRemoteDataSource = MockAuthRemoteDataSource();
-    repository = AuthRepositoryImpl(mockAuthRemoteDataSource);
-  });
+    authRepositoryImpl = AuthRepositoryImpl(mockAuthRemoteDataSource);
+    mockPrefs = MockSharedPreferences();
+    mockSecureStorage = MockFlutterSecureStorage();
 
+    AppLocalStorage.prefsForTest = mockPrefs;
+    AppLocalStorage.secureStorageForTest = mockSecureStorage;
+  });
   const tUserEntity = UserEntity(email: 'test@example.com', code: '123456');
   const tUserDto = UserDto(email: 'test@example.com', code: '123456');
 
   group('sendResetPasswordCode', () {
+    provideDummy<Result<EmailVerificationResponseDto>>(
+      Success(const EmailVerificationResponseDto()),
+    );
+    provideDummy<Result<VerificationCodeResponseDto>>(
+      Success(const VerificationCodeResponseDto()),
+    );
+    provideDummy<Result<ResetPasswordResponseDto>>(
+      Success(const ResetPasswordResponseDto()),
+    );
     const tResponseDto = EmailVerificationResponseDto(message: 'Success');
     const tResponseEntity = EmailVerificationResponseEntity(message: 'Success');
 
@@ -45,7 +63,9 @@ void main() {
         ).thenAnswer((_) async => Success(tResponseDto));
 
         // Act
-        final result = await repository.sendResetPasswordCode(tUserEntity);
+        final result = await authRepositoryImpl.sendResetPasswordCode(
+          tUserEntity,
+        );
 
         // Assert
         expect(result, isA<Success<EmailVerificationResponseEntity>>());
@@ -64,7 +84,9 @@ void main() {
         ).thenAnswer((_) async => Failure('Error'));
 
         // Act
-        final result = await repository.sendResetPasswordCode(tUserEntity);
+        final result = await authRepositoryImpl.sendResetPasswordCode(
+          tUserEntity,
+        );
 
         // Assert
         expect(result, isA<Failure>());
@@ -78,7 +100,15 @@ void main() {
   group('verifyResetPasswordCode', () {
     const tResponseDto = VerificationCodeResponseDto(status: 'Success');
     const tResponseEntity = VerificationCodeResponseEntity('Success');
-
+    provideDummy<Result<EmailVerificationResponseDto>>(
+      Success(const EmailVerificationResponseDto()),
+    );
+    provideDummy<Result<VerificationCodeResponseDto>>(
+      Success(const VerificationCodeResponseDto()),
+    );
+    provideDummy<Result<ResetPasswordResponseDto>>(
+      Success(const ResetPasswordResponseDto()),
+    );
     test(
       'should return Success when the call to remote data source is successful',
       () async {
@@ -88,7 +118,9 @@ void main() {
         ).thenAnswer((_) async => Success(tResponseDto));
 
         // Act
-        final result = await repository.verifyResetPasswordCode(tUserEntity);
+        final result = await authRepositoryImpl.verifyResetPasswordCode(
+          tUserEntity,
+        );
 
         // Assert
         expect(result, isA<Success<VerificationCodeResponseEntity>>());
@@ -107,7 +139,9 @@ void main() {
         ).thenAnswer((_) async => Failure('Error'));
 
         // Act
-        final result = await repository.verifyResetPasswordCode(tUserEntity);
+        final result = await authRepositoryImpl.verifyResetPasswordCode(
+          tUserEntity,
+        );
 
         // Assert
         expect(result, isA<Failure>());
@@ -119,6 +153,15 @@ void main() {
   });
 
   group('resetPassword', () {
+    provideDummy<Result<EmailVerificationResponseDto>>(
+      Success(const EmailVerificationResponseDto()),
+    );
+    provideDummy<Result<VerificationCodeResponseDto>>(
+      Success(const VerificationCodeResponseDto()),
+    );
+    provideDummy<Result<ResetPasswordResponseDto>>(
+      Success(const ResetPasswordResponseDto()),
+    );
     const tResponseDto = ResetPasswordResponseDto(
       message: 'Success',
       token: 'token',
@@ -137,7 +180,7 @@ void main() {
         ).thenAnswer((_) async => Success(tResponseDto));
 
         // Act
-        final result = await repository.resetPassword(tUserEntity);
+        final result = await authRepositoryImpl.resetPassword(tUserEntity);
 
         // Assert
         expect(result, isA<Success<ResetPasswordResponseEntity>>());
@@ -156,12 +199,295 @@ void main() {
         ).thenAnswer((_) async => Failure('Error'));
 
         // Act
-        final result = await repository.resetPassword(tUserEntity);
+        final result = await authRepositoryImpl.resetPassword(tUserEntity);
 
         // Assert
         expect(result, isA<Failure>());
         expect((result as Failure).errorMessage, 'Error');
         verify(mockAuthRemoteDataSource.resetPassword(tUserDto));
+        verifyNoMoreInteractions(mockAuthRemoteDataSource);
+      },
+    );
+  });
+
+  group('Login Tests', () {
+    const tEmail = 'test@example.com';
+    const tPassword = 'password123';
+    const tToken = 'fake_jwt_token';
+
+    test('should store token and rememberMe flag when login is successful and'
+        'rememberMe is true', () async {
+      // Arrange
+      provideDummy<Result<String>>(Success(tToken));
+      when(
+        mockAuthRemoteDataSource.login(any, any),
+      ).thenAnswer((_) async => Success(tToken));
+      when(
+        mockPrefs.setBool(AppConstants.rememberMeKey, true),
+      ).thenAnswer((_) async => true);
+      when(
+        mockSecureStorage.write(key: AppConstants.userToken, value: tToken),
+      ).thenAnswer((_) async => {});
+
+      // Act
+      final result = await authRepositoryImpl.login(tEmail, tPassword, true);
+
+      // Assert
+      expect(result, isA<Success<String>>());
+      expect((result as Success).data, 'logged_in_successfully');
+
+      verify(mockPrefs.setBool(AppConstants.rememberMeKey, true)).called(1);
+      verify(
+        mockSecureStorage.write(key: AppConstants.userToken, value: tToken),
+      ).called(1);
+    });
+
+    test(
+      "Success login without rememberMe returns success message and does not store token",
+      () async {
+        // arrange
+        provideDummy<Result<String>>(Success(tToken));
+        when(
+          mockAuthRemoteDataSource.login(tEmail, tPassword),
+        ).thenAnswer((_) async => Success(tToken));
+
+        // act
+        final result = await authRepositoryImpl.login(tEmail, tPassword, false);
+
+        // assert
+        expect(result, isA<Success<String>>());
+        expect((result as Success<String>).data, 'logged_in_successfully');
+
+        verify(mockAuthRemoteDataSource.login(tEmail, tPassword)).called(1);
+        verifyNoMoreInteractions(mockAuthRemoteDataSource);
+      },
+    );
+
+    test("Failure login returns failure and does not store anything", () async {
+      // arrange
+      when(
+        mockAuthRemoteDataSource.login(tEmail, tPassword),
+      ).thenAnswer((_) async => Failure('invalid_credentials'));
+
+      // act
+      final result = await authRepositoryImpl.login(tEmail, tPassword, true);
+
+      // assert
+      expect(result, isA<Failure<String>>());
+      expect((result as Failure<String>).errorMessage, 'invalid_credentials');
+
+      verify(mockAuthRemoteDataSource.login(tEmail, tPassword)).called(1);
+      verifyNoMoreInteractions(mockAuthRemoteDataSource);
+    });
+  });
+
+  group('getAllVehicles', () {
+    setUp(() {
+      provideDummy<Result<ApplyResponse>>(Success(ApplyResponse()));
+      provideDummy<Result<GetAllVehiclesResponse>>(
+        Success(GetAllVehiclesResponse()),
+      );
+    });
+
+    test(
+      'should return Success<List<VehicleEntity>> when dataSource returns success',
+      () async {
+        final tVehiclesModel = [Vehicles(id: "1", type: "Car")];
+        final tResponse = GetAllVehiclesResponse(vehicles: tVehiclesModel);
+
+        when(
+          mockAuthRemoteDataSource.getAllVehicles(),
+        ).thenAnswer((_) async => Success(tResponse));
+
+        final result = await authRepositoryImpl.getAllVehicles();
+
+        expect(result, isA<Success<List<VehicleEntity>>>());
+        expect((result as Success).data.first.id, "1");
+      },
+    );
+
+    test('should return Failure when dataSource returns failure', () async {
+      when(
+        mockAuthRemoteDataSource.getAllVehicles(),
+      ).thenAnswer((_) async => Failure("error_msg"));
+
+      final result = await authRepositoryImpl.getAllVehicles();
+
+      expect(result, isA<Failure<List<VehicleEntity>>>());
+      expect((result as Failure).errorMessage, "error_msg");
+    });
+  });
+
+  group('apply', () {
+    final tDriverEntity = DriverEntity(firstName: "Ahmed", email: "a@a.com");
+    final tFile = File('dummy');
+
+    setUp(() {
+      provideDummy<Result<ApplyResponse>>(Success(ApplyResponse()));
+      provideDummy<Result<GetAllVehiclesResponse>>(
+        Success(GetAllVehiclesResponse()),
+      );
+    });
+
+    test(
+      'should return Success<ApplyResponseEntity> when dataSource returns success',
+      () async {
+        final tApplyResponse = ApplyResponse(
+          message: "success",
+          token: "token123",
+        );
+        when(
+          mockAuthRemoteDataSource.apply(
+            any,
+            nidImage: anyNamed('nidImage'),
+            vehicleLicense: anyNamed('vehicleLicense'),
+          ),
+        ).thenAnswer((_) async => Success(tApplyResponse));
+
+        final result = await authRepositoryImpl.apply(
+          tDriverEntity,
+          nidImage: tFile,
+          vehicleLicense: tFile,
+        );
+
+        expect(result, isA<Success<ApplyResponseEntity>>());
+        expect((result as Success).data.token, "token123");
+      },
+    );
+
+    test('should return Failure when dataSource returns failure', () async {
+      provideDummy<Result<ApplyResponse>>(Success(ApplyResponse()));
+      provideDummy<Result<GetAllVehiclesResponse>>(
+        Success(GetAllVehiclesResponse()),
+      );
+      when(
+        mockAuthRemoteDataSource.apply(
+          any,
+          nidImage: anyNamed('nidImage'),
+          vehicleLicense: anyNamed('vehicleLicense'),
+        ),
+      ).thenAnswer((_) async => Failure("server_error"));
+
+      final result = await authRepositoryImpl.apply(
+        tDriverEntity,
+        nidImage: tFile,
+        vehicleLicense: tFile,
+      );
+
+      expect(result, isA<Failure<ApplyResponseEntity>>());
+      expect((result as Failure).errorMessage, "server_error");
+    });
+  });
+
+  group('Logout Test', () {
+    test(
+      "Should clear all data from SharedPreferences and FlutterSecureStorage",
+      () async {
+        // Arrange
+        when(mockPrefs.clear()).thenAnswer((_) async => true);
+        when(mockSecureStorage.deleteAll()).thenAnswer((_) async => {});
+
+        // Act
+        authRepositoryImpl.logout();
+
+        // Assert
+        verify(AppLocalStorage.clearAll()).called(1);
+      },
+    );
+  });
+
+  group("Change Password Function Test Cases", () {
+    late String password;
+    late String newPassword;
+    late ChangePasswordResponse changePasswordResponse;
+    late Success<ChangePasswordResponse> successResponse;
+    late Failure<ChangePasswordResponse> failureResponse;
+
+    setUp(() {
+      password = "oldPassword123";
+      newPassword = "newPassword456";
+      changePasswordResponse = ChangePasswordResponse(
+        token: 'token',
+        message: "Password changed successfully",
+      );
+      successResponse = Success<ChangePasswordResponse>(changePasswordResponse);
+      failureResponse = Failure<ChangePasswordResponse>(
+        "errors.connectionError",
+      );
+    });
+
+    test(
+      'should store token and return Success when changePassword is successful',
+      () async {
+        provideDummy<Result<ChangePasswordResponse>>(successResponse);
+
+        when(
+          mockAuthRemoteDataSource.changePassword(
+            password: password,
+            newPassword: newPassword,
+          ),
+        ).thenAnswer((_) async => successResponse);
+
+        when(
+          mockPrefs.setBool(AppConstants.rememberMeKey, true),
+        ).thenAnswer((_) async => true);
+
+        when(
+          mockSecureStorage.write(key: AppConstants.userToken, value: 'token'),
+        ).thenAnswer((_) async => {});
+
+        final result = await authRepositoryImpl.changePassword(
+          password: password,
+          newPassword: newPassword,
+        );
+
+        expect(result, isA<Success<ChangePasswordResponse>>());
+        expect((result as Success).data, changePasswordResponse);
+
+        verify(
+          mockAuthRemoteDataSource.changePassword(
+            password: password,
+            newPassword: newPassword,
+          ),
+        ).called(1);
+
+        verify(mockPrefs.setBool(AppConstants.rememberMeKey, true)).called(1);
+        verify(
+          mockSecureStorage.write(key: AppConstants.userToken, value: "token"),
+        ).called(1);
+      },
+    );
+
+    test(
+      "when changePassword returns Failure it should return Failure",
+      () async {
+        // Arrange
+        provideDummy<Result<ChangePasswordResponse>>(failureResponse);
+        when(
+          mockAuthRemoteDataSource.changePassword(
+            password: password,
+            newPassword: newPassword,
+          ),
+        ).thenAnswer((_) async => failureResponse);
+
+        // Act
+        final result = await authRepositoryImpl.changePassword(
+          password: password,
+          newPassword: newPassword,
+        );
+
+        // Assertion And Verification
+        expect(result, isA<Failure<ChangePasswordResponse>>());
+        expect(
+          (result as Failure<ChangePasswordResponse>).errorMessage,
+          equals("errors.connectionError"),
+        );
+        verify(
+          mockAuthRemoteDataSource.changePassword(
+            password: password,
+            newPassword: newPassword,
+          ),
+        ).called(1);
         verifyNoMoreInteractions(mockAuthRemoteDataSource);
       },
     );

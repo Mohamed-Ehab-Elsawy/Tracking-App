@@ -233,6 +233,13 @@
             </list>
           </value>
         </entry>
+        <entry key="country_picker">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/country_picker-2.0.27/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="coverage">
           <value>
             <list>
@@ -1564,6 +1571,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/code_builder-4.11.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/collection-1.19.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/convert-3.1.2/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/country_picker-2.0.27/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/coverage-1.15.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/cross_file-0.3.5+2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/crypto-3.0.7/lib" />
