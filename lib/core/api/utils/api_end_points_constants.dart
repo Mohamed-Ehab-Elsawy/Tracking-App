@@ -1,4 +1,5 @@
 abstract class ApiEndPointsConstants {
+  static const String orders = 'orders/pending-orders';
   static const String login = 'drivers/signin';
   static const String apply = 'drivers/apply';
   static const String forgetPassword = 'drivers/forgotPassword';
