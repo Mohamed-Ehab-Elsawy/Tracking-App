@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tracking_app/features/orders/presentation/orders_history/view/order_history_view.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view/profile_view.dart';
 import 'package:tracking_app/features/sections/presentation/managers/sections_contracts.dart';
 import 'package:tracking_app/features/sections/presentation/managers/sections_cubit.dart';
@@ -16,7 +17,7 @@ class SectionsView extends StatefulWidget {
 class _SectionsViewState extends State<SectionsView> {
   List<Widget> get pages => [
     const Center(child: Text('Home')),
-    const Center(child: Text('Orders')),
+    const OrderHistoryView(),
     const ProfileView(),
   ];
 
