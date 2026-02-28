@@ -67,7 +67,6 @@
     "canceled": "ملغي",
     " Recent orders : ": " الطلبات الأخيرة : ",
     "un known order number": "رقم طلب غير معروف",
-    "enterAddress": "يرجى إدخال العنوان"
     "enterAddress": "يرجى إدخال العنوان",
     "floweryRider": "سائق فلاوري",
     "noNameProvided": "لا يوجد اسم ",
@@ -75,8 +74,7 @@
     "flowerOrder": "طلب الزهور",
     "pickupAddress": "عنوان التسليم",
     "userAddress": "عنوان المستلم",
-    "orderRejectedSuccessfully": "تم رفض الطلب بنجاح"
-    "enterAddress": "يرجى إدخال العنوان"
+    "orderRejectedSuccessfully": "تم رفض الطلب بنجاح",
     "enterCountry": "يرجى اختيار بلد الإقامة",
     "selectVehicleType": "يرجى اختيار نوع المركبة",
     "enterVehicleNumber": "يرجى إدخال رقم اللوحة",
@@ -173,6 +171,8 @@
     "resetPassword": "إعادة تعيين كلمة المرور",
     "ResetPasswordDesc": "كلمة المرور يجب ألا تكون فارغة ويجب أن تحتوي على \n6 أحرف على الأقل مع حرف كبير ورقم واحد \nعلى الأقل"
   },
+  "order_details": "تفاصيل الطلب",
+  "egp": " جنية مصري",
   "confirm_logout_message": "تـأكيد تسجيل الخـروج!!",
   "cancel": "إلغاء"
 }

@@ -68,9 +68,6 @@
     "canceled": "canceled",
     " Recent orders : ": " Recent orders : ",
     "un known order number": "un known order number",
-
-
-    "enterAddress": "Please enter the address"
     "enterAddress": "Please enter the address",
     "floweryRider": "Flowery rider",
     "noNameProvided": "No name provided",
@@ -78,8 +75,7 @@
     "flowerOrder": "Flower order",
     "pickupAddress": "Pickup address",
     "userAddress": "User address",
-    "orderRejectedSuccessfully": "Order rejected successfully"
-    "enterAddress": "Please enter the address"
+    "orderRejectedSuccessfully": "Order rejected successfully",
     "enterCountry": "Please select your country",
     "selectVehicleType": "Please select your vehicle type",
     "enterVehicleNumber": "Please enter vehicle plate number",
@@ -177,13 +173,17 @@
     "resetPassword": "Reset Password",
     "ResetPasswordDesc": "Password must not be empty and must contain \n6 characters with upper case letter and one \nnumber at least "
   },
+  "order_details": "Order Details",
+  "status": "Status: ",
+  "order_id": "Order ID: ",
+  "pickup_address": "Pickup Address",
+  "user_address": "User Address",
+  "egp": "EGP ",
   "welcomeTo": "Welcome to",
   "floweryRiderApp": "Flowery Rider App",
   "confirm_logout_message": "Confirm logout!!",
   "cancel": "Cancel",
-  "enterAddress": "Please enter the address",
   "changePassword": "Change Password",
-  "password": "Password",
   "newPassword": "New Password",
   "updatePassword": "Update Password",
   "enterCurrentPassword": "Enter Current Password",
