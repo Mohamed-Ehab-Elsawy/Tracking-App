@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tracking_app/core/bloc/base_state.dart';
 import 'package:tracking_app/core/di/di.dart';
 import 'package:tracking_app/core/presentation/feedback/app_snackbar.dart';
+import 'package:tracking_app/core/route/app_routes.dart';
 import 'package:tracking_app/core/theme/colors/color_extension.dart';
 import 'package:tracking_app/core/validation/form_validator.dart';
 import 'package:tracking_app/features/profile/data/model/request/update_profile_request.dart';
@@ -67,7 +68,7 @@ class _UpdateDriverViewState extends State<UpdateDriverView> {
         case NavigateToResetPassword():
           {
             if (!mounted) return;
-            //
+            Navigator.pushNamed(context, AppRoutes.changePassword);
           }
         case ShowToast():
           {
