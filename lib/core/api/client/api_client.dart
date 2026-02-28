@@ -4,12 +4,11 @@ import 'package:retrofit/retrofit.dart';
 import 'package:tracking_app/core/api/models/requests/driver_login_request_dto.dart';
 import 'package:tracking_app/core/api/models/responses/driver_login_response_dto.dart';
 import 'package:tracking_app/core/api/utils/api_end_points_constants.dart';
-import 'package:tracking_app/features/home/data/models/home_response_dto.dart';
-
-import 'package:tracking_app/features/orders/data/models/response/order_response_dto.dart';
-import 'package:tracking_app/features/orders/data/models/response/product_response.dart';
 import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/services/notification_dto.dart';
+import 'package:tracking_app/features/home/data/models/home_response_dto.dart';
+import 'package:tracking_app/features/orders/data/models/response/order_response_dto.dart';
+import 'package:tracking_app/features/orders/data/models/response/product_response.dart';
 import 'package:tracking_app/features/auth/data/model/response/apply_response.dart';
 import 'package:tracking_app/features/auth/data/model/response/get_all_vehicles_response.dart';
 import 'package:tracking_app/features/auth/data/models/change_password/change_password_response.dart';
@@ -30,6 +29,7 @@ abstract class ApiClient {
     @Query('page') int page,
     @Query('limit') int limit,
   );
+
   @POST(ApiEndPointsConstants.login)
   Future<DriverLoginResponseDTO> login(@Body() DriverLoginRequestDTO request);
 
@@ -47,6 +47,7 @@ abstract class ApiClient {
   Future<ResetPasswordResponseDto> resetPassword({
     @Body() required UserDto userDto,
   });
+
   @GET(ApiEndPointsConstants.getAllDriverOrders)
   Future<OrderResponseDto> getAllDriverOrders();
 
@@ -58,12 +59,15 @@ abstract class ApiClient {
     @Body() required SendNotificationRequest notificationDto,
     @Header(AppConstants.authorizationKey) required String authorization,
   });
+
   @GET(ApiEndPointsConstants.getProfile)
   Future<DriverDataResponse> getDriverData();
+
   @PUT(ApiEndPointsConstants.updateProfile)
   Future<DriverDataResponse> updateProfile(
     @Body() UpdateProfileRequest updateProfileRequest,
   );
+
   @PUT(ApiEndPointsConstants.uploadProfileImage)
   @MultiPart()
   Future<UploadPhotoResponse> uploadPhoto(
@@ -87,6 +91,7 @@ abstract class ApiClient {
     @Part(name: "NIDImg") MultipartFile? nidImages,
     @Part(name: "vehicleLicense") MultipartFile? vehicleLicense,
   );
+
   @GET(ApiEndPointsConstants.getAllVehicles)
   Future<GetAllVehiclesResponse> getAllVehicles();
 
