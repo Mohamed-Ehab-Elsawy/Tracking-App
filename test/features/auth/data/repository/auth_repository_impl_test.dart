@@ -210,7 +210,7 @@ void main() {
     );
   });
 
-  group('AuthRepositoryImpl Login Tests', () {
+  group('Login Tests', () {
     const tEmail = 'test@example.com';
     const tPassword = 'password123';
     const tToken = 'fake_jwt_token';
@@ -379,7 +379,7 @@ void main() {
     });
   });
 
-  group('AuthRepositoryImpl Logout Test', () {
+  group('Logout Test', () {
     test(
       "Should clear all data from SharedPreferences and FlutterSecureStorage",
       () async {
@@ -407,6 +407,7 @@ void main() {
       password = "oldPassword123";
       newPassword = "newPassword456";
       changePasswordResponse = ChangePasswordResponse(
+        token: 'token',
         message: "Password changed successfully",
       );
       successResponse = Success<ChangePasswordResponse>(changePasswordResponse);
@@ -415,36 +416,47 @@ void main() {
       );
     });
 
-    test("when call changePassword Success Case", () async {
-      // Arrange
-      provideDummy<Result<ChangePasswordResponse>>(successResponse);
-      when(
-        mockAuthRemoteDataSource.changePassword(
+    test(
+      'should store token and return Success when changePassword is successful',
+      () async {
+        provideDummy<Result<ChangePasswordResponse>>(successResponse);
+
+        when(
+          mockAuthRemoteDataSource.changePassword(
+            password: password,
+            newPassword: newPassword,
+          ),
+        ).thenAnswer((_) async => successResponse);
+
+        when(
+          mockPrefs.setBool(AppConstants.rememberMeKey, true),
+        ).thenAnswer((_) async => true);
+
+        when(
+          mockSecureStorage.write(key: AppConstants.userToken, value: 'token'),
+        ).thenAnswer((_) async => {});
+
+        final result = await authRepositoryImpl.changePassword(
           password: password,
           newPassword: newPassword,
-        ),
-      ).thenAnswer((_) async => successResponse);
+        );
 
-      // Act
-      final result = await authRepositoryImpl.changePassword(
-        password: password,
-        newPassword: newPassword,
-      );
+        expect(result, isA<Success<ChangePasswordResponse>>());
+        expect((result as Success).data, changePasswordResponse);
 
-      // Assertion And Verification
-      expect(result, isA<Success<ChangePasswordResponse>>());
-      expect(
-        (result as Success<ChangePasswordResponse>).data.message,
-        equals(changePasswordResponse.message),
-      );
-      verify(
-        mockAuthRemoteDataSource.changePassword(
-          password: password,
-          newPassword: newPassword,
-        ),
-      ).called(1);
-      verifyNoMoreInteractions(mockAuthRemoteDataSource);
-    });
+        verify(
+          mockAuthRemoteDataSource.changePassword(
+            password: password,
+            newPassword: newPassword,
+          ),
+        ).called(1);
+
+        verify(mockPrefs.setBool(AppConstants.rememberMeKey, true)).called(1);
+        verify(
+          mockSecureStorage.write(key: AppConstants.userToken, value: "token"),
+        ).called(1);
+      },
+    );
 
     test(
       "when changePassword returns Failure it should return Failure",

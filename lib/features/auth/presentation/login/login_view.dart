@@ -35,19 +35,18 @@ class _LoginViewState extends State<LoginView> {
   void initState() {
     super.initState();
     _cubit.eventStream.listen((event) {
+      if (!mounted) return;
       switch (event) {
         case LoginNavToHomeEvent():
-          if (mounted) context.pushNamed(AppRoutes.homeView);
+          context.pushNamedAndRemoveUntil(AppRoutes.homeView);
         case LoginNavToForgetPasswordEvent():
-          if (mounted) context.pushNamed(AppRoutes.forgetPasswordView);
+          context.pushNamed(AppRoutes.forgetPasswordView);
         case LoginFailureEvent():
-          if (mounted) {
-            AppSnackBar.show(
-              context,
-              event.errorMessage ?? 'errors.unknown'.tr(),
-              isError: true,
-            );
-          }
+          AppSnackBar.show(
+            context,
+            event.errorMessage ?? 'errors.unknown'.tr(),
+            isError: true,
+          );
       }
     });
   }
