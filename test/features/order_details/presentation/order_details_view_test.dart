@@ -72,8 +72,9 @@ void main() {
       WidgetTester tester,
     ) async {
       // Arrange
-      when(mockCubit.state).thenReturn(
-          CurrentOrderDetailsState(BaseState.loading()));
+      when(
+        mockCubit.state,
+      ).thenReturn(CurrentOrderDetailsState(BaseState.loading()));
 
       // Act
       await pumpOrderDetailsView(tester);
@@ -105,7 +106,9 @@ void main() {
         // Arrange
         when(mockCubit.state).thenReturn(
           CurrentOrderDetailsState(
-              BaseState.loaded(mockEntity), currentStep: 2),
+            BaseState.loaded(mockEntity),
+            currentStep: 2,
+          ),
         );
 
         // Act

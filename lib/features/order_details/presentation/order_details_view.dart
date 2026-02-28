@@ -36,7 +36,9 @@ class CurrentOrderDetailsView extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
                   const CurrentOrderProgressIndicator(
-                      currentStep: 0, totalSteps: 5),
+                    currentStep: 0,
+                    totalSteps: 5,
+                  ),
 
                   context.h(AppSpacing.md),
 

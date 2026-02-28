@@ -76,9 +76,8 @@ void main() {
       'increments currentStep by 1',
       build: () => cubit,
       act: (cubit) => cubit.doIntent(ChangeStepIntent()),
-      expect: () =>
-      [
-        predicate<CurrentOrderDetailsState>((s) => s.currentStep == 1)
+      expect: () => [
+        predicate<CurrentOrderDetailsState>((s) => s.currentStep == 1),
       ],
     );
 
@@ -87,9 +86,8 @@ void main() {
       build: () => cubit,
       seed: () => CurrentOrderDetailsState(BaseState.init(), currentStep: 4),
       act: (cubit) => cubit.doIntent(ChangeStepIntent()),
-      expect: () =>
-      [
-        predicate<CurrentOrderDetailsState>((s) => s.currentStep == 0)
+      expect: () => [
+        predicate<CurrentOrderDetailsState>((s) => s.currentStep == 0),
       ],
     );
   });

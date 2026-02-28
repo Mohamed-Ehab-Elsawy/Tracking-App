@@ -69,10 +69,9 @@ class CurrentOrderDetailsCard extends StatelessWidget {
               children: [
                 IconButton(
                   padding: EdgeInsets.zero,
-                  onPressed: () =>
-                      context.read<CurrentOrderDetailsCubit>().doIntent(
-                    PhoneCallPressedIntent(phoneNumber!),
-                  ),
+                  onPressed: () => context
+                      .read<CurrentOrderDetailsCubit>()
+                      .doIntent(PhoneCallPressedIntent(phoneNumber!)),
                   icon: Icon(
                     Icons.phone_outlined,
                     size: 20,
@@ -81,10 +80,9 @@ class CurrentOrderDetailsCard extends StatelessWidget {
                 ),
                 IconButton(
                   padding: EdgeInsets.zero,
-                  onPressed: () =>
-                      context.read<CurrentOrderDetailsCubit>().doIntent(
-                    WhatsAppPressedIntent(phoneNumber!),
-                  ),
+                  onPressed: () => context
+                      .read<CurrentOrderDetailsCubit>()
+                      .doIntent(WhatsAppPressedIntent(phoneNumber!)),
                   icon: CustomImageView(
                     imagePath: "assets/icons/whatsapp_icon.svg",
                     height: 20,

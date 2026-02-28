@@ -15,10 +15,7 @@ abstract class ApiModule {
 
   @preResolve
   @lazySingleton
-  Future<Dio> provideDio(
-    BaseOptions option,
-    PrettyDioLogger logger,
-  ) async {
+  Future<Dio> provideDio(BaseOptions option, PrettyDioLogger logger) async {
     var dio = Dio(option);
     dio.interceptors.add(logger);
 
