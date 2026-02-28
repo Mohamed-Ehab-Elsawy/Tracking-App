@@ -4,6 +4,8 @@ import 'package:retrofit/retrofit.dart';
 import 'package:tracking_app/core/api/models/requests/driver_login_request_dto.dart';
 import 'package:tracking_app/core/api/models/responses/driver_login_response_dto.dart';
 import 'package:tracking_app/core/api/utils/api_end_points_constants.dart';
+import 'package:tracking_app/features/home/data/models/home_response_dto.dart';
+
 import 'package:tracking_app/features/orders/data/models/response/order_response_dto.dart';
 import 'package:tracking_app/features/orders/data/models/response/product_response.dart';
 import 'package:tracking_app/core/constants/app_constants.dart';
@@ -23,6 +25,11 @@ abstract class ApiClient {
   @factoryMethod
   factory ApiClient(Dio dio, {String? baseUrl}) = _ApiClient;
 
+  @GET(ApiEndPointsConstants.orders)
+  Future<HomeResponseDto> getOrders(
+    @Query('page') int page,
+    @Query('limit') int limit,
+  );
   @POST(ApiEndPointsConstants.login)
   Future<DriverLoginResponseDTO> login(@Body() DriverLoginRequestDTO request);
 

@@ -69,6 +69,14 @@
     "un known order number": "رقم طلب غير معروف",
     "enterAddress": "يرجى إدخال العنوان"
     "enterAddress": "يرجى إدخال العنوان",
+    "floweryRider": "سائق فلاوري",
+    "noNameProvided": "لا يوجد اسم ",
+    "noAddressProvided": "لا يوجد عنوان",
+    "flowerOrder": "طلب الزهور",
+    "pickupAddress": "عنوان التسليم",
+    "userAddress": "عنوان المستلم",
+    "orderRejectedSuccessfully": "تم رفض الطلب بنجاح"
+    "enterAddress": "يرجى إدخال العنوان"
     "enterCountry": "يرجى اختيار بلد الإقامة",
     "selectVehicleType": "يرجى اختيار نوع المركبة",
     "enterVehicleNumber": "يرجى إدخال رقم اللوحة",

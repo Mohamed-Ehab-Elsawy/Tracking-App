@@ -72,6 +72,14 @@
 
     "enterAddress": "Please enter the address"
     "enterAddress": "Please enter the address",
+    "floweryRider": "Flowery rider",
+    "noNameProvided": "No name provided",
+    "noAddressProvided": "No address provided",
+    "flowerOrder": "Flower order",
+    "pickupAddress": "Pickup address",
+    "userAddress": "User address",
+    "orderRejectedSuccessfully": "Order rejected successfully"
+    "enterAddress": "Please enter the address"
     "enterCountry": "Please select your country",
     "selectVehicleType": "Please select your vehicle type",
     "enterVehicleNumber": "Please enter vehicle plate number",
