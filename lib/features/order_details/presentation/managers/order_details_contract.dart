@@ -1,40 +1,40 @@
 import 'package:tracking_app/core/bloc/base_state.dart';
 import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
 
-class OrderDetailsState {
+class CurrentOrderDetailsState {
   final BaseState<OrderEntity> currentState;
   final int currentStep;
 
-  const OrderDetailsState(this.currentState, {this.currentStep = 0});
+  const CurrentOrderDetailsState(this.currentState, {this.currentStep = 0});
 
-  factory OrderDetailsState.initial() =>
-      OrderDetailsState(BaseState.init(), currentStep: 0);
+  factory CurrentOrderDetailsState.initial() =>
+      CurrentOrderDetailsState(BaseState.init(), currentStep: 0);
 
-  OrderDetailsState copyWith({
+  CurrentOrderDetailsState copyWith({
     BaseState<OrderEntity>? state,
     int? currentStep,
-  }) => OrderDetailsState(
+  }) => CurrentOrderDetailsState(
     state ?? currentState,
     currentStep: currentStep ?? this.currentStep,
   );
 }
 
-sealed class OrderDetailsIntent {}
+sealed class CurrentOrderDetailsIntent {}
 
-class GetOrderDetailsIntent extends OrderDetailsIntent {}
+class GetCurrentOrderDetailsIntent extends CurrentOrderDetailsIntent {}
 
-class ChangeStepIntent extends OrderDetailsIntent {}
+class ChangeStepIntent extends CurrentOrderDetailsIntent {}
 
-class PhoneCallPressedIntent extends OrderDetailsIntent {
+class PhoneCallPressedIntent extends CurrentOrderDetailsIntent {
   final String phoneNumber;
 
   PhoneCallPressedIntent(this.phoneNumber);
 }
 
-class WhatsAppPressedIntent extends OrderDetailsIntent {
+class WhatsAppPressedIntent extends CurrentOrderDetailsIntent {
   final String phoneNumber;
 
   WhatsAppPressedIntent(this.phoneNumber);
 }
 
-sealed class OrderDetailsEvent {}
+sealed class CurrentOrderDetailsEvent {}

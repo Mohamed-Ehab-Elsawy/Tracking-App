@@ -13,8 +13,8 @@ import 'package:tracking_app/features/order_details/presentation/widgets/order_s
 
 import 'widgets/order_progress_indicator.dart';
 
-class OrderDetailsView extends StatelessWidget {
-  const OrderDetailsView({super.key});
+class CurrentOrderDetailsView extends StatelessWidget {
+  const CurrentOrderDetailsView({super.key});
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -24,9 +24,9 @@ class OrderDetailsView extends StatelessWidget {
     ),
     body: Padding(
       padding: AppInsets.screen,
-      child: BlocBuilder<OrderDetailsCubit, OrderDetailsState>(
+      child: BlocBuilder<CurrentOrderDetailsCubit, CurrentOrderDetailsState>(
         builder: (context, state) {
-          final cubit = context.read<OrderDetailsCubit>();
+          final cubit = context.read<CurrentOrderDetailsCubit>();
           final baseState = state.currentState;
 
           if (baseState.isLoading) {
@@ -35,7 +35,8 @@ class OrderDetailsView extends StatelessWidget {
               child: ListView(
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  const OrderProgressIndicator(currentStep: 0, totalSteps: 5),
+                  const CurrentOrderProgressIndicator(
+                      currentStep: 0, totalSteps: 5),
 
                   context.h(AppSpacing.md),
 
@@ -66,21 +67,21 @@ class OrderDetailsView extends StatelessWidget {
             return ListView(
               physics: const BouncingScrollPhysics(),
               children: [
-                OrderProgressIndicator(
+                CurrentOrderProgressIndicator(
                   currentStep: cubit.state.currentStep,
                   totalSteps: 5,
                 ),
 
                 context.h(AppSpacing.md),
 
-                StatusCard(entity: entity),
+                CurrentOrderStatusCard(entity: entity),
 
                 context.h(AppSpacing.md),
 
                 Text("pickup_address".tr(), style: context.textStyles.medium20),
                 context.h(AppSpacing.sm),
 
-                OrderDetailsCard(
+                CurrentOrderDetailsCard(
                   title: entity.storeName,
                   description: entity.storeAddress,
                   phoneNumber: entity.storePhone,
@@ -91,7 +92,7 @@ class OrderDetailsView extends StatelessWidget {
                 Text("user_address".tr(), style: context.textStyles.medium20),
                 context.h(AppSpacing.sm),
 
-                OrderDetailsCard(
+                CurrentOrderDetailsCard(
                   title: entity.userName,
                   description: entity.userAddress,
                   phoneNumber: entity.userPhone,
@@ -105,7 +106,7 @@ class OrderDetailsView extends StatelessWidget {
                 ...entity.details.map(
                   (item) => Padding(
                     padding: EdgeInsets.only(bottom: AppSpacing.sm),
-                    child: OrderDetailsCard(
+                    child: CurrentOrderDetailsCard(
                       title: item.title,
                       description: "egp".tr() + item.price,
                       count: item.count.toString(),

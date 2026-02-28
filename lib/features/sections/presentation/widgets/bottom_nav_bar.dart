@@ -19,7 +19,7 @@ class BottomNavBar extends StatelessWidget {
       items: [
         BottomNavigationBarItem(
           icon: const Icon(Icons.home_outlined),
-          label: 'sections'.tr(),
+          label: 'home'.tr(),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.fact_check_outlined),

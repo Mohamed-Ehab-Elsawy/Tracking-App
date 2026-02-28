@@ -8,14 +8,15 @@ import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/constants/asset_constants.dart';
 import 'package:tracking_app/core/constants/localization_constants.dart';
 import 'package:tracking_app/core/di/di.dart';
-import 'package:tracking_app/firebase_options.dart';
 import 'package:tracking_app/core/local/app_local_storage.dart';
 import 'package:tracking_app/core/services/fcm_service.dart';
 import 'package:tracking_app/tracking_app.dart';
 
+import 'firebase_options.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseMessaging.instance.requestPermission();
   await FCMService.getAccessToken().then((fcmAccessToken) {
     AppLocalStorage.setSecuredString(

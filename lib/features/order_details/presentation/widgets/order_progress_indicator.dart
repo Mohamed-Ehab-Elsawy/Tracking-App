@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tracking_app/core/theme/colors/color_extension.dart';
 
-class OrderProgressIndicator extends StatelessWidget {
+class CurrentOrderProgressIndicator extends StatelessWidget {
   final int currentStep;
   final int totalSteps;
 
-  const OrderProgressIndicator({
+  const CurrentOrderProgressIndicator({
     super.key,
     required this.currentStep,
     this.totalSteps = 5,

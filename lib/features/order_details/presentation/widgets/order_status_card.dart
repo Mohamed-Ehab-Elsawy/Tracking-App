@@ -5,10 +5,10 @@ import 'package:tracking_app/core/theme/dimensions/app_spacing.dart';
 import 'package:tracking_app/core/theme/typography/typography_extension.dart';
 import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
 
-class StatusCard extends StatelessWidget {
+class CurrentOrderStatusCard extends StatelessWidget {
   final OrderEntity entity;
 
-  const StatusCard({super.key, required this.entity});
+  const CurrentOrderStatusCard({super.key, required this.entity});
 
   @override
   Widget build(BuildContext context) {

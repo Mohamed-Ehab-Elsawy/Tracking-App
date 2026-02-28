@@ -8,11 +8,11 @@ import 'package:tracking_app/core/theme/typography/typography_extension.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
 
-class OrderDetailsCard extends StatelessWidget {
+class CurrentOrderDetailsCard extends StatelessWidget {
   final String title, description;
   final String? phoneNumber, count;
 
-  const OrderDetailsCard({
+  const CurrentOrderDetailsCard({
     super.key,
     required this.title,
     required this.description,
@@ -69,7 +69,8 @@ class OrderDetailsCard extends StatelessWidget {
               children: [
                 IconButton(
                   padding: EdgeInsets.zero,
-                  onPressed: () => context.read<OrderDetailsCubit>().doIntent(
+                  onPressed: () =>
+                      context.read<CurrentOrderDetailsCubit>().doIntent(
                     PhoneCallPressedIntent(phoneNumber!),
                   ),
                   icon: Icon(
@@ -80,7 +81,8 @@ class OrderDetailsCard extends StatelessWidget {
                 ),
                 IconButton(
                   padding: EdgeInsets.zero,
-                  onPressed: () => context.read<OrderDetailsCubit>().doIntent(
+                  onPressed: () =>
+                      context.read<CurrentOrderDetailsCubit>().doIntent(
                     WhatsAppPressedIntent(phoneNumber!),
                   ),
                   icon: CustomImageView(

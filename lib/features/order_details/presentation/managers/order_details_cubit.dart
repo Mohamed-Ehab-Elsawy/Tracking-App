@@ -8,18 +8,22 @@ import 'package:tracking_app/features/order_details/presentation/managers/order_
 import 'package:url_launcher/url_launcher.dart';
 
 @injectable
-class OrderDetailsCubit
+class CurrentOrderDetailsCubit
     extends
-        BaseCubit<OrderDetailsState, OrderDetailsIntent, OrderDetailsEvent> {
+        BaseCubit<
+          CurrentOrderDetailsState,
+          CurrentOrderDetailsIntent,
+          CurrentOrderDetailsEvent
+        > {
   final GetCurrentOrderUseCase _getCurrentOrderUseCase;
 
-  OrderDetailsCubit(this._getCurrentOrderUseCase)
-    : super(OrderDetailsState.initial());
+  CurrentOrderDetailsCubit(this._getCurrentOrderUseCase)
+    : super(CurrentOrderDetailsState.initial());
 
   @override
-  void doIntent(OrderDetailsIntent intent) {
+  void doIntent(CurrentOrderDetailsIntent intent) {
     switch (intent) {
-      case GetOrderDetailsIntent():
+      case GetCurrentOrderDetailsIntent():
         _getOrderDetails();
 
       case PhoneCallPressedIntent():

@@ -5,14 +5,14 @@ import 'package:tracking_app/features/order_details/presentation/managers/order_
 void main() {
   group('OrderDetailsState Tests', () {
     test('initial() should return state with init status and step 0', () {
-      final state = OrderDetailsState.initial();
+      final state = CurrentOrderDetailsState.initial();
 
       expect(state.currentState.requestState, RequestState.init);
       expect(state.currentStep, 0);
     });
 
     test('copyWith should update currentState when provided', () {
-      final initialState = OrderDetailsState.initial();
+      final initialState = CurrentOrderDetailsState.initial();
       final newState = initialState.copyWith(state: BaseState.loading());
 
       expect(newState.currentState.isLoading, isTrue);
@@ -20,7 +20,7 @@ void main() {
     });
 
     test('copyWith should update currentStep when provided', () {
-      final initialState = OrderDetailsState.initial();
+      final initialState = CurrentOrderDetailsState.initial();
       final newState = initialState.copyWith(currentStep: 3);
 
       expect(newState.currentStep, 3);
@@ -30,7 +30,7 @@ void main() {
     test(
       'copyWith should return same values if no parameters are provided',
       () {
-        final initialState = OrderDetailsState.initial();
+        final initialState = CurrentOrderDetailsState.initial();
         final newState = initialState.copyWith();
 
         expect(newState.currentStep, initialState.currentStep);
@@ -41,8 +41,8 @@ void main() {
 
   group('OrderDetailsIntent Tests', () {
     test('GetOrderDetailsIntent can be instantiated', () {
-      final intent = GetOrderDetailsIntent();
-      expect(intent, isA<GetOrderDetailsIntent>());
+      final intent = GetCurrentOrderDetailsIntent();
+      expect(intent, isA<GetCurrentOrderDetailsIntent>());
     });
 
     test('ChangeStepIntent can be instantiated', () {

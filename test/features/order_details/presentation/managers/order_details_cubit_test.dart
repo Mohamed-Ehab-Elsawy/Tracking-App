@@ -13,14 +13,14 @@ import 'order_details_cubit_test.mocks.dart';
 
 @GenerateNiceMocks([MockSpec<GetCurrentOrderUseCase>()])
 void main() {
-  late OrderDetailsCubit cubit;
+  late CurrentOrderDetailsCubit cubit;
   late MockGetCurrentOrderUseCase mockUseCase;
 
   final tOrderEntity = OrderEntity(id: "1", storeName: "Test Store");
 
   setUp(() {
     mockUseCase = MockGetCurrentOrderUseCase();
-    cubit = OrderDetailsCubit(mockUseCase);
+    cubit = CurrentOrderDetailsCubit(mockUseCase);
   });
 
   tearDown(() => cubit.close());
@@ -33,25 +33,25 @@ void main() {
   });
 
   group('GetOrderDetailsIntent', () {
-    blocTest<OrderDetailsCubit, OrderDetailsState>(
+    blocTest<CurrentOrderDetailsCubit, CurrentOrderDetailsState>(
       'emits [Loading, Loaded] when use case returns Success',
       build: () {
         provideDummy<Result<OrderEntity>>(Success(tOrderEntity));
         when(mockUseCase.call()).thenAnswer((_) async => Success(tOrderEntity));
         return cubit;
       },
-      act: (cubit) => cubit.doIntent(GetOrderDetailsIntent()),
+      act: (cubit) => cubit.doIntent(GetCurrentOrderDetailsIntent()),
       expect: () => [
-        predicate<OrderDetailsState>((s) => s.currentState.isLoading),
+        predicate<CurrentOrderDetailsState>((s) => s.currentState.isLoading),
 
-        predicate<OrderDetailsState>((s) {
+        predicate<CurrentOrderDetailsState>((s) {
           return s.currentState.isLoaded && s.currentState.data == tOrderEntity;
         }),
       ],
       verify: (_) => verify(mockUseCase.call()).called(1),
     );
 
-    blocTest<OrderDetailsCubit, OrderDetailsState>(
+    blocTest<CurrentOrderDetailsCubit, CurrentOrderDetailsState>(
       'emits [Loading, Error] when use case returns Failure',
       build: () {
         provideDummy<Result<OrderEntity>>(Failure("Server Error"));
@@ -60,10 +60,10 @@ void main() {
         ).thenAnswer((_) async => Failure("Server Error"));
         return cubit;
       },
-      act: (cubit) => cubit.doIntent(GetOrderDetailsIntent()),
+      act: (cubit) => cubit.doIntent(GetCurrentOrderDetailsIntent()),
       expect: () => [
-        predicate<OrderDetailsState>((s) => s.currentState.isLoading),
-        predicate<OrderDetailsState>((s) {
+        predicate<CurrentOrderDetailsState>((s) => s.currentState.isLoading),
+        predicate<CurrentOrderDetailsState>((s) {
           return s.currentState.isError &&
               s.currentState.errorMessage == "Server Error";
         }),
@@ -72,19 +72,25 @@ void main() {
   });
 
   group('ChangeStepIntent', () {
-    blocTest<OrderDetailsCubit, OrderDetailsState>(
+    blocTest<CurrentOrderDetailsCubit, CurrentOrderDetailsState>(
       'increments currentStep by 1',
       build: () => cubit,
       act: (cubit) => cubit.doIntent(ChangeStepIntent()),
-      expect: () => [predicate<OrderDetailsState>((s) => s.currentStep == 1)],
+      expect: () =>
+      [
+        predicate<CurrentOrderDetailsState>((s) => s.currentStep == 1)
+      ],
     );
 
-    blocTest<OrderDetailsCubit, OrderDetailsState>(
+    blocTest<CurrentOrderDetailsCubit, CurrentOrderDetailsState>(
       'resets currentStep to 0 when reaching step 5 (modulo 5)',
       build: () => cubit,
-      seed: () => OrderDetailsState(BaseState.init(), currentStep: 4),
+      seed: () => CurrentOrderDetailsState(BaseState.init(), currentStep: 4),
       act: (cubit) => cubit.doIntent(ChangeStepIntent()),
-      expect: () => [predicate<OrderDetailsState>((s) => s.currentStep == 0)],
+      expect: () =>
+      [
+        predicate<CurrentOrderDetailsState>((s) => s.currentStep == 0)
+      ],
     );
   });
 }

@@ -18,10 +18,8 @@ abstract class ApiModule {
   Future<Dio> provideDio(
     BaseOptions option,
     PrettyDioLogger logger,
-    AuthInterceptor authInterceptor,
   ) async {
     var dio = Dio(option);
-    dio.interceptors.add(authInterceptor);
     dio.interceptors.add(logger);
 
     final userToken = await AppLocalStorage.getSecuredString(
@@ -53,25 +51,5 @@ abstract class ApiModule {
       responseBody: true,
       responseHeader: false,
     );
-  }
-}
-
-@lazySingleton
-class AuthInterceptor extends Interceptor {
-  @override
-  void onRequest(
-    RequestOptions options,
-    RequestInterceptorHandler handler,
-  ) async {
-    final token = await AppLocalStorage.getSecuredString(
-      key: AppConstants.userToken,
-    );
-
-    if (token.isNotEmpty) {
-      options.headers['Authorization'] =
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkcml2ZXIiOiI2OTg3NmJkYmUzNjRlZjYxNDA1MTVmYWYiLCJpYXQiOjE3NzEyMDE3OTd9.E7yTCCU-TfX8cq0DF_sxW12QxOhtQo3cd4uA8bpQJPo';
-    }
-
-    super.onRequest(options, handler);
   }
 }

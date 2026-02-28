@@ -18,9 +18,9 @@ import 'package:tracking_app/features/order_details/presentation/widgets/order_s
 
 import 'order_details_view_test.mocks.dart';
 
-@GenerateNiceMocks([MockSpec<OrderDetailsCubit>()])
+@GenerateNiceMocks([MockSpec<CurrentOrderDetailsCubit>()])
 void main() {
-  late MockOrderDetailsCubit mockCubit;
+  late MockCurrentOrderDetailsCubit mockCubit;
 
   final mockEntity = OrderEntity(
     storeName: "Test Store",
@@ -41,7 +41,7 @@ void main() {
   });
 
   setUp(() {
-    mockCubit = MockOrderDetailsCubit();
+    mockCubit = MockCurrentOrderDetailsCubit();
     when(mockCubit.stream).thenAnswer((_) => const Stream.empty());
   });
 
@@ -57,9 +57,9 @@ void main() {
         child: AppThemeProvider(
           appTheme: LightTheme(),
           child: MaterialApp(
-            home: BlocProvider<OrderDetailsCubit>.value(
+            home: BlocProvider<CurrentOrderDetailsCubit>.value(
               value: mockCubit,
-              child: const OrderDetailsView(),
+              child: const CurrentOrderDetailsView(),
             ),
           ),
         ),
@@ -72,7 +72,8 @@ void main() {
       WidgetTester tester,
     ) async {
       // Arrange
-      when(mockCubit.state).thenReturn(OrderDetailsState(BaseState.loading()));
+      when(mockCubit.state).thenReturn(
+          CurrentOrderDetailsState(BaseState.loading()));
 
       // Act
       await pumpOrderDetailsView(tester);
@@ -89,7 +90,7 @@ void main() {
       const errorMessage = "Something went wrong!";
       when(
         mockCubit.state,
-      ).thenReturn(OrderDetailsState(BaseState.error(errorMessage)));
+      ).thenReturn(CurrentOrderDetailsState(BaseState.error(errorMessage)));
 
       // Act
       await pumpOrderDetailsView(tester);
@@ -103,14 +104,15 @@ void main() {
       (WidgetTester tester) async {
         // Arrange
         when(mockCubit.state).thenReturn(
-          OrderDetailsState(BaseState.loaded(mockEntity), currentStep: 2),
+          CurrentOrderDetailsState(
+              BaseState.loaded(mockEntity), currentStep: 2),
         );
 
         // Act
         await pumpOrderDetailsView(tester);
 
         // Assert
-        expect(find.byType(StatusCard), findsOneWidget);
+        expect(find.byType(CurrentOrderStatusCard), findsOneWidget);
 
         expect(find.text("Test Store"), findsOneWidget);
         expect(find.text("John Doe"), findsOneWidget);
@@ -126,7 +128,7 @@ void main() {
       // Arrange
       when(
         mockCubit.state,
-      ).thenReturn(OrderDetailsState(BaseState.loaded(mockEntity)));
+      ).thenReturn(CurrentOrderDetailsState(BaseState.loaded(mockEntity)));
 
       // Act
       await pumpOrderDetailsView(tester);
@@ -144,14 +146,14 @@ void main() {
       WidgetTester tester,
     ) async {
       // Arrange
-      when(mockCubit.state).thenReturn(OrderDetailsState.initial());
+      when(mockCubit.state).thenReturn(CurrentOrderDetailsState.initial());
 
       // Act
       await pumpOrderDetailsView(tester);
 
       // Assert
       expect(find.byType(Skeletonizer), findsNothing);
-      expect(find.byType(StatusCard), findsNothing);
+      expect(find.byType(CurrentOrderStatusCard), findsNothing);
       expect(find.byType(ElevatedButton), findsNothing);
     });
   });
