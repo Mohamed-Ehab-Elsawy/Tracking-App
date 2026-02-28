@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 abstract class BaseCubit<T, I, E> extends Cubit<T> {
   BaseCubit(super.initialState);
 
-  Future<void> doIntent(I intent);
+  void doIntent(I intent);
 
   final StreamController<E> _eventController = StreamController<E>.broadcast();
 

@@ -14,26 +14,35 @@ class TrackingApp extends StatefulWidget {
 }
 
 class _TrackingAppState extends State<TrackingApp> {
-  late bool logged;
+  bool logged = false;
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    logged = await AppLocalStorage.getBool(AppConstants.rememberMeKey);
+    _initAsync();
+  }
+
+  Future<void> _initAsync() async {
+    final status = await AppLocalStorage.getBool(AppConstants.rememberMeKey);
+    setState(() {
+      logged = status;
+    });
   }
 
   @override
-  Widget build(BuildContext context) => AppThemeProvider(
-    appTheme: LightTheme(),
-    child: MaterialApp(
-      title: AppConstants.appName.tr(),
-      debugShowCheckedModeBanner: false,
-      theme: LightTheme().themeData,
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      initialRoute: logged ? AppRoutes.homeView : AppRoutes.onboardingView,
-      onGenerateRoute: onGenerateRoute,
-    ),
-  );
+  Widget build(BuildContext context) {
+    return AppThemeProvider(
+      appTheme: LightTheme(),
+      child: MaterialApp(
+        title: AppConstants.appName.tr(),
+        debugShowCheckedModeBanner: false,
+        theme: LightTheme().themeData,
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        initialRoute: logged ? AppRoutes.homeView : AppRoutes.onboardingView,
+        onGenerateRoute: onGenerateRoute,
+      ),
+    );
+  }
 }

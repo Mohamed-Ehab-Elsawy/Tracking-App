@@ -5,9 +5,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tracking_app/core/bloc/base_state.dart';
 import 'package:tracking_app/core/theme/app_theme.dart';
 import 'package:tracking_app/core/theme/light_theme.dart';
 import 'package:tracking_app/features/auth/presentation/logout/logout_cubit.dart';
+import 'package:tracking_app/features/home/presentation/cubit/orders_state.dart';
+import 'package:tracking_app/features/home/presentation/cubit/orders_view_model.dart';
+import 'package:tracking_app/features/home/presentation/view/home_view.dart';
 import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_cubit.dart';
 import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_states.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view/profile_view.dart';
@@ -24,12 +28,14 @@ import 'sections_view_test.mocks.dart';
   MockSpec<ProfileViewModel>(),
   MockSpec<LogoutCubit>(),
   MockSpec<OrderHistoryCubit>(),
+  MockSpec<OrdersViewModel>(),
 ])
 void main() {
   late MockSectionsCubit mockCubit;
   late MockProfileViewModel mockProfileViewModel;
   late MockLogoutCubit mockLogoutCubit;
   late MockOrderHistoryCubit mockOrderHistoryCubit;
+  late MockOrdersViewModel mockOrdersViewModel;
 
   setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
@@ -43,6 +49,7 @@ void main() {
     mockProfileViewModel = MockProfileViewModel();
     mockLogoutCubit = MockLogoutCubit();
     mockOrderHistoryCubit = MockOrderHistoryCubit();
+    mockOrdersViewModel = MockOrdersViewModel();
 
     when(mockCubit.stream).thenAnswer((_) => const Stream.empty());
     when(mockCubit.state).thenReturn(const SectionsViewState());
@@ -55,6 +62,11 @@ void main() {
 
     when(mockOrderHistoryCubit.stream).thenAnswer((_) => const Stream.empty());
     when(mockOrderHistoryCubit.state).thenReturn(OrderHistoryStates());
+
+    when(mockOrdersViewModel.stream).thenAnswer((_) => const Stream.empty());
+    when(
+      mockOrdersViewModel.state,
+    ).thenReturn(OrdersState(ordersState: BaseState.init()));
   });
 
   Widget buildTestableWidget() => EasyLocalization(
@@ -70,6 +82,7 @@ void main() {
             BlocProvider<ProfileViewModel>.value(value: mockProfileViewModel),
             BlocProvider<LogoutCubit>.value(value: mockLogoutCubit),
             BlocProvider<OrderHistoryCubit>.value(value: mockOrderHistoryCubit),
+            BlocProvider<OrdersViewModel>.value(value: mockOrdersViewModel),
           ],
           child: const SectionsView(),
         ),
@@ -85,7 +98,7 @@ void main() {
 
       await tester.pumpWidget(buildTestableWidget());
 
-      expect(find.text('Home'), findsOneWidget);
+      expect(find.byType(HomeView), findsOneWidget);
 
       await tester.tap(find.byIcon(Icons.fact_check_outlined));
       await tester.pump();
