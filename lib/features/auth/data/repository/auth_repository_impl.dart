@@ -93,19 +93,24 @@ class AuthRepositoryImpl implements AuthRepository {
     var result = await _authRemoteDataSource.login(email, password);
     switch (result) {
       case Success<String>():
-        if (rememberMe) await _storeTokenAndRememberMe(result.data);
+        await _storeTokenAndRememberMe(result.data, rememberMe: rememberMe);
         return Success('logged_in_successfully');
       case Failure<String>():
         return result;
     }
   }
 
-  Future<void> _storeTokenAndRememberMe(String token) async {
-    await AppLocalStorage.set(AppConstants.rememberMeKey, true);
+  Future<void> _storeTokenAndRememberMe(
+    String token, {
+    bool? rememberMe,
+  }) async {
     await AppLocalStorage.setSecuredString(
       key: AppConstants.userToken,
       value: token,
     );
+    if (rememberMe != null && rememberMe) {
+      await AppLocalStorage.set(AppConstants.rememberMeKey, rememberMe);
+    }
   }
 
   @override
