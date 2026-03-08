@@ -14,6 +14,7 @@ class OrdersViewModel
   int _currentPage = 1;
   final int _limit = 10;
   bool _hasMore = true;
+  bool _isLoadingMore = false;
   OrdersViewModel(this._getOrdersUseCase)
     : super(OrdersState(ordersState: BaseState.init()));
   @override
@@ -35,12 +36,16 @@ class OrdersViewModel
   }
 
   Future<void> _fetchOrders({required bool refresh}) async {
+    if (_isLoadingMore) return;
+
+    if (!refresh) {
+      if (!_hasMore) return;
+      _isLoadingMore = true;
+    }
+
     if (refresh) {
       _currentPage = 1;
       _hasMore = true;
-      emit(state.copyWith(ordersState: BaseState.loading()));
-    } else {
-      if (!_hasMore) return;
       emit(state.copyWith(ordersState: BaseState.loading()));
     }
 
@@ -48,12 +53,14 @@ class OrdersViewModel
 
     switch (result) {
       case Success<List<HomeOrderEntity>>():
-        final currentOrders = (state.order?.data ?? []);
+        final currentOrders = state.order?.data ?? [];
         final newOrdersList = refresh
             ? result.data
-            : currentOrders + result.data;
+            : [...currentOrders, ...result.data];
+
         _hasMore = result.data.length >= _limit;
         _currentPage++;
+
         emit(
           state.copyWith(
             order: BaseState.loaded(newOrdersList),
@@ -61,9 +68,12 @@ class OrdersViewModel
             ordersState: BaseState(requestState: RequestState.loaded),
           ),
         );
+
       case Failure<List<HomeOrderEntity>>():
         emit(state.copyWith(ordersState: BaseState.error(result.errorMessage)));
     }
+
+    _isLoadingMore = false;
   }
 
   Future<void> _handleRejectOrder(String orderId) async {

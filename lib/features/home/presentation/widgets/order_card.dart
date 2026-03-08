@@ -21,7 +21,7 @@ class OrderCard extends StatelessWidget {
       color: context.theme.colors.secondary,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      elevation: 5,
+      elevation: 1,
       margin: const EdgeInsets.all(10),
 
       child: Container(
@@ -68,7 +68,9 @@ class OrderCard extends StatelessWidget {
                   ),
                 ),
 
-                Expanded(
+                SizedBox(
+                  width: 111,
+                  height: 36,
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: context.theme.colors.primary),
@@ -90,7 +92,9 @@ class OrderCard extends StatelessWidget {
                   ),
                 ),
 
-                Expanded(
+                SizedBox(
+                  width: 111,
+                  height: 36,
                   child: ElevatedButton(
                     onPressed: () {},
                     child: Text('accept'.tr()),

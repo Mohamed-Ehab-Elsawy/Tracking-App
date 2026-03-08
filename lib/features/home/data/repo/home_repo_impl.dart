@@ -17,7 +17,14 @@ class HomeRepoImpl implements HomeRepo {
     switch (response) {
       case Success<HomeResponseDto>():
         var result =
-            response.data.orders?.map((e) => e.toEntity()).toList() ?? [];
+            response.data.orders
+                ?.map((e) => e.toEntity())
+                .toList()
+                .reversed
+                .toList()
+                .reversed
+                .toList() ??
+            [];
         return Success(result);
       case Failure<HomeResponseDto>():
         return Failure(response.errorMessage);
