@@ -10,10 +10,10 @@ class OrderList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: state.order!.data!.length + (state.hasMore == true ? 1 : 0),
+      itemCount: state.orders!.data!.length + (state.hasMore == true ? 1 : 0),
       itemBuilder: (context, index) {
-        if (index < state.order!.data!.length) {
-          return OrderCard(order: state.order!.data![index]);
+        if (index < state.orders!.data!.length) {
+          return OrderCard(order: state.orders!.data![index]);
         } else {
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 32),

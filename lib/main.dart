@@ -26,7 +26,11 @@ void main() async {
   });
   await EasyLocalization.ensureInitialized();
   await configureDependencies();
-
+  String? deviceToken = await FirebaseMessaging.instance.getToken();
+  await AppLocalStorage.setSecuredString(
+    key: AppConstants.deviceToken,
+    value: deviceToken ?? "",
+  );
   Bloc.observer = MyBlocObserver();
 
   runApp(_buildApp());

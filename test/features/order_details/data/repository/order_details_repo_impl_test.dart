@@ -44,7 +44,7 @@ void main() {
       final result = await repo.getCurrentOrderDetails(orderId: '123');
 
       expect(result, isA<Success<OrderEntity>>());
-      verify(mockFirestore.collection('orders')).called(1);
+      verify(mockFirestore.collection('active_orders')).called(1);
     });
 
     test('should return Failure on FirebaseException', () async {

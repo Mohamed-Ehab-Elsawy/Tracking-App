@@ -7,6 +7,7 @@ import 'package:tracking_app/core/api/utils/api_end_points_constants.dart';
 import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/services/notification_dto.dart';
 import 'package:tracking_app/features/home/data/models/home_response_dto.dart';
+import 'package:tracking_app/features/home/data/models/update_order_response.dart';
 import 'package:tracking_app/features/orders/data/models/response/order_response_dto.dart';
 import 'package:tracking_app/features/orders/data/models/response/product_response.dart';
 import 'package:tracking_app/features/auth/data/model/response/apply_response.dart';
@@ -100,4 +101,6 @@ abstract class ApiClient {
     @Field("password") required String password,
     @Field("newPassword") required String newPassword,
   });
+  @PUT("${ApiEndPointsConstants.acceptOrder}/{id}")
+  Future<UpdateOrderResponse> acceptOrder(@Path("id") String orderId);
 }

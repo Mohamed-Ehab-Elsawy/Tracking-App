@@ -14,6 +14,7 @@ import 'profile_view_model_test.mocks.dart';
 
 @GenerateMocks([GetDriverDataUseCase])
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   late MockGetDriverDataUseCase useCase;
   late DriverEntity entity;
   setUp(() {
