@@ -88,7 +88,8 @@ Route? onGenerateRoute(RouteSettings settings) {
 
     case AppRoutes.homeView:
       var sectionsCubit = SectionsCubit();
-      var profileViewModel = getIt<ProfileViewModel>();
+      var profileViewModel = getIt<ProfileViewModel>()
+        ..doIntent(GetDriverDataEvent());
       var logoutCubit = getIt.get<LogoutCubit>();
       var orderHistoryCubit = getIt.get<OrderHistoryCubit>();
       var homeViewModel = getIt<OrdersViewModel>();
@@ -98,8 +99,7 @@ Route? onGenerateRoute(RouteSettings settings) {
             BlocProvider<SectionsCubit>(create: (context) => sectionsCubit),
             BlocProvider<LogoutCubit>(create: (context) => logoutCubit),
             BlocProvider<ProfileViewModel>(
-              create: (context) =>
-                  profileViewModel..doIntent(GetDriverDataEvent()),
+              create: (context) => profileViewModel,
             ),
             BlocProvider<OrderHistoryCubit>(
               create: (context) => orderHistoryCubit,

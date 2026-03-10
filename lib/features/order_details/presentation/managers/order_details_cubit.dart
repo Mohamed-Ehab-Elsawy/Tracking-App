@@ -43,9 +43,14 @@ class CurrentOrderDetailsCubit
     var result = await _getCurrentOrderUseCase.call();
     switch (result) {
       case Success<OrderEntity>():
-        emit(state.copyWith(state: BaseState.loaded(result.data)));
+        {
+          emit(state.copyWith(state: BaseState.loaded(result.data)));
+        }
+
       case Failure<OrderEntity>():
-        emit(state.copyWith(state: BaseState.error(result.errorMessage)));
+        {
+          emit(state.copyWith(state: BaseState.error(result.errorMessage)));
+        }
     }
   }
 

@@ -15,6 +15,7 @@ class TrackingApp extends StatefulWidget {
 
 class _TrackingAppState extends State<TrackingApp> {
   bool logged = false;
+  late String orderId;
 
   @override
   void initState() {
@@ -23,9 +24,13 @@ class _TrackingAppState extends State<TrackingApp> {
   }
 
   Future<void> _initAsync() async {
-    final status = await AppLocalStorage.getBool(AppConstants.rememberMeKey);
+    final logedStatus = await AppLocalStorage.getBool(
+      AppConstants.rememberMeKey,
+    );
+    orderId = await AppLocalStorage.getString(key: AppConstants.orderId);
+
     setState(() {
-      logged = status;
+      logged = logedStatus;
     });
   }
 
@@ -40,9 +45,18 @@ class _TrackingAppState extends State<TrackingApp> {
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
-        initialRoute: logged ? AppRoutes.homeView : AppRoutes.onboardingView,
+        initialRoute: init(),
         onGenerateRoute: onGenerateRoute,
       ),
     );
+  }
+
+  String? init() {
+    if (!logged) {
+      return AppRoutes.onboardingView;
+    } else if (logged && orderId.isNotEmpty) {
+      return AppRoutes.homeView;
+    }
+    return AppRoutes.homeView;
   }
 }
