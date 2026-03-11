@@ -9,8 +9,11 @@ class CurrentOrderStatusCard extends StatelessWidget {
   final OrderEntity entity;
   final String currentState;
 
-  const CurrentOrderStatusCard(
-      {super.key, required this.entity, required this.currentState});
+  const CurrentOrderStatusCard({
+    super.key,
+    required this.entity,
+    required this.currentState,
+  });
 
   @override
   Widget build(BuildContext context) {
