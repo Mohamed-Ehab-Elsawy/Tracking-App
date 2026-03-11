@@ -11,10 +11,10 @@ class CurrentOrderDetailsState {
       CurrentOrderDetailsState(BaseState.init(), currentStep: 0);
 
   CurrentOrderDetailsState copyWith({
-    BaseState<OrderEntity>? state,
+    BaseState<OrderEntity>? currentState,
     int? currentStep,
   }) => CurrentOrderDetailsState(
-    state ?? currentState,
+    currentState ?? this.currentState,
     currentStep: currentStep ?? this.currentStep,
   );
 }

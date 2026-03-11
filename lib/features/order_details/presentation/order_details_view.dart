@@ -65,7 +65,20 @@ class CurrentOrderDetailsView extends StatelessWidget {
 
           if (baseState.isLoaded && baseState.data != null) {
             final entity = baseState.data!;
-
+            final String currentStatus = switch (state.currentStep) {
+              0 => "picked",
+              1 => "out_for_delivery",
+              2 => "arrived",
+              3 => "delivered",
+              int() => 'awaiting',
+            };
+            final String buttonText = switch (state.currentStep) {
+              0 => "arrived_at_pickup_point",
+              1 => "start_deliver",
+              2 => "arrived_to_the_customer",
+              3 => "delivered_to_the_customer",
+              int() => "awaiting",
+            };
             return ListView(
               physics: const BouncingScrollPhysics(),
               children: [
@@ -76,7 +89,10 @@ class CurrentOrderDetailsView extends StatelessWidget {
 
                 context.h(AppSpacing.md),
 
-                CurrentOrderStatusCard(entity: entity),
+                CurrentOrderStatusCard(
+                  entity: entity,
+                  currentState: currentStatus,
+                ),
 
                 context.h(AppSpacing.md),
 
@@ -119,8 +135,11 @@ class CurrentOrderDetailsView extends StatelessWidget {
                 context.h(AppSpacing.md),
 
                 ElevatedButton(
-                  onPressed: () => cubit.doIntent(ChangeStepIntent()),
-                  child: const Text("Next Step"),
+                  key: Key('next_step_button'),
+                  onPressed: () => buttonText == "awaiting"
+                      ? null
+                      : cubit.doIntent(ChangeStepIntent()),
+                  child: Text(buttonText.tr()),
                 ),
               ],
             );

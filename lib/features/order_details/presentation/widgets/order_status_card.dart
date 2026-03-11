@@ -7,8 +7,10 @@ import 'package:tracking_app/features/order_details/domain/entities/order_entity
 
 class CurrentOrderStatusCard extends StatelessWidget {
   final OrderEntity entity;
+  final String currentState;
 
-  const CurrentOrderStatusCard({super.key, required this.entity});
+  const CurrentOrderStatusCard(
+      {super.key, required this.entity, required this.currentState});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class CurrentOrderStatusCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              "status".tr() + entity.status,
+              "status".tr() + currentState.tr(),
               style: textStyles.semiBold18.copyWith(color: colors.success),
             ),
             Text(
