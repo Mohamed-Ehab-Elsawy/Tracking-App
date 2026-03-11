@@ -4,44 +4,45 @@ import 'package:mockito/mockito.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
 import 'package:tracking_app/features/order_details/domain/repository/order_details_repository.dart';
-import 'package:tracking_app/features/order_details/domain/use_case/get_current_order_use_case.dart';
+import 'package:tracking_app/features/order_details/domain/use_case/update_order_status_use_case.dart';
+import 'package:tracking_app/features/order_details/presentation/managers/order_status.dart';
 
-import 'get_current_order_use_case_test.mocks.dart';
+import 'update_order_status_use_case_test.mocks.dart';
 
 @GenerateNiceMocks([MockSpec<OrderDetailsRepository>()])
 void main() {
-  late GetCurrentOrderUseCase useCase;
+  late UpdateOrderStatusUseCase useCase;
   late MockOrderDetailsRepository mockRepo;
 
   setUp(() {
     mockRepo = MockOrderDetailsRepository();
-    useCase = GetCurrentOrderUseCase(mockRepo);
+    useCase = UpdateOrderStatusUseCase(mockRepo);
   });
 
-  final tOrderEntity = OrderEntity(
-    id: "123",
-    storeName: "Senior Flutter Store",
-  );
-
-  group('GetCurrentOrderUseCase Tests', () {
+  group('UpdateOrderStatusUseCase Tests', () {
+    final tOrderEntity = OrderEntity(
+      id: "123",
+      storeName: "Senior Flutter Store",
+    );
+    final status = OrderStatus.accepted;
     test(
-      'should call getCurrentOrderDetails from repository and return Success',
+      'should call updateOrderStatus from repository and return Success',
       () async {
         // Arrange
         provideDummy<Result<OrderEntity>>(Success(tOrderEntity));
         when(
-          mockRepo.getCurrentOrderDetails(),
+          mockRepo.updateOrderStatus(status),
         ).thenAnswer((_) async => Success(tOrderEntity));
 
         // Act
-        final result = await useCase.call();
+        final result = await useCase.call(status);
 
         // Assert
         expect(result, isA<Success<OrderEntity>>());
         expect((result as Success).data, tOrderEntity);
 
         // Verify the repository was called exactly once
-        verify(mockRepo.getCurrentOrderDetails()).called(1);
+        verify(mockRepo.updateOrderStatus(status)).called(1);
         verifyNoMoreInteractions(mockRepo);
       },
     );
@@ -53,17 +54,17 @@ void main() {
         const errorMessage = "No internet connection";
         provideDummy<Result<OrderEntity>>(Failure(errorMessage));
         when(
-          mockRepo.getCurrentOrderDetails(),
+          mockRepo.updateOrderStatus(status),
         ).thenAnswer((_) async => Failure(errorMessage));
 
         // Act
-        final result = await useCase.call();
+        final result = await useCase.call(status);
 
         // Assert
         expect(result, isA<Failure<OrderEntity>>());
         expect((result as Failure).errorMessage, errorMessage);
 
-        verify(mockRepo.getCurrentOrderDetails()).called(1);
+        verify(mockRepo.updateOrderStatus(status)).called(1);
       },
     );
   });

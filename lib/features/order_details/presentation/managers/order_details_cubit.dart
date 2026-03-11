@@ -4,7 +4,9 @@ import 'package:tracking_app/core/bloc/base_state.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/get_current_order_use_case.dart';
+import 'package:tracking_app/features/order_details/domain/use_case/update_order_status_use_case.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
+import 'package:tracking_app/features/order_details/presentation/managers/order_status.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 @injectable
@@ -16,9 +18,12 @@ class CurrentOrderDetailsCubit
           CurrentOrderDetailsEvent
         > {
   final GetCurrentOrderUseCase _getCurrentOrderUseCase;
+  final UpdateOrderStatusUseCase _updateOrderStatusUseCase;
+  final orderStatus = OrderStatus.accepted;
 
-  CurrentOrderDetailsCubit(this._getCurrentOrderUseCase)
-    : super(CurrentOrderDetailsState.initial());
+  CurrentOrderDetailsCubit(this._getCurrentOrderUseCase,
+      this._updateOrderStatusUseCase,)
+      : super(CurrentOrderDetailsState.initial());
 
   @override
   void doIntent(CurrentOrderDetailsIntent intent) {
@@ -33,19 +38,52 @@ class CurrentOrderDetailsCubit
         _openWhatsApp(intent.phoneNumber);
 
       case ChangeStepIntent():
-        final nextStep = (state.currentStep + 1) % 5;
-        emit(state.copyWith(currentStep: nextStep));
+        _changeStatus();
     }
   }
 
   void _getOrderDetails() async {
-    emit(state.copyWith(state: BaseState.loading()));
+    emit(state.copyWith(currentState: BaseState.loading()));
     var result = await _getCurrentOrderUseCase.call();
     switch (result) {
       case Success<OrderEntity>():
-        emit(state.copyWith(state: BaseState.loaded(result.data)));
+        {
+          final entity = result.data;
+          final currentStep = switch(entity.status){
+            "accepted" => 0,
+            "picked" => 1,
+            "outForDelivery" => 2,
+            "arrived" => 3,
+            "delivered" => 4,
+            String() => 0,
+          };
+          emit(state.copyWith(currentState: BaseState.loaded(entity),
+              currentStep: currentStep));
+        }
       case Failure<OrderEntity>():
-        emit(state.copyWith(state: BaseState.error(result.errorMessage)));
+        emit(
+          state.copyWith(currentState: BaseState.error(result.errorMessage)),
+        );
+    }
+  }
+
+  Future<void> _changeStatus() async {
+    final nextStep = (state.currentStep + 1) % OrderStatus.values.length;
+    final nextStatus = OrderStatus.values[nextStep];
+
+    final result = await _updateOrderStatusUseCase.call(nextStatus);
+    switch (result) {
+      case Success<OrderEntity>():
+        emit(
+          state.copyWith(
+            currentStep: nextStep,
+            currentState: BaseState.loaded(result.data),
+          ),
+        );
+      case Failure<OrderEntity>():
+        emit(
+          state.copyWith(currentState: BaseState.error(result.errorMessage)),
+        );
     }
   }
 
