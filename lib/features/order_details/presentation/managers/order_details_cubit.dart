@@ -21,9 +21,10 @@ class CurrentOrderDetailsCubit
   final UpdateOrderStatusUseCase _updateOrderStatusUseCase;
   final orderStatus = OrderStatus.accepted;
 
-  CurrentOrderDetailsCubit(this._getCurrentOrderUseCase,
-      this._updateOrderStatusUseCase,)
-      : super(CurrentOrderDetailsState.initial());
+  CurrentOrderDetailsCubit(
+    this._getCurrentOrderUseCase,
+    this._updateOrderStatusUseCase,
+  ) : super(CurrentOrderDetailsState.initial());
 
   @override
   void doIntent(CurrentOrderDetailsIntent intent) {
@@ -49,7 +50,7 @@ class CurrentOrderDetailsCubit
       case Success<OrderEntity>():
         {
           final entity = result.data;
-          final currentStep = switch(entity.status){
+          final currentStep = switch (entity.status) {
             "accepted" => 0,
             "picked" => 1,
             "outForDelivery" => 2,
@@ -57,8 +58,12 @@ class CurrentOrderDetailsCubit
             "delivered" => 4,
             String() => 0,
           };
-          emit(state.copyWith(currentState: BaseState.loaded(entity),
-              currentStep: currentStep));
+          emit(
+            state.copyWith(
+              currentState: BaseState.loaded(entity),
+              currentStep: currentStep,
+            ),
+          );
         }
       case Failure<OrderEntity>():
         emit(
