@@ -28,6 +28,7 @@
 /dev/integration_tests/**/xcuserdata
 /dev/integration_tests/**/Pods
 /packages/flutter/coverage/
+assets/service-account.json
 version
 analysis_benchmark.json
 
