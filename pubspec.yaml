@@ -49,6 +49,7 @@ dependencies:
 
   country_picker: ^2.0.27
   url_launcher: ^6.3.2
+  firebase_core_platform_interface: ^6.0.2
 
 dev_dependencies:
   flutter_test:
