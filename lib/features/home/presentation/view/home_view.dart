@@ -88,8 +88,8 @@ class _HomeViewState extends State<HomeView> {
                   _ordersViewModel.doIntent(RefreshOrdersIntent()),
               child: NotificationListener<ScrollNotification>(
                 onNotification: (ScrollNotification scrollInfo) {
-                  if (scrollInfo.metrics.pixels ==
-                      scrollInfo.metrics.maxScrollExtent) {
+                  if (scrollInfo.metrics.pixels >=
+                      scrollInfo.metrics.maxScrollExtent - 200) {
                     _ordersViewModel.doIntent(LoadMoreOrdersIntent());
                   }
                   return false;

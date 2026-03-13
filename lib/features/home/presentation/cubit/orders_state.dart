@@ -22,5 +22,5 @@ class OrdersState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [ordersState, hasMore];
+  List<Object?> get props => [ordersState, hasMore, order];
 }
