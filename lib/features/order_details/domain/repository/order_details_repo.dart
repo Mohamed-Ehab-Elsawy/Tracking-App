@@ -3,4 +3,10 @@ import 'package:tracking_app/features/order_details/domain/entities/order_entity
 
 abstract interface class OrderDetailsRepo {
   Future<Result<OrderEntity>> getCurrentOrderDetails({String? orderId});
+  Future<Result<List<List<double>>>> getDirections(
+    double startLat,
+    double startLng,
+    double endLat,
+    double endLng,
+  );
 }

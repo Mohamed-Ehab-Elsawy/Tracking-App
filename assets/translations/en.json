@@ -187,5 +187,8 @@
   "newPassword": "New Password",
   "updatePassword": "Update Password",
   "enterCurrentPassword": "Enter Current Password",
-  "enterNewPassword": "Enter New Password"
+  "enterNewPassword": "Enter New Password",
+  "thanks": "Thank you!!",
+  "success_delivered": "The order delivered \nsuccessfully",
+  "done": "Done"
 }

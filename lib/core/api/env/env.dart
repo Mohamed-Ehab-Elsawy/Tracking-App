@@ -6,4 +6,6 @@ part 'env.g.dart';
 abstract class Env {
   @EnviedField(varName: 'BASE_URL', obfuscate: true)
   static final String baseUrl = _Env.baseUrl;
+  @EnviedField(varName: 'MAP_ACCESS_TOKEN', obfuscate: true)
+  static final String mapAccessToken = _Env.mapAccessToken;
 }
