@@ -17,4 +17,5 @@ abstract class ApiEndPointsConstants {
   static const String getSpecificProduct = 'products';
   static const String getAllVehicles = 'vehicles';
   static const String acceptOrder = 'orders/start';
+
 }
