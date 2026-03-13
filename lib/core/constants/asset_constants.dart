@@ -10,4 +10,6 @@ class AssetConstants {
   static const String fontsPath = 'assets/fonts';
   static const String backgroundPath = '$imagesPath/bg.png';
   static const String checkCircle = '$imagesPath/check_circle.png';
+  static const String successCheck = 'assets/animations/success-check.json';
+  static const String mapPin = "assets/icons/map-pin.png";
 }
