@@ -15,8 +15,12 @@ import 'package:tracking_app/features/auth/presentation/logout/logout_cubit.dart
 import 'package:tracking_app/features/home/presentation/cubit/orders_events.dart';
 import 'package:tracking_app/features/home/presentation/cubit/orders_view_model.dart';
 import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
+import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
+import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
+import 'package:tracking_app/features/order_details/presentation/map_view.dart';
+import 'package:tracking_app/features/order_details/presentation/order_delivery_success_view.dart';
 import 'package:tracking_app/features/order_details/presentation/order_details_view.dart';
 import 'package:tracking_app/features/orders/presentation/order_details/view/order_details_view.dart';
 import 'package:tracking_app/features/orders/presentation/order_details/view_model/order_details_view_model.dart';
@@ -44,12 +48,38 @@ class AppRoutes {
   static const String profileView = '/profile_view';
   static const String updateDriverView = '/update_driver_view';
   static const String orderDetailsView = '/order_details_view';
+  static const String mapOrderView = "mapOrderView";
+  static const String orderDeliverySuccessView = "orderDeliverySuccessView";
 }
 
 Route? onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
     case AppRoutes.onboardingView:
       return MaterialPageRoute(builder: (context) => const OnboardingView());
+    case AppRoutes.mapOrderView:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (context) => BlocProvider(
+          create: (context) => getIt<MapOrderViewModel>(),
+          child: MapOrderView(
+            order:
+                settings.arguments as OrderEntity? ??
+                OrderEntity(
+                  userAddress: 'userAddress',
+                  userName: 'userName',
+                  userPhone: 'userPhone',
+                  storeAddress: 'storeAddress',
+                  storeName: 'storeName',
+                  storePhone: 'storePhone',
+                ),
+          ),
+        ),
+      );
+
+    case AppRoutes.orderDeliverySuccessView:
+      return MaterialPageRoute(
+        builder: (context) => const OrderDeliverySuccessView(),
+      );
 
     case AppRoutes.loginView:
       var cubit = getIt.get<LoginCubit>();
