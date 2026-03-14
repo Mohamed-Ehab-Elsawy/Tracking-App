@@ -1,145 +1,220 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
+import 'package:tracking_app/core/services/firestore_service.dart';
+import 'package:tracking_app/features/order_details/data/data_source/order_details_remote_data_source.dart';
 import 'package:tracking_app/features/order_details/data/data_source/order_details_remote_data_source_impl.dart';
+import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_status.dart';
 
-import 'order_details_remote_data_source_impl_test.mocks.dart';
+class MockFirebaseStoreService extends Mock implements FirebaseStoreService {}
 
-@GenerateMocks([
-  FirebaseFirestore,
-  CollectionReference,
-  DocumentReference,
-  DocumentSnapshot,
-])
 void main() {
-  late OrderDetailsRemoteDataSourceImpl dataSource;
-  late MockFirebaseFirestore mockFirestore;
-  late MockCollectionReference<Map<String, dynamic>> mockCollection;
-  late MockDocumentReference<Map<String, dynamic>> mockDocRef;
-  late MockDocumentSnapshot<Map<String, dynamic>> mockSnapshot;
+  late FirebaseStoreService store;
+  late OrderDetailsRemoteDataSource dataSource;
+
+  const orderId = 'order_123';
+
+  Map<String, dynamic> sampleOrderMap({String? id, String status = 'pending'}) {
+    return {
+      if (id != null) 'id': id,
+      'status': status,
+      'createdAt': '2024-01-01T12:00:00Z',
+      'storeName': 'Store',
+      'storeAddress': 'Address',
+      'storePhone': '0100000000',
+      'userName': 'User',
+      'userAddress': 'User Address',
+      'userPhone': '0111111111',
+      'paymentMethod': 'cash',
+      'details': [],
+    };
+  }
 
   setUp(() {
-    mockFirestore = MockFirebaseFirestore();
-    mockCollection = MockCollectionReference();
-    mockDocRef = MockDocumentReference();
-    mockSnapshot = MockDocumentSnapshot();
+    store = MockFirebaseStoreService();
+    dataSource = OrderDetailsRemoteDataSourceImpl(store);
+  });
 
-    dataSource = OrderDetailsRemoteDataSourceImpl(mockFirestore);
-
-    when(mockFirestore.collection('active_orders')).thenReturn(mockCollection);
-    when(mockCollection.doc(any)).thenReturn(mockDocRef);
+  tearDown(() {
+    reset(store);
   });
 
   group('getCurrentOrderDetails', () {
-    const tOrderId = 'order_123';
-    final tMap = {'id': tOrderId, 'status': 'pending'};
-
-    test('returns Success with OrderEntity when document exists', () async {
-      when(mockDocRef.get()).thenAnswer((_) async => mockSnapshot);
-      when(mockSnapshot.data()).thenReturn(tMap);
-
-      final result = await dataSource.getCurrentOrderDetails(tOrderId);
-
-      expect(result, isA<Success>());
-      verify(mockFirestore.collection('active_orders')).called(1);
-      verify(mockCollection.doc(tOrderId)).called(1);
-      verify(mockDocRef.get()).called(1);
-    });
-
-    test('returns Failure with not_found when document data is null', () async {
-      when(mockDocRef.get()).thenAnswer((_) async => mockSnapshot);
-      when(mockSnapshot.data()).thenReturn(null);
-
-      final result = await dataSource.getCurrentOrderDetails(tOrderId);
-
-      expect(result, isA<Failure>());
-    });
-
-    test('returns Failure when FirebaseException occurs', () async {
-      when(mockDocRef.get()).thenThrow(
-        FirebaseException(
-          plugin: 'cloud_firestore',
-          message: 'permission_denied',
+    test('returns Success<OrderEntity> on success', () async {
+      // Arrange
+      when(
+        () => store.get(
+          collectionPath: AppConstants.activeOrderCollectionKey,
+          userId: orderId,
         ),
-      );
+      ).thenAnswer((_) async => sampleOrderMap(id: orderId, status: 'pending'));
 
-      final result = await dataSource.getCurrentOrderDetails(tOrderId);
+      // Act
+      final result = await dataSource.getCurrentOrderDetails(orderId);
 
-      expect(result, isA<Failure>());
+      // Assert
+      expect(result, isA<Success<OrderEntity>>());
+      final data = (result as Success<OrderEntity>).data;
+      expect(data.status, 'pending');
+      expect(data.id, orderId);
+
+      verify(
+        () => store.get(
+          collectionPath: AppConstants.activeOrderCollectionKey,
+          userId: orderId,
+        ),
+      ).called(1);
+      verifyNoMoreInteractions(store);
     });
 
-    test('returns Failure when generic Exception occurs', () async {
-      when(mockDocRef.get()).thenThrow(Exception('generic_error'));
+    test('returns Failure<OrderEntity> when Firestore throws', () async {
+      // Arrange
+      when(
+        () => store.get(
+          collectionPath: AppConstants.activeOrderCollectionKey,
+          userId: orderId,
+        ),
+      ).thenThrow(Exception('network error'));
 
-      final result = await dataSource.getCurrentOrderDetails(tOrderId);
+      // Act
+      final result = await dataSource.getCurrentOrderDetails(orderId);
 
-      expect(result, isA<Failure>());
+      // Assert
+      expect(result, isA<Failure<OrderEntity>>());
+
+      verify(
+        () => store.get(
+          collectionPath: AppConstants.activeOrderCollectionKey,
+          userId: orderId,
+        ),
+      ).called(1);
+      verifyNoMoreInteractions(store);
     });
   });
 
   group('updateOrderStatus', () {
-    const tOrderId = 'order_123';
-    final tStatus = OrderStatus.values.first;
-    final tMap = {'id': tOrderId, 'status': tStatus.name};
-
-    test('returns Failure with invalid_params when orderId is empty', () async {
-      final result = await dataSource.updateOrderStatus('', tStatus);
-
-      expect(result, isA<Failure>());
-      verifyNever(mockFirestore.collection(any));
-    });
-
-    test('returns Success when update and fetch are successful', () async {
-      when(mockDocRef.update(any)).thenAnswer((_) async => {});
-      when(mockDocRef.get()).thenAnswer((_) async => mockSnapshot);
-      when(mockSnapshot.data()).thenReturn(tMap);
-
-      final result = await dataSource.updateOrderStatus(tOrderId, tStatus);
-
-      expect(result, isA<Success>());
-      verify(mockDocRef.update({'status': tStatus.name})).called(1);
-      verify(mockDocRef.get()).called(1);
-    });
-
-    test('returns Failure when updated document data is null', () async {
-      when(mockDocRef.update(any)).thenAnswer((_) async => {});
-      when(mockDocRef.get()).thenAnswer((_) async => mockSnapshot);
-      when(mockSnapshot.data()).thenReturn(null);
-
-      final result = await dataSource.updateOrderStatus(tOrderId, tStatus);
-
-      expect(result, isA<Failure>());
-    });
-
     test(
-      'returns Failure when FirebaseException occurs during update',
+      'updates status and returns Success<OrderEntity> with refreshed doc',
       () async {
-        when(mockDocRef.update(any)).thenThrow(
-          FirebaseException(
-            plugin: 'cloud_firestore',
-            message: 'network_error',
+        // Arrange
+        const newStatus = OrderStatus.delivered;
+        when(
+          () => store.update(
+            collectionPath: AppConstants.activeOrderCollectionKey,
+            docID: orderId,
+            data: {AppConstants.activeOrderStatusKey: newStatus.name},
           ),
+        ).thenAnswer((_) async {});
+
+        when(
+          () => store.get(
+            collectionPath: AppConstants.activeOrderCollectionKey,
+            userId: orderId,
+          ),
+        ).thenAnswer(
+          (_) async => sampleOrderMap(id: orderId, status: newStatus.name),
         );
 
-        final result = await dataSource.updateOrderStatus(tOrderId, tStatus);
+        // Act
+        final result = await dataSource.updateOrderStatus(orderId, newStatus);
 
-        expect(result, isA<Failure>());
-        verifyNever(mockDocRef.get());
+        // Assert
+        expect(result, isA<Success<OrderEntity>>());
+        final data = (result as Success<OrderEntity>).data;
+        expect(data.status, equals(newStatus.name));
+        expect(data.id, orderId);
+
+        verify(
+          () => store.update(
+            collectionPath: AppConstants.activeOrderCollectionKey,
+            docID: orderId,
+            data: {AppConstants.activeOrderStatusKey: newStatus.name},
+          ),
+        ).called(1);
+
+        verify(
+          () => store.get(
+            collectionPath: AppConstants.activeOrderCollectionKey,
+            userId: orderId,
+          ),
+        ).called(1);
+
+        verifyNoMoreInteractions(store);
       },
     );
 
+    test('returns Failure<OrderEntity> when update throws', () async {
+      // Arrange
+      const newStatus = OrderStatus.picked;
+      when(
+        () => store.update(
+          collectionPath: AppConstants.activeOrderCollectionKey,
+          docID: orderId,
+          data: {AppConstants.activeOrderStatusKey: newStatus.name},
+        ),
+      ).thenThrow(Exception('permission denied'));
+
+      // Act
+      final result = await dataSource.updateOrderStatus(orderId, newStatus);
+
+      // Assert
+      expect(result, isA<Failure<OrderEntity>>());
+
+      verify(
+        () => store.update(
+          collectionPath: AppConstants.activeOrderCollectionKey,
+          docID: orderId,
+          data: {AppConstants.activeOrderStatusKey: newStatus.name},
+        ),
+      ).called(1);
+      // No get() should be attempted after a failed update
+      verifyNoMoreInteractions(store);
+    });
+
     test(
-      'returns Failure when generic Exception occurs during update',
+      'returns Failure<OrderEntity> when fetching updated doc throws',
       () async {
-        when(mockDocRef.update(any)).thenThrow(Exception('generic_error'));
+        // Arrange
+        const newStatus = OrderStatus.accepted;
+        when(
+          () => store.update(
+            collectionPath: AppConstants.activeOrderCollectionKey,
+            docID: orderId,
+            data: {AppConstants.activeOrderStatusKey: newStatus.name},
+          ),
+        ).thenAnswer((_) async {});
 
-        final result = await dataSource.updateOrderStatus(tOrderId, tStatus);
+        when(
+          () => store.get(
+            collectionPath: AppConstants.activeOrderCollectionKey,
+            userId: orderId,
+          ),
+        ).thenThrow(Exception('not found'));
 
-        expect(result, isA<Failure>());
-        verifyNever(mockDocRef.get());
+        // Act
+        final result = await dataSource.updateOrderStatus(orderId, newStatus);
+
+        // Assert
+        expect(result, isA<Failure<OrderEntity>>());
+
+        verify(
+          () => store.update(
+            collectionPath: AppConstants.activeOrderCollectionKey,
+            docID: orderId,
+            data: {AppConstants.activeOrderStatusKey: newStatus.name},
+          ),
+        ).called(1);
+
+        verify(
+          () => store.get(
+            collectionPath: AppConstants.activeOrderCollectionKey,
+            userId: orderId,
+          ),
+        ).called(1);
+
+        verifyNoMoreInteractions(store);
       },
     );
   });

@@ -7,9 +7,16 @@ abstract interface class FirebaseStoreService {
     required String userId,
     required Map<String, dynamic> data,
   });
+
   Future<Map<String, dynamic>> get({
     required String collectionPath,
     required String userId,
+  });
+
+  Future<void> update({
+    required String collectionPath,
+    required String docID,
+    required Map<String, dynamic> data,
   });
 }
 
@@ -39,4 +46,12 @@ class DatabaseServiceImpl implements FirebaseStoreService {
       },
     );
   }
+
+  @override
+  Future<void> update({
+    required String collectionPath,
+    required String docID,
+    required Map<String, dynamic> data,
+  }) async =>
+      await _dbFirestore.collection(collectionPath).doc(docID).update(data);
 }
