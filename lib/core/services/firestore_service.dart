@@ -25,7 +25,7 @@ class DatabaseServiceImpl implements FirebaseStoreService {
     required String userId,
     required Map<String, dynamic> data,
   }) async {
-    await _dbFirestore.collection(collectionPath).doc(userId).set(data);
+    await _dbFirestore.collection(collectionPath).doc(userId).update(data);
   }
 
   @override
