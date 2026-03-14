@@ -26,19 +26,14 @@ class OrderDetailsRemoteDataSourceImpl implements OrderDetailsRemoteDataSource {
   @override
   Future<Result<OrderEntity>> updateOrderStatus(
     String orderId,
-    OrderStatus status,) async =>
-      executeApi(() async {
-        await _firebaseStoreServices.update(
-          collectionPath: AppConstants.activeOrderCollectionKey,
-          docID: orderId,
-          data: {AppConstants.activeOrderStatusKey: status.name},
-        );
-
-    final updatedDoc = await _firebaseStoreServices.get(
+    OrderStatus status,
+  ) async => executeApi(() async {
+    final updatedDoc = await _firebaseStoreServices.updateThenFetch(
       collectionPath: AppConstants.activeOrderCollectionKey,
-      userId: orderId,
+      docID: orderId,
+      data: {AppConstants.activeOrderStatusKey: status.name},
     );
 
     return OrderEntity.fromMap(updatedDoc);
-      });
+  });
 }

@@ -13,7 +13,7 @@ abstract interface class FirebaseStoreService {
     required String userId,
   });
 
-  Future<void> update({
+  Future<Map<String, dynamic>> updateThenFetch({
     required String collectionPath,
     required String docID,
     required Map<String, dynamic> data,
@@ -40,18 +40,23 @@ class DatabaseServiceImpl implements FirebaseStoreService {
     required String collectionPath,
     required String userId,
   }) async {
-    return await _dbFirestore.collection(collectionPath).doc(userId).get().then(
-      (doc) {
-        return doc.data() as Map<String, dynamic>;
-      },
-    );
+    var doc = await _dbFirestore.collection(collectionPath).doc(userId).get();
+    return doc.data() ?? {};
   }
 
   @override
-  Future<void> update({
+  Future<Map<String, dynamic>> updateThenFetch({
     required String collectionPath,
     required String docID,
     required Map<String, dynamic> data,
-  }) async =>
-      await _dbFirestore.collection(collectionPath).doc(docID).update(data);
+  }) async {
+    var doc = await _dbFirestore
+        .collection(collectionPath)
+        .doc(docID)
+        .update(data)
+        .then(
+          (value) => _dbFirestore.collection(collectionPath).doc(docID).get(),
+        );
+    return doc.data() ?? {};
+  }
 }

@@ -101,12 +101,14 @@ void main() {
         // Arrange
         const newStatus = OrderStatus.delivered;
         when(
-          () => store.update(
+          () => store.updateThenFetch(
             collectionPath: AppConstants.activeOrderCollectionKey,
             docID: orderId,
             data: {AppConstants.activeOrderStatusKey: newStatus.name},
           ),
-        ).thenAnswer((_) async {});
+        ).thenAnswer((_) async {
+          return sampleOrderMap(id: orderId, status: newStatus.name);
+        });
 
         when(
           () => store.get(
@@ -127,21 +129,19 @@ void main() {
         expect(data.id, orderId);
 
         verify(
-          () => store.update(
+          () => store.updateThenFetch(
             collectionPath: AppConstants.activeOrderCollectionKey,
             docID: orderId,
             data: {AppConstants.activeOrderStatusKey: newStatus.name},
           ),
         ).called(1);
 
-        verify(
+        verifyNever(
           () => store.get(
             collectionPath: AppConstants.activeOrderCollectionKey,
             userId: orderId,
           ),
-        ).called(1);
-
-        verifyNoMoreInteractions(store);
+        );
       },
     );
 
@@ -149,7 +149,7 @@ void main() {
       // Arrange
       const newStatus = OrderStatus.picked;
       when(
-        () => store.update(
+        () => store.updateThenFetch(
           collectionPath: AppConstants.activeOrderCollectionKey,
           docID: orderId,
           data: {AppConstants.activeOrderStatusKey: newStatus.name},
@@ -163,59 +163,12 @@ void main() {
       expect(result, isA<Failure<OrderEntity>>());
 
       verify(
-        () => store.update(
+        () => store.updateThenFetch(
           collectionPath: AppConstants.activeOrderCollectionKey,
           docID: orderId,
           data: {AppConstants.activeOrderStatusKey: newStatus.name},
         ),
       ).called(1);
-      // No get() should be attempted after a failed update
-      verifyNoMoreInteractions(store);
     });
-
-    test(
-      'returns Failure<OrderEntity> when fetching updated doc throws',
-      () async {
-        // Arrange
-        const newStatus = OrderStatus.accepted;
-        when(
-          () => store.update(
-            collectionPath: AppConstants.activeOrderCollectionKey,
-            docID: orderId,
-            data: {AppConstants.activeOrderStatusKey: newStatus.name},
-          ),
-        ).thenAnswer((_) async {});
-
-        when(
-          () => store.get(
-            collectionPath: AppConstants.activeOrderCollectionKey,
-            userId: orderId,
-          ),
-        ).thenThrow(Exception('not found'));
-
-        // Act
-        final result = await dataSource.updateOrderStatus(orderId, newStatus);
-
-        // Assert
-        expect(result, isA<Failure<OrderEntity>>());
-
-        verify(
-          () => store.update(
-            collectionPath: AppConstants.activeOrderCollectionKey,
-            docID: orderId,
-            data: {AppConstants.activeOrderStatusKey: newStatus.name},
-          ),
-        ).called(1);
-
-        verify(
-          () => store.get(
-            collectionPath: AppConstants.activeOrderCollectionKey,
-            userId: orderId,
-          ),
-        ).called(1);
-
-        verifyNoMoreInteractions(store);
-      },
-    );
   });
 }
