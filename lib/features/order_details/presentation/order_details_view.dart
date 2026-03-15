@@ -97,7 +97,7 @@ class CurrentOrderDetailsView extends StatelessWidget {
                 CurrentOrderDetailsCard(
                   title: entity.userName,
                   description: entity.userAddress,
-                  phoneNumber: entity.userPhone,
+                  phoneNumber: entity.userAddress,
                 ),
 
                 context.h(AppSpacing.md),
@@ -119,8 +119,18 @@ class CurrentOrderDetailsView extends StatelessWidget {
                 context.h(AppSpacing.md),
 
                 ElevatedButton(
-                  onPressed: () => cubit.doIntent(ChangeStepIntent()),
-                  child: const Text("Next Step"),
+                  onPressed: () async {
+                    cubit.doIntent(ChangeStepIntent());
+                    cubit.doIntent(
+                      SendOrderStatusNotificationIntent(
+                        token: state.currentState.data!.userToken,
+                        status: state.currentState.data?.status ?? "",
+                      ),
+                    );
+                  },
+                  child: baseState.isLoading
+                      ? const CircularProgressIndicator()
+                      : const Text("Next Step"),
                 ),
               ],
             );

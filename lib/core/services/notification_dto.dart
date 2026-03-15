@@ -11,7 +11,10 @@ class SendNotificationRequest {
       'token': targetToken,
       'notification': {'title': title, 'body': body},
       'data': data ?? {},
-      'android': {'priority': 'high'},
+      'android': {
+        'priority': 'high',
+        'notification': {'channel_id': 'high_importance_channel'},
+      },
       'apns': {
         'headers': {'apns-priority': '10'},
       },
