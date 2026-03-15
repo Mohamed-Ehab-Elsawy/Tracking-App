@@ -21,6 +21,7 @@ class OrderDetailsRepoImpl implements OrderDetailsRepo {
       final id =
           orderId ??
           await AppLocalStorage.getSecuredString(key: AppConstants.orderId);
+      orderId ?? await AppLocalStorage.getString(key: AppConstants.orderId);
 
       ///
       final doc = await _firestore.collection("active_orders").doc(id).get();

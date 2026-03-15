@@ -61,7 +61,6 @@ class CurrentOrderDetailsCubit
         {
           emit(state.copyWith(state: BaseState.loaded(result.data)));
         }
-
       case Failure<OrderEntity>():
         {
           emit(state.copyWith(state: BaseState.error(result.errorMessage)));
