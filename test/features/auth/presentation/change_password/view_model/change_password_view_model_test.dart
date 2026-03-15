@@ -91,7 +91,7 @@ void main() {
     );
 
     blocTest<ChangePasswordViewModel, ChangePasswordState>(
-      'should emit [loading, error] and trigger error UI event when changePassword fails',
+      'should emit [loading, error] and trigger error UI events when changePassword fails',
       build: () => viewModel,
       setUp: () {
         provideDummy<Result<ChangePasswordResponse>>(failureResponse);

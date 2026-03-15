@@ -74,7 +74,7 @@ void main() {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pumpAndSettle();
 
-      // Trigger navigation event
+      // Trigger navigation events
       navigationStreamController.add(ConfirmEmailEvent());
       await tester.pumpAndSettle();
 

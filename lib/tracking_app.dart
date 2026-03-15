@@ -45,7 +45,8 @@ class _TrackingAppState extends State<TrackingApp> {
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
-        initialRoute: logged ? AppRoutes.homeView : AppRoutes.onboardingView,
+        initialRoute: AppRoutes.mapOrderView,
+        //initialRoute: logged ? AppRoutes.homeView : AppRoutes.onboardingView,
         onGenerateRoute: onGenerateRoute,
       ),
     );

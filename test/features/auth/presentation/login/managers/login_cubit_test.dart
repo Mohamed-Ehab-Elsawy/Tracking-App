@@ -23,7 +23,7 @@ void main() {
   tearDown(() => cubit.close());
 
   blocTest<LoginCubit, LoginViewState>(
-    'emits [loading, loaded] and navigation event on success',
+    'emits [loading, loaded] and navigation events on success',
     build: () => cubit,
     setUp: () {
       provideDummy<Result<String>>(Success<String>('logged_in_successfully'));
@@ -61,7 +61,7 @@ void main() {
   );
 
   blocTest<LoginCubit, LoginViewState>(
-    'emits [loading, error] and failure event on error',
+    'emits [loading, error] and failure events on error',
     build: () => cubit,
     setUp: () {
       provideDummy<Result<String>>(Failure<String>('Invalid credentials'));

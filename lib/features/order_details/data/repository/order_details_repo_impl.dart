@@ -47,7 +47,12 @@ class OrderDetailsRepoImpl implements OrderDetailsRepo {
     final String coordinates = "$startLng,$startLat;$endLng,$endLat";
     final String token = Env.mapAccessToken;
     final response = await executeApi(
-      () => _apiClient.getRoute(AppConstants.driving, coordinates, AppConstants.geometries, token),
+      () => _apiClient.getRoute(
+        AppConstants.driving,
+        coordinates,
+        AppConstants.geometries,
+        token,
+      ),
     );
     switch (response) {
       case Success<DirectionsResponse>():

@@ -10,7 +10,7 @@ import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/constants/asset_constants.dart';
 import 'package:tracking_app/core/constants/localization_constants.dart';
 import 'package:tracking_app/core/di/di.dart';
-import 'package:tracking_app/core/events/app_event_bus.dart';
+import 'package:tracking_app/core/events/event_bus_services.dart';
 import 'package:tracking_app/core/local/app_local_storage.dart';
 import 'package:tracking_app/core/services/fcm_service.dart';
 import 'package:tracking_app/tracking_app.dart';

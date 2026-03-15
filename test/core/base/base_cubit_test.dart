@@ -41,7 +41,7 @@ void main() {
       expect: () => [1],
     );
 
-    test('emits event to eventStream', () async {
+    test('emits events to eventStream', () async {
       final events = <TestEvent>[];
 
       final sub = cubit.eventStream.listen(events.add);
@@ -71,7 +71,7 @@ void main() {
       await sub2.cancel();
     });
 
-    test('does not throw when emitting event after close', () async {
+    test('does not throw when emitting events after close', () async {
       await cubit.close();
 
       expect(() => cubit.emitEvent(TestEvent.navigate), returnsNormally);

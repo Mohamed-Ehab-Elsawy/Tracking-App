@@ -7,7 +7,7 @@ on:
 
 jobs:
   android:
-    if: github.event.label.name == 'ReadyForTesting'
+    if: github.events.label.name == 'ReadyForTesting'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,7 +32,7 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
   ios:
-    if: github.event.label.name == 'ReadyForTesting'
+    if: github.events.label.name == 'ReadyForTesting'
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4

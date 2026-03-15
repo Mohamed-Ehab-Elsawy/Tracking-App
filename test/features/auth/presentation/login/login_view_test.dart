@@ -161,7 +161,7 @@ void main() {
 
     verify(mockLoginCubit.emitEvent(any)).called(1);
 
-    // Simulate the event emission to test navigation
+    // Simulate the events emission to test navigation
     eventController.add(LoginNavToForgetPasswordEvent());
     await tester.pumpAndSettle();
 
