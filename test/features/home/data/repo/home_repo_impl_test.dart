@@ -12,20 +12,23 @@ import 'package:tracking_app/features/home/domain/entities/home_order_entity.dar
 
 import 'home_repo_impl_test.mocks.dart';
 
-@GenerateMocks([HomeDataSource,FirebaseFirestore,FirebaseOrderDataSource])
+@GenerateMocks([HomeDataSource, FirebaseFirestore, FirebaseOrderDataSource])
 void main() {
   late MockHomeDataSource dataSource;
   late HomeRepoImpl homeRepoImpl;
   late HomeResponseDto homeResponseDto;
   late MockFirebaseFirestore firebaseFirestore;
-late MockFirebaseOrderDataSource firebaseOrderDataSource;
-
+  late MockFirebaseOrderDataSource firebaseOrderDataSource;
 
   setUp(() {
     dataSource = MockHomeDataSource();
     firebaseFirestore = MockFirebaseFirestore();
     firebaseOrderDataSource = MockFirebaseOrderDataSource();
-    homeRepoImpl = HomeRepoImpl(dataSource,firebaseFirestore,firebaseOrderDataSource);
+    homeRepoImpl = HomeRepoImpl(
+      dataSource,
+      firebaseFirestore,
+      firebaseOrderDataSource,
+    );
 
     homeResponseDto = HomeResponseDto(
       orders: [

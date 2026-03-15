@@ -21,7 +21,7 @@ import 'order_details_view_test.mocks.dart';
 @GenerateNiceMocks([MockSpec<CurrentOrderDetailsCubit>()])
 void main() {
   late MockCurrentOrderDetailsCubit mockCubit;
-  late CurrentOrderDetailsState mockState;
+  // late CurrentOrderDetailsState mockState;
 
   final mockEntity = OrderEntity(
     storeName: "Test Store",
