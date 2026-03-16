@@ -136,7 +136,7 @@ void main() {
       // Act
       await pumpOrderDetailsView(tester);
 
-      final buttonFinder = find.widgetWithText(ElevatedButton, "Next Step");
+      final buttonFinder = find.byKey(const Key('next_step_button'));
 
       await tester.tap(buttonFinder);
       await tester.pump();

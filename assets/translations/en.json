@@ -45,8 +45,6 @@
     "enterPhoneNumber": "Please enter your phone number",
     "validPhoneNumber": "Please enter a valid phone number (10-15 digits)",
     "enterRecipientName": "Please enter recipient name",
-
-
     "Flower order": "Flower order",
     "completed": "completed",
     "Pickup address": "Pickup address",
@@ -190,5 +188,14 @@
   "enterNewPassword": "Enter New Password",
   "thanks": "Thank you!!",
   "success_delivered": "The order delivered \nsuccessfully",
-  "done": "Done"
+  "done": "Done",
+  "arrived_at_pickup_point": "Arrived at pickup point",
+  "start_deliver": "Start deliver",
+  "arrived_to_the_customer": "Arrived to the customer",
+  "delivered_to_the_customer": "Delivered to the customer",
+  "awaiting": "Awaiting",
+  "picked": "Picked",
+  "out_for_delivery": "Out for delivery",
+  "arrived": "Arrived",
+  "delivered": "Delivered"
 }

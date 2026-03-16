@@ -181,5 +181,14 @@
   "cancel": "إلغاء",
   "thanks": "شكرا!!",
   "success_delivered": "تم نوصيل\nالطلب",
-  "done": "تاكيد"
+  "done": "تاكيد",
+  "arrived_at_pickup_point": "وصلت إلي مكان الاستلام",
+  "start_deliver": "بدأ التوصيل",
+  "arrived_to_the_customer": "وصلت للعميل",
+  "delivered_to_the_customer": "سلمت الاوردر العميل",
+  "awaiting": "انتظر",
+  "picked": "تم الاستلام",
+  "out_for_delivery": "خرج للتوصيل",
+  "arrived": "وصل",
+  "delivered": "تم التسليم"
 }
