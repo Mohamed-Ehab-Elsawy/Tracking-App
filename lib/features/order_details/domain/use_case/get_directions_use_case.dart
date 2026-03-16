@@ -1,11 +1,11 @@
 import 'package:injectable/injectable.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
-import 'package:tracking_app/features/order_details/domain/repository/order_details_repo.dart';
+import 'package:tracking_app/features/order_details/domain/repository/order_details_repository.dart';
 
 @injectable
 class GetDirectionsUseCase {
-  final OrderDetailsRepo _orderDetailsRepo;
+  final OrderDetailsRepository _orderDetailsRepo;
 
   GetDirectionsUseCase(this._orderDetailsRepo);
 

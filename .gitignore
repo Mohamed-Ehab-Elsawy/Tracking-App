@@ -125,3 +125,5 @@ app.*.symbols
 
 # firebase
 firebase_options.dart
+
+env/.env

@@ -56,7 +56,6 @@ class AppRoutes {
   static const String orderDetailsView = '/order_details_view';
   static const String mapOrderView = "mapOrderView";
   static const String orderDeliverySuccessView = "orderDeliverySuccessView";
-  static const String orderDetailsView = '/order_details_view';
 }
 
 Route? onGenerateRoute(RouteSettings settings) {
@@ -64,8 +63,24 @@ Route? onGenerateRoute(RouteSettings settings) {
     case AppRoutes.onboardingView:
       return MaterialPageRoute(builder: (context) => const OnboardingView());
     case AppRoutes.mapOrderView:
-    case AppRoutes.onboardingView:
-      return MaterialPageRoute(builder: (context) => const OnboardingView());
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (context) => BlocProvider(
+          create: (context) => getIt<MapOrderViewModel>(),
+          child: MapOrderView(
+            order:
+            settings.arguments as OrderEntity? ??
+                OrderEntity(
+                  userAddress: 'userAddress',
+                  userName: 'userName',
+                  userPhone: 'userPhone',
+                  storeAddress: 'storeAddress',
+                  storeName: 'storeName',
+                  storePhone: 'storePhone',
+                ),
+          ),
+        ),
+      );
 
     case AppRoutes.loginView:
       var cubit = getIt.get<LoginCubit>();
@@ -130,21 +145,6 @@ Route? onGenerateRoute(RouteSettings settings) {
 
     case AppRoutes.updateDriverView:
       return MaterialPageRoute(
-        settings: settings,
-        builder: (context) => BlocProvider(
-          create: (context) => getIt<MapOrderViewModel>(),
-          child: MapOrderView(
-            order:
-                settings.arguments as OrderEntity? ??
-                OrderEntity(
-                  userAddress: 'userAddress',
-                  userName: 'userName',
-                  userPhone: 'userPhone',
-                  storeAddress: 'storeAddress',
-                  storeName: 'storeName',
-                  storePhone: 'storePhone',
-                ),
-          ),
         settings: RouteSettings(arguments: settings.arguments),
         builder: (_) => BlocProvider(
           create: (_) => getIt<UpdateProfileViewModel>(),
@@ -157,44 +157,6 @@ Route? onGenerateRoute(RouteSettings settings) {
         builder: (context) => const OrderDeliverySuccessView(),
       );
 
-    case AppRoutes.orderDetailsView:
-      var cubit = getIt.get<CurrentOrderDetailsCubit>();
-    case AppRoutes.loginView:
-      var cubit = getIt.get<LoginCubit>();
-      return MaterialPageRoute(
-        builder: (context) =>
-            BlocProvider(create: (context) => cubit, child: const LoginView()),
-      );
-
-    case AppRoutes.forgetPasswordView:
-      return MaterialPageRoute(
-        builder: (context) => BlocProvider<ForgetPasswordViewModel>(
-          create: (context) => getIt.get<ForgetPasswordViewModel>(),
-          child: const ForgetPasswordView(),
-        ),
-      );
-
-    case AppRoutes.applyView:
-      return MaterialPageRoute(
-        builder: (context) => BlocProvider(
-          create: (context) => cubit..doIntent(GetCurrentOrderDetailsIntent()),
-          child: const CurrentOrderDetailsView(),
-          create: (context) =>
-              getIt<ApplyViewModel>()..doIntent(GetVehiclesIntent()),
-          child: const ApplyView(),
-        ),
-      );
-
-    case AppRoutes.applySuccessView:
-      return MaterialPageRoute(builder: (context) => const ApplySuccessView());
-
-    case AppRoutes.changePassword:
-      return MaterialPageRoute(
-        builder: (_) => BlocProvider(
-          create: (context) => getIt<ChangePasswordViewModel>(),
-          child: const ChangePasswordView(),
-        ),
-      );
 
     case AppRoutes.orderDetails:
       {
@@ -207,40 +169,6 @@ Route? onGenerateRoute(RouteSettings settings) {
           ),
         );
       }
-    case AppRoutes.homeView:
-      var sectionsCubit = SectionsCubit();
-      var profileViewModel = getIt<ProfileViewModel>()
-        ..doIntent(GetDriverDataEvent());
-      var logoutCubit = getIt.get<LogoutCubit>();
-      var orderHistoryCubit = getIt.get<OrderHistoryCubit>();
-      var homeViewModel = getIt<OrdersViewModel>();
-      return MaterialPageRoute(
-        builder: (context) => MultiBlocProvider(
-          providers: [
-            BlocProvider<SectionsCubit>(create: (context) => sectionsCubit),
-            BlocProvider<LogoutCubit>(create: (context) => logoutCubit),
-            BlocProvider<ProfileViewModel>(
-              create: (context) => profileViewModel,
-            ),
-            BlocProvider<OrderHistoryCubit>(
-              create: (context) => orderHistoryCubit,
-            ),
-            BlocProvider<OrdersViewModel>(
-              create: (context) => homeViewModel..doIntent(GetOrdersIntent()),
-            ),
-          ],
-          child: const SectionsView(),
-        ),
-      );
-
-    case AppRoutes.updateDriverView:
-      return MaterialPageRoute(
-        settings: RouteSettings(arguments: settings.arguments),
-        builder: (_) => BlocProvider(
-          create: (_) => getIt<UpdateProfileViewModel>(),
-          child: const UpdateDriverView(),
-        ),
-      );
 
     case AppRoutes.orderDetailsView:
       var cubit = getIt.get<CurrentOrderDetailsCubit>();
@@ -251,17 +179,6 @@ Route? onGenerateRoute(RouteSettings settings) {
         ),
       );
 
-    case AppRoutes.orderDetails:
-      {
-        var cubit = getIt.get<OrderItemNameCubit>();
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (_) => BlocProvider<OrderItemNameCubit>(
-            create: (context) => cubit,
-            child: OrderDetailsView(),
-          ),
-        );
-      }
   }
   return null;
 }

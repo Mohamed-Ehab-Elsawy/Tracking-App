@@ -29,7 +29,6 @@ class CurrentOrderDetailsState {
     BaseState<void>? sendNotificationState,
     BaseState<NotificationDto>? notificationState,
   }) => CurrentOrderDetailsState(
-    state ?? currentState,
     currentState ?? this.currentState,
     currentStep: currentStep ?? this.currentStep,
     sendNotificationState: this.sendNotificationState,

@@ -50,8 +50,6 @@ class _TrackingAppState extends State<TrackingApp> {
       ),
     );
   }
-}
-
   String? init() {
     if (!logged) {
       return AppRoutes.onboardingView;
