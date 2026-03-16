@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:location/location.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:tracking_app/core/services/location_manager.dart';
 import 'package:tracking_app/core/theme/colors/color_extension.dart';
 import 'package:tracking_app/core/presentation/feedback/app_snackbar.dart';
 import 'package:tracking_app/core/widgets/loading_indicator.dart';
@@ -19,27 +21,54 @@ class MapOrderView extends StatefulWidget {
 
 class MapOrderViewState extends State<MapOrderView> {
   MapboxMap? mapboxMap;
+  late LocationManager _locationManager;
   late MapOrderViewModel _viewModel;
   late StreamSubscription<MapOrderEvent> _eventSubscription;
+  late StreamSubscription<LocationData>? _locationSubscription;
 
+  Position? _lastPosition;
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
+
     await _viewModel.initMap(mapboxMap);
 
-    //dummy data
-    _viewModel.doIntent(
-      GetDirectionsIntent(
-        startLat: 30.0444,
-        startLng: 31.2357,
-        endLat: 30.0626,
-        endLng: 31.2497,
-      ),
-    );
+    _locationSubscription = _locationManager.updateLocation().listen((
+      location,
+    ) {
+      final lat = location.latitude;
+      final lng = location.longitude;
+      if (lat == null || lng == null) return;
+
+      // Only re-fetch directions if moved more than ~20 meters
+      final newPos = Position(lng, lat);
+      if (_hasMovedSignificantly(newPos)) {
+        _lastPosition = newPos;
+        _viewModel.doIntent(
+          GetDirectionsIntent(
+            startLat: lat,
+            startLng: lng,
+            // endLat: widget.order?.latitude ?? 30.0626,   // ← use order data
+            // endLng: widget.order?.longitude ?? 31.2497,
+            endLat: 30.0626,
+            endLng: 31.2497,
+          ),
+        );
+      }
+    });
+  }
+
+  bool _hasMovedSignificantly(Position newPos) {
+    if (_lastPosition == null) return true;
+    final latDiff = (newPos.lat - _lastPosition!.lat).abs();
+    final lngDiff = (newPos.lng - _lastPosition!.lng).abs();
+    return latDiff > 0.0002 || lngDiff > 0.0002; // ~20m threshold
   }
 
   @override
   void initState() {
     super.initState();
+    _locationManager = LocationManager();
+    _locationManager.requestPermission();
     _viewModel = context.read<MapOrderViewModel>();
     _eventSubscription = _viewModel.eventStream.listen((event) {
       if (!mounted) return;
@@ -52,6 +81,7 @@ class MapOrderViewState extends State<MapOrderView> {
   @override
   void dispose() {
     _eventSubscription.cancel();
+    _locationSubscription?.cancel();
     super.dispose();
   }
 
