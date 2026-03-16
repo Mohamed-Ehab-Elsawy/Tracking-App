@@ -18,6 +18,16 @@ import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
 import 'package:tracking_app/features/order_details/presentation/order_details_view.dart';
+import 'package:tracking_app/features/home/presentation/cubit/orders_events.dart';
+import 'package:tracking_app/features/home/presentation/cubit/orders_view_model.dart';
+import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
+import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
+import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
+import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
+import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
+import 'package:tracking_app/features/order_details/presentation/map_view.dart';
+import 'package:tracking_app/features/order_details/presentation/order_delivery_success_view.dart';
+import 'package:tracking_app/features/order_details/presentation/order_details_view.dart';
 import 'package:tracking_app/features/orders/presentation/order_details/view/order_details_view.dart';
 import 'package:tracking_app/features/orders/presentation/order_details/view_model/order_details_view_model.dart';
 import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_cubit.dart';
@@ -44,10 +54,16 @@ class AppRoutes {
   static const String profileView = '/profile_view';
   static const String updateDriverView = '/update_driver_view';
   static const String orderDetailsView = '/order_details_view';
+  static const String mapOrderView = "mapOrderView";
+  static const String orderDeliverySuccessView = "orderDeliverySuccessView";
+  static const String orderDetailsView = '/order_details_view';
 }
 
 Route? onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
+    case AppRoutes.onboardingView:
+      return MaterialPageRoute(builder: (context) => const OnboardingView());
+    case AppRoutes.mapOrderView:
     case AppRoutes.onboardingView:
       return MaterialPageRoute(builder: (context) => const OnboardingView());
 
@@ -86,6 +102,111 @@ Route? onGenerateRoute(RouteSettings settings) {
         ),
       );
 
+    case AppRoutes.homeView:
+      var sectionsCubit = SectionsCubit();
+      var profileViewModel = getIt<ProfileViewModel>()
+        ..doIntent(GetDriverDataEvent());
+      var logoutCubit = getIt.get<LogoutCubit>();
+      var orderHistoryCubit = getIt.get<OrderHistoryCubit>();
+      var homeViewModel = getIt<OrdersViewModel>();
+      return MaterialPageRoute(
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<SectionsCubit>(create: (context) => sectionsCubit),
+            BlocProvider<LogoutCubit>(create: (context) => logoutCubit),
+            BlocProvider<ProfileViewModel>(
+              create: (context) => profileViewModel,
+            ),
+            BlocProvider<OrderHistoryCubit>(
+              create: (context) => orderHistoryCubit,
+            ),
+            BlocProvider<OrdersViewModel>(
+              create: (context) => homeViewModel..doIntent(GetOrdersIntent()),
+            ),
+          ],
+          child: const SectionsView(),
+        ),
+      );
+
+    case AppRoutes.updateDriverView:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (context) => BlocProvider(
+          create: (context) => getIt<MapOrderViewModel>(),
+          child: MapOrderView(
+            order:
+                settings.arguments as OrderEntity? ??
+                OrderEntity(
+                  userAddress: 'userAddress',
+                  userName: 'userName',
+                  userPhone: 'userPhone',
+                  storeAddress: 'storeAddress',
+                  storeName: 'storeName',
+                  storePhone: 'storePhone',
+                ),
+          ),
+        settings: RouteSettings(arguments: settings.arguments),
+        builder: (_) => BlocProvider(
+          create: (_) => getIt<UpdateProfileViewModel>(),
+          child: const UpdateDriverView(),
+        ),
+      );
+
+    case AppRoutes.orderDeliverySuccessView:
+      return MaterialPageRoute(
+        builder: (context) => const OrderDeliverySuccessView(),
+      );
+
+    case AppRoutes.orderDetailsView:
+      var cubit = getIt.get<CurrentOrderDetailsCubit>();
+    case AppRoutes.loginView:
+      var cubit = getIt.get<LoginCubit>();
+      return MaterialPageRoute(
+        builder: (context) =>
+            BlocProvider(create: (context) => cubit, child: const LoginView()),
+      );
+
+    case AppRoutes.forgetPasswordView:
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider<ForgetPasswordViewModel>(
+          create: (context) => getIt.get<ForgetPasswordViewModel>(),
+          child: const ForgetPasswordView(),
+        ),
+      );
+
+    case AppRoutes.applyView:
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) => cubit..doIntent(GetCurrentOrderDetailsIntent()),
+          child: const CurrentOrderDetailsView(),
+          create: (context) =>
+              getIt<ApplyViewModel>()..doIntent(GetVehiclesIntent()),
+          child: const ApplyView(),
+        ),
+      );
+
+    case AppRoutes.applySuccessView:
+      return MaterialPageRoute(builder: (context) => const ApplySuccessView());
+
+    case AppRoutes.changePassword:
+      return MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (context) => getIt<ChangePasswordViewModel>(),
+          child: const ChangePasswordView(),
+        ),
+      );
+
+    case AppRoutes.orderDetails:
+      {
+        var cubit = getIt.get<OrderItemNameCubit>();
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => BlocProvider<OrderItemNameCubit>(
+            create: (context) => cubit,
+            child: OrderDetailsView(),
+          ),
+        );
+      }
     case AppRoutes.homeView:
       var sectionsCubit = SectionsCubit();
       var profileViewModel = getIt<ProfileViewModel>()

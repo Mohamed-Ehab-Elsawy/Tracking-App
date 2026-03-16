@@ -4,17 +4,18 @@ import 'package:mockito/mockito.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
 import 'package:tracking_app/features/order_details/domain/repository/order_details_repo.dart';
+import 'package:tracking_app/features/order_details/domain/repository/order_details_repository.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/get_current_order_use_case.dart';
 
 import 'get_current_order_use_case_test.mocks.dart';
 
-@GenerateNiceMocks([MockSpec<OrderDetailsRepo>()])
+@GenerateNiceMocks([MockSpec<OrderDetailsRepository>()])
 void main() {
   late GetCurrentOrderUseCase useCase;
-  late MockOrderDetailsRepo mockRepo;
+  late MockOrderDetailsRepository mockRepo;
 
   setUp(() {
-    mockRepo = MockOrderDetailsRepo();
+    mockRepo = MockOrderDetailsRepository();
     useCase = GetCurrentOrderUseCase(mockRepo);
   });
 

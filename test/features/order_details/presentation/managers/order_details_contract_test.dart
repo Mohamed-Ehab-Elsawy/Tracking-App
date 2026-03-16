@@ -13,7 +13,7 @@ void main() {
 
     test('copyWith should update currentState when provided', () {
       final initialState = CurrentOrderDetailsState.initial();
-      final newState = initialState.copyWith(state: BaseState.loading());
+      final newState = initialState.copyWith(currentState: BaseState.loading());
 
       expect(newState.currentState.isLoading, isTrue);
       expect(newState.currentStep, initialState.currentStep);

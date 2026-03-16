@@ -187,5 +187,18 @@
   "newPassword": "New Password",
   "updatePassword": "Update Password",
   "enterCurrentPassword": "Enter Current Password",
-  "enterNewPassword": "Enter New Password"
+  "enterNewPassword": "Enter New Password",
+  "arrived_at_pickup_point": "Arrived at pickup point",
+  "start_deliver": "Start deliver",
+  "arrived_to_the_customer": "Arrived to the customer",
+  "delivered_to_the_customer": "Delivered to the customer",
+  "awaiting": "Awaiting",
+  "picked": "Picked",
+  "out_for_delivery": "Out for delivery",
+  "arrived": "Arrived",
+  "delivered": "Delivered",
+  "enterNewPassword": "Enter New Password",
+  "thanks": "Thank you!!",
+  "success_delivered": "The order delivered \nsuccessfully",
+  "done": "Done"
 }

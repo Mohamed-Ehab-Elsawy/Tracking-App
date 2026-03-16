@@ -21,6 +21,7 @@ import 'order_details_view_test.mocks.dart';
 @GenerateNiceMocks([MockSpec<CurrentOrderDetailsCubit>()])
 void main() {
   late MockCurrentOrderDetailsCubit mockCubit;
+  // late CurrentOrderDetailsState mockState;
 
   final mockEntity = OrderEntity(
     storeName: "Test Store",
@@ -72,9 +73,13 @@ void main() {
       WidgetTester tester,
     ) async {
       // Arrange
-      when(
-        mockCubit.state,
-      ).thenReturn(CurrentOrderDetailsState(BaseState.loading()));
+      when(mockCubit.state).thenReturn(
+        CurrentOrderDetailsState(
+          BaseState.loading(),
+          sendNotificationState: BaseState.init(),
+          notificationState: BaseState.init(),
+        ),
+      );
 
       // Act
       await pumpOrderDetailsView(tester);
@@ -89,9 +94,13 @@ void main() {
     ) async {
       // Arrange
       const errorMessage = "Something went wrong!";
-      when(
-        mockCubit.state,
-      ).thenReturn(CurrentOrderDetailsState(BaseState.error(errorMessage)));
+      when(mockCubit.state).thenReturn(
+        CurrentOrderDetailsState(
+          BaseState.error(errorMessage),
+          sendNotificationState: BaseState.init(),
+          notificationState: BaseState.init(),
+        ),
+      );
 
       // Act
       await pumpOrderDetailsView(tester);
@@ -108,6 +117,8 @@ void main() {
           CurrentOrderDetailsState(
             BaseState.loaded(mockEntity),
             currentStep: 2,
+            notificationState: BaseState.init(),
+            sendNotificationState: BaseState.init(),
           ),
         );
 
@@ -129,14 +140,18 @@ void main() {
       WidgetTester tester,
     ) async {
       // Arrange
-      when(
-        mockCubit.state,
-      ).thenReturn(CurrentOrderDetailsState(BaseState.loaded(mockEntity)));
+      when(mockCubit.state).thenReturn(
+        CurrentOrderDetailsState(
+          BaseState.loaded(mockEntity),
+          sendNotificationState: BaseState.init(),
+          notificationState: BaseState.init(),
+        ),
+      );
 
       // Act
       await pumpOrderDetailsView(tester);
 
-      final buttonFinder = find.widgetWithText(ElevatedButton, "Next Step");
+      final buttonFinder = find.byKey(const Key('next_step_button'));
 
       await tester.tap(buttonFinder);
       await tester.pump();

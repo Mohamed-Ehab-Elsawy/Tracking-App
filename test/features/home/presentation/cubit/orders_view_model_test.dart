@@ -24,7 +24,6 @@ import 'orders_view_model_test.mocks.dart';
 void main() {
   late MockGetOrdersUseCase mockUseCase;
   late OrdersViewModel viewModel;
-  late MockGetOrdersUseCase getOrdersUseCase;
   late MockAcceptOrderUseCase acceptOrderUseCase;
   late MockGetUserDataUseCase getUserDataUseCase;
   late MockSaveAcceptedOrderUseCase saveAcceptedOrderUseCase;
@@ -34,7 +33,7 @@ void main() {
     acceptOrderUseCase = MockAcceptOrderUseCase();
     getUserDataUseCase = MockGetUserDataUseCase();
     saveAcceptedOrderUseCase = MockSaveAcceptedOrderUseCase();
-    getOrdersUseCase = MockGetOrdersUseCase();
+    // getOrdersUseCase = MockGetOrdersUseCase();
 
     viewModel = OrdersViewModel(
       mockUseCase,
