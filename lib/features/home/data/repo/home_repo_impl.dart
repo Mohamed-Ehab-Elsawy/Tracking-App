@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
+import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
+import 'package:tracking_app/core/local/app_local_storage.dart';
 import 'package:tracking_app/features/home/data/data_source/firebase_data_source.dart';
 import 'package:tracking_app/features/home/data/data_source/home_data_source.dart';
 import 'package:tracking_app/features/home/data/mapper/home_orders_mapper.dart';
@@ -12,6 +14,7 @@ import 'package:tracking_app/features/home/domain/entities/active_order_entity.d
 import 'package:tracking_app/features/home/domain/entities/home_order_entity.dart';
 import 'package:tracking_app/features/home/domain/entities/order_entity.dart';
 import 'package:tracking_app/features/home/domain/repo/home_repo.dart';
+
 import '../../domain/entities/user_entity.dart';
 
 @Injectable(as: HomeRepo)
@@ -25,6 +28,7 @@ class HomeRepoImpl implements HomeRepo {
     this._firestore,
     this.firebaseOrderDataSource,
   );
+
   @override
   Future<Result<List<HomeOrderEntity>>> getOrders(int page, int limit) async {
     final response = await _homeDataSource.getOrders(page, limit);
@@ -55,6 +59,8 @@ class HomeRepoImpl implements HomeRepo {
         {
           var orderDto = response.data.orders ?? UpdateOrdersDto();
           OrdersEntity orderEntity = orderDto.toEntity();
+
+          await AppLocalStorage.set(AppConstants.orderId, orderId);
 
           return Success<OrdersEntity>(orderEntity);
         }

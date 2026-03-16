@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tracking_app/core/extensions/context_spacing_extension.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
+import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/order_details/presentation/widgets/order_details_card.dart';
 
 class BottomSheetContainer extends StatefulWidget {
@@ -10,7 +10,8 @@ class BottomSheetContainer extends StatefulWidget {
     required this.order,
     required this.firstStore,
   });
-  final OrderEntity order;
+
+  final ActiveOrderDto order;
   final bool firstStore;
 
   @override
@@ -76,31 +77,31 @@ class _BottomSheetContainerState extends State<BottomSheetContainer>
           context.h(8),
           if (widget.firstStore) ...[
             CurrentOrderDetailsCard(
-              title: widget.order.storeName,
-              description: widget.order.storeAddress,
-              phoneNumber: widget.order.storePhone,
+              title: widget.order.storeName ?? "",
+              description: widget.order.storeAddress ?? "",
+              phoneNumber: widget.order.phone,
             ),
             context.h(24),
             Text("user_address".tr()),
             context.h(8),
             CurrentOrderDetailsCard(
-              title: widget.order.userName,
-              description: widget.order.userAddress,
-              phoneNumber: widget.order.userPhone,
+              title: widget.order.userName ?? "",
+              description: widget.order.userAddress ?? "",
+              phoneNumber: widget.order.phone,
             ),
           ] else ...[
             CurrentOrderDetailsCard(
-              title: widget.order.userName,
-              description: widget.order.userAddress,
-              phoneNumber: widget.order.userPhone,
+              title: widget.order.userName ?? "",
+              description: widget.order.userAddress ?? "",
+              phoneNumber: widget.order.phone,
             ),
             context.h(24),
             Text("user_address".tr()),
             context.h(8),
             CurrentOrderDetailsCard(
-              title: widget.order.storeName,
-              description: widget.order.storeAddress,
-              phoneNumber: widget.order.storePhone,
+              title: widget.order.storeName ?? "",
+              description: widget.order.storeAddress ?? "",
+              phoneNumber: widget.order.phone,
             ),
           ],
         ],

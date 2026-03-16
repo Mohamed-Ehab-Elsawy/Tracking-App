@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:tracking_app/core/theme/colors/color_extension.dart';
 import 'package:tracking_app/core/theme/dimensions/app_spacing.dart';
 import 'package:tracking_app/core/theme/typography/typography_extension.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
+import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 
 class CurrentOrderStatusCard extends StatelessWidget {
-  final OrderEntity entity;
+  final ActiveOrderDto entity;
   final String currentState;
 
   const CurrentOrderStatusCard({
@@ -32,11 +32,11 @@ class CurrentOrderStatusCard extends StatelessWidget {
               style: textStyles.semiBold18.copyWith(color: colors.success),
             ),
             Text(
-              "order_id".tr() + entity.id,
+              "order_id".tr() + (entity.orderId ?? ""),
               style: textStyles.semiBold18.copyWith(color: colors.surface),
             ),
             Text(
-              entity.createdAt,
+              entity.startedAt.toString(),
               style: textStyles.medium13.copyWith(color: colors.grey),
             ),
           ],

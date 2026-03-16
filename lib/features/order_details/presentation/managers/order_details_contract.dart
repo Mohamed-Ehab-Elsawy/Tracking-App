@@ -1,8 +1,8 @@
 import 'package:tracking_app/core/bloc/base_state.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
+import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 
 class CurrentOrderDetailsState {
-  final BaseState<OrderEntity> currentState;
+  final BaseState<ActiveOrderDto> currentState;
   final int currentStep;
 
   const CurrentOrderDetailsState(this.currentState, {this.currentStep = 0});
@@ -11,7 +11,7 @@ class CurrentOrderDetailsState {
       CurrentOrderDetailsState(BaseState.init(), currentStep: 0);
 
   CurrentOrderDetailsState copyWith({
-    BaseState<OrderEntity>? currentState,
+    BaseState<ActiveOrderDto>? currentState,
     int? currentStep,
   }) => CurrentOrderDetailsState(
     currentState ?? this.currentState,

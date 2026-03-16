@@ -1,20 +1,23 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location/location.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:tracking_app/core/presentation/feedback/app_snackbar.dart';
 import 'package:tracking_app/core/services/location_manager.dart';
 import 'package:tracking_app/core/theme/colors/color_extension.dart';
-import 'package:tracking_app/core/presentation/feedback/app_snackbar.dart';
 import 'package:tracking_app/core/widgets/loading_indicator.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
-import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
+import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/map_order_state.dart';
+import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
+
 import 'widgets/bottom_sheet_container.dart';
 
 class MapOrderView extends StatefulWidget {
   const MapOrderView({super.key, required this.order});
-  final OrderEntity? order;
+
+  final ActiveOrderDto? order;
   @override
   State createState() => MapOrderViewState();
 }

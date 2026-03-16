@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,6 +26,7 @@ class CurrentOrderDetailsView extends StatefulWidget {
 
 class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
   StreamSubscription? _eventSubscription;
+
   @override
   void initState() {
     super.initState();
@@ -97,10 +99,11 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
           if (baseState.isLoaded && baseState.data != null) {
             final entity = baseState.data!;
             final String currentStatus = switch (state.currentStep) {
-              0 => "picked",
-              1 => "out_for_delivery",
-              2 => "arrived",
-              3 => "delivered",
+              0 => "Accepted",
+              1 => "picked",
+              2 => "out_for_delivery",
+              3 => "arrived",
+              4 => "delivered",
               int() => 'awaiting',
             };
             final String buttonText = switch (state.currentStep) {
@@ -131,9 +134,9 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
                 context.h(AppSpacing.sm),
 
                 CurrentOrderDetailsCard(
-                  title: entity.storeName,
-                  description: entity.storeAddress,
-                  phoneNumber: entity.storePhone,
+                  title: entity.storeName ?? "",
+                  description: entity.storeAddress ?? "",
+                  phoneNumber: entity.phone,
                   onTap: () => Navigator.of(
                     context,
                   ).pushNamed(AppRoutes.mapOrderView, arguments: entity),
@@ -145,9 +148,9 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
                 context.h(AppSpacing.sm),
 
                 CurrentOrderDetailsCard(
-                  title: entity.userName,
-                  description: entity.userAddress,
-                  phoneNumber: entity.userPhone,
+                  title: entity.userName ?? "",
+                  description: entity.userAddress ?? "",
+                  phoneNumber: entity.phone,
                 ),
 
                 context.h(AppSpacing.md),
@@ -155,17 +158,16 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
                 Text("order_details".tr(), style: context.textStyles.medium20),
                 context.h(AppSpacing.sm),
 
-                ...entity.details.map(
-                  (item) => Padding(
-                    padding: EdgeInsets.only(bottom: AppSpacing.sm),
-                    child: CurrentOrderDetailsCard(
-                      title: item.title,
-                      description: "egp".tr() + item.price,
-                      count: item.count.toString(),
-                    ),
-                  ),
-                ),
-
+                // ...entity..map(
+                //   (item) => Padding(
+                //     padding: EdgeInsets.only(bottom: AppSpacing.sm),
+                //     child: CurrentOrderDetailsCard(
+                //       title: item.title,
+                //       description: "egp".tr() + item.price,
+                //       count: item.count.toString(),
+                //     ),
+                //   ),
+                // ),
                 context.h(AppSpacing.md),
 
                 ElevatedButton(

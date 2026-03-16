@@ -12,10 +12,10 @@ import 'package:tracking_app/features/auth/presentation/forget_password/view_mod
 import 'package:tracking_app/features/auth/presentation/login/login_view.dart';
 import 'package:tracking_app/features/auth/presentation/login/managers/login_cubit.dart';
 import 'package:tracking_app/features/auth/presentation/logout/logout_cubit.dart';
+import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/home/presentation/cubit/orders_events.dart';
 import 'package:tracking_app/features/home/presentation/cubit/orders_view_model.dart';
 import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
@@ -61,18 +61,7 @@ Route? onGenerateRoute(RouteSettings settings) {
         settings: settings,
         builder: (context) => BlocProvider(
           create: (context) => getIt<MapOrderViewModel>(),
-          child: MapOrderView(
-            order:
-                settings.arguments as OrderEntity? ??
-                OrderEntity(
-                  userAddress: 'userAddress',
-                  userName: 'userName',
-                  userPhone: 'userPhone',
-                  storeAddress: 'storeAddress',
-                  storeName: 'storeName',
-                  storePhone: 'storePhone',
-                ),
-          ),
+          child: MapOrderView(order: settings.arguments as ActiveOrderDto),
         ),
       );
 

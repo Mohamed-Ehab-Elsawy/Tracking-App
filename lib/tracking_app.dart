@@ -24,14 +24,11 @@ class _TrackingAppState extends State<TrackingApp> {
   }
 
   Future<void> _initAsync() async {
-    final logedStatus = await AppLocalStorage.getBool(
+    final loggedStatus = await AppLocalStorage.getBool(
       AppConstants.rememberMeKey,
     );
     orderId = await AppLocalStorage.getString(key: AppConstants.orderId);
-
-    setState(() {
-      logged = logedStatus;
-    });
+    setState(() => logged = loggedStatus);
   }
 
   @override
@@ -45,8 +42,7 @@ class _TrackingAppState extends State<TrackingApp> {
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
-        //initialRoute: AppRoutes.mapOrderView,
-        initialRoute: logged ? AppRoutes.homeView : AppRoutes.onboardingView,
+        initialRoute: init(),
         onGenerateRoute: onGenerateRoute,
       ),
     );
@@ -56,7 +52,7 @@ class _TrackingAppState extends State<TrackingApp> {
     if (!logged) {
       return AppRoutes.onboardingView;
     } else if (logged && orderId.isNotEmpty) {
-      return AppRoutes.homeView;
+      return AppRoutes.orderDetailsView;
     }
     return AppRoutes.homeView;
   }

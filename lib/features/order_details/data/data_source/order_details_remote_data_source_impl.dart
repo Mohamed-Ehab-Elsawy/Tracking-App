@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
+import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/order_details/data/data_source/order_details_remote_data_source.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_status.dart';
 
 @Injectable(as: OrderDetailsRemoteDataSource)
@@ -12,7 +12,7 @@ class OrderDetailsRemoteDataSourceImpl implements OrderDetailsRemoteDataSource {
   OrderDetailsRemoteDataSourceImpl(this._firestore);
 
   @override
-  Future<Result<OrderEntity>> getCurrentOrderDetails(String orderId) async {
+  Future<Result<ActiveOrderDto>> getCurrentOrderDetails(String orderId) async {
     try {
       final doc = await _firestore
           .collection('active_orders')
@@ -21,7 +21,7 @@ class OrderDetailsRemoteDataSourceImpl implements OrderDetailsRemoteDataSource {
 
       if (doc.data() == null) return Failure('not_found');
 
-      return Success(OrderEntity.fromMap(doc.data()!));
+      return Success(ActiveOrderDto.fromJson(doc.data()!));
     } on FirebaseException catch (e) {
       return Failure(e.message ?? 'something_went_wrong');
     } catch (e) {
@@ -30,7 +30,7 @@ class OrderDetailsRemoteDataSourceImpl implements OrderDetailsRemoteDataSource {
   }
 
   @override
-  Future<Result<OrderEntity>> updateOrderStatus(
+  Future<Result<ActiveOrderDto>> updateOrderStatus(
     String orderId,
     OrderStatus status,
   ) async {
@@ -49,7 +49,7 @@ class OrderDetailsRemoteDataSourceImpl implements OrderDetailsRemoteDataSource {
         return Failure('not_found');
       }
 
-      return Success(OrderEntity.fromMap(updatedDoc.data()!));
+      return Success(ActiveOrderDto.fromJson(updatedDoc.data()!));
     } on FirebaseException catch (e) {
       return Failure(e.message ?? 'something_went_wrong');
     } catch (e) {

@@ -3,7 +3,7 @@ import 'package:tracking_app/core/base/base_cubit.dart';
 import 'package:tracking_app/core/bloc/base_state.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/core/events/event_bus_services.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
+import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/get_current_order_use_case.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/update_order_status_use_case.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
@@ -46,11 +46,11 @@ class CurrentOrderDetailsCubit
 
   void _getOrderDetails() async {
     emit(state.copyWith(currentState: BaseState.loading()));
-    var result = await _getCurrentOrderUseCase.call();
-    switch (result) {
-      case Success<OrderEntity>():
+    var currentOrderDetailsResult = await _getCurrentOrderUseCase.call();
+    switch (currentOrderDetailsResult) {
+      case Success<ActiveOrderDto>():
         {
-          final entity = result.data;
+          final entity = currentOrderDetailsResult.data;
           final currentStep = switch (entity.status) {
             "accepted" => 0,
             "picked" => 1,
@@ -58,6 +58,7 @@ class CurrentOrderDetailsCubit
             "arrived" => 3,
             "delivered" => 4,
             String() => 0,
+            null => 0,
           };
           emit(
             state.copyWith(
@@ -66,13 +67,15 @@ class CurrentOrderDetailsCubit
             ),
           );
         }
-      case Failure<OrderEntity>():
+      case Failure<ActiveOrderDto>():
         {
           emit(
-            state.copyWith(currentState: BaseState.error(result.errorMessage)),
+            state.copyWith(currentState: BaseState.error(
+                currentOrderDetailsResult.errorMessage)),
           );
         }
-    }}
+    }
+  }
 
   Future<void> _changeStatus() async {
     final nextStep = (state.currentStep + 1) % OrderStatus.values.length;
@@ -80,20 +83,19 @@ class CurrentOrderDetailsCubit
 
     final result = await _updateOrderStatusUseCase.call(nextStatus);
     switch (result) {
-      case Success<OrderEntity>():
+      case Success<ActiveOrderDto>():
         emit(
           state.copyWith(
             currentStep: nextStep,
             currentState: BaseState.loaded(result.data),
           ),
         );
-      case Failure<OrderEntity>():
+      case Failure<ActiveOrderDto>():
         emit(
           state.copyWith(currentState: BaseState.error(result.errorMessage)),
         );
-        }
     }
-
+  }
 
   Future<void> _openDialer(String phoneNumber) async {
     final uri = Uri.parse("tel:$phoneNumber");
@@ -113,5 +115,4 @@ class CurrentOrderDetailsCubit
 
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
-
 }

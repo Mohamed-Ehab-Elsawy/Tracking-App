@@ -3,16 +3,19 @@ import 'package:tracking_app/features/order_details/domain/entities/order_detail
 class OrderEntity {
   String id;
   String status;
-  String createdAt;
-  String storeName, storeAddress, storePhone;
-  String userName, userAddress, userPhone;
+  String startedAt;
+  String storeName, storeAddress, storePhone, storeImage;
+  String userId, userName, userAddress, userPhone, userImage, userToken;
+  String driverId, driverToken;
+  String lat, long;
   List<OrderDetailsEntity> details;
   String paymentMethod;
+  String street, city;
 
   OrderEntity({
     this.id = "",
     this.status = "",
-    this.createdAt = "",
+    this.startedAt = "",
     this.storeName = "",
     this.storeAddress = "",
     this.storePhone = "",
@@ -21,12 +24,22 @@ class OrderEntity {
     this.userPhone = "",
     this.details = const [],
     this.paymentMethod = "",
+    this.street = "",
+    this.city = "",
+    this.storeImage = "",
+    this.userImage = "",
+    this.lat = "",
+    this.long = "",
+    this.driverId = "",
+    this.driverToken = "",
+    this.userId = "",
+    this.userToken = "",
   });
 
   factory OrderEntity.fromMap(Map<String, dynamic> map) => OrderEntity(
     id: map['id'] ?? '',
     status: map['status'] ?? '',
-    createdAt: map['createdAt'] ?? '',
+    startedAt: map['createdAt'] ?? '',
     storeName: map['storeName'] ?? '',
     storeAddress: map['storeAddress'] ?? '',
     storePhone: map['storePhone'] ?? '',
@@ -37,5 +50,15 @@ class OrderEntity {
     details: (map['details'] as List<dynamic>? ?? [])
         .map((e) => OrderDetailsEntity.fromMap(e as Map<String, dynamic>))
         .toList(),
+    street: map['street'] ?? '',
+    city: map['city'] ?? '',
+    storeImage: map['storeImage'] ?? '',
+    userImage: map['userImage'] ?? '',
+    lat: map['lat'] ?? '',
+    long: map['long'] ?? '',
+    driverId: map['driverId'] ?? '',
+    driverToken: map['driverToken'] ?? '',
+    userId: map['userId'] ?? '',
+    userToken: map['userToken'] ?? '',
   );
 }

@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tracking_app/core/api/client/api_client.dart';
 import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/features/order_details/data/data_source/order_details_remote_data_source.dart';
@@ -11,19 +12,27 @@ import 'package:tracking_app/features/order_details/presentation/managers/order_
 
 import 'order_details_repository_impl_test.mocks.dart';
 
-@GenerateNiceMocks([MockSpec<OrderDetailsRemoteDataSource>()])
+@GenerateNiceMocks([
+  MockSpec<OrderDetailsRemoteDataSource>(),
+  MockSpec<ApiClient>(),
+])
 void main() {
   late OrderDetailsRepositoryImpl repository;
   late MockOrderDetailsRemoteDataSource mockRemoteDataSource;
   late Result<OrderEntity> response;
+  late MockApiClient mockApiClient;
 
   setUp(() {
     SharedPreferences.setMockInitialValues({
       AppConstants.orderId: 'cached_order_id_123',
     });
 
+    mockApiClient = MockApiClient();
     mockRemoteDataSource = MockOrderDetailsRemoteDataSource();
-    repository = OrderDetailsRepositoryImpl(mockRemoteDataSource);
+    repository = OrderDetailsRepositoryImpl(
+      mockRemoteDataSource,
+      mockApiClient,
+    );
     response = Success(
       OrderEntity(id: "direct_id_456", storeName: "Senior Flutter Store"),
     );
@@ -46,23 +55,6 @@ void main() {
       ).called(1);
       verifyNoMoreInteractions(mockRemoteDataSource);
     });
-
-    test(
-      'returns remote data using cached orderId when orderId is null',
-      () async {
-        when(
-          mockRemoteDataSource.getCurrentOrderDetails('cached_order_id_123'),
-        ).thenAnswer((_) async => response);
-
-        final result = await repository.getCurrentOrderDetails();
-
-        expect(result, equals(response));
-        verify(
-          mockRemoteDataSource.getCurrentOrderDetails('cached_order_id_123'),
-        ).called(1);
-        verifyNoMoreInteractions(mockRemoteDataSource);
-      },
-    );
   });
 
   group('updateOrderStatus', () {

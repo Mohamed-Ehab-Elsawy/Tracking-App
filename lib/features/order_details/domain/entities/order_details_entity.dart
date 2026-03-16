@@ -6,9 +6,9 @@ class OrderDetailsEntity {
 
   factory OrderDetailsEntity.fromMap(Map<String, dynamic> map) =>
       OrderDetailsEntity(
-        map['id'] ?? '',
+        map['orderId'] ?? '',
         map['title'] ?? '',
-        map['price'] ?? '',
+        map['totalPrice '] ?? '',
         map['count'] ?? 0,
       );
 }

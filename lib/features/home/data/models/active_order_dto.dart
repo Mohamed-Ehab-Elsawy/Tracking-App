@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tracking_app/features/home/domain/entities/active_order_entity.dart';
 
 part 'active_order_dto.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ActiveOrderDto {
   final String? orderId;
   final String? driverId;
@@ -24,6 +25,7 @@ class ActiveOrderDto {
 
   final String? status;
 
+  @JsonKey(fromJson: _fromTimestamp, toJson: _toTimestamp)
   final DateTime? startedAt;
   final String? long;
   final String? lat;
@@ -57,6 +59,7 @@ class ActiveOrderDto {
       _$ActiveOrderDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$ActiveOrderDtoToJson(this);
+
   ActiveOrderEntity toEntity() {
     return ActiveOrderEntity(
       orderId: orderId ?? "",
@@ -77,6 +80,19 @@ class ActiveOrderDto {
       lat: lat ?? "",
       city: city ?? "",
       street: street ?? "",
+      phone: phone ?? "",
     );
+  }
+
+  static DateTime? _fromTimestamp(dynamic value) {
+    if (value == null) return null;
+    if (value is Timestamp) return value.toDate();
+    if (value is String) return DateTime.tryParse(value);
+    return null;
+  }
+
+  static dynamic _toTimestamp(DateTime? date) {
+    if (date == null) return null;
+    return Timestamp.fromDate(date);
   }
 }
