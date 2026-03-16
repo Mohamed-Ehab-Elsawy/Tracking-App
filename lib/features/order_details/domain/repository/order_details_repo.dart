@@ -14,4 +14,10 @@ abstract interface class OrderDetailsRepo {
     required NotificationDto notification,
     required String userId,
   });
+  Future<Result<List<List<double>>>> getDirections(
+    double startLat,
+    double startLng,
+    double endLat,
+    double endLng,
+  );
 }

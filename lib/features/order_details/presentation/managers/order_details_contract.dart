@@ -70,3 +70,5 @@ class SaveNotificationIntent extends CurrentOrderDetailsIntent {
 }
 
 sealed class CurrentOrderDetailsEvent {}
+
+class ReciveNotificationEvent extends CurrentOrderDetailsEvent {}

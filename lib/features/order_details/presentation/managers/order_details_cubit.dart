@@ -6,6 +6,7 @@ import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/core/local/app_local_storage.dart';
 import 'package:tracking_app/core/services/notification_dto.dart';
 import 'package:tracking_app/features/order_details/data/models/notification_dto.dart';
+import 'package:tracking_app/core/events/app_event_bus.dart';
 import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/get_current_order_use_case.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/save_notification_to_fire_base_use_case.dart';
@@ -105,6 +106,12 @@ class CurrentOrderDetailsCubit
   Future<void> _openDialer(String phoneNumber) async {
     final uri = Uri.parse("tel:$phoneNumber");
     await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
+  void listonOnSilentNotificationEvent() {
+    EventBusService.eventBus.on<SilentNotificationEvent>().listen((event) {
+      emitEvent(ReciveNotificationEvent());
+    });
   }
 
   Future<void> _openWhatsApp(String phoneNumber) async {

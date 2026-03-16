@@ -12,4 +12,6 @@ class AppConstants {
   static const String userId = 'user_id';
   static const String deviceToken = 'device_token';
   static const String driverId = 'driver_id';
+  static const String driving = "driving";
+  static const String geometries = "geojson";
 }
