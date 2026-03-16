@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tracking_app/core/extensions/context_spacing_extension.dart';
+import 'package:tracking_app/core/route/app_routes.dart';
 import 'package:tracking_app/core/theme/dimensions/app_insets.dart';
 import 'package:tracking_app/core/theme/dimensions/app_spacing.dart';
 import 'package:tracking_app/core/theme/typography/typography_extension.dart';
@@ -13,8 +15,37 @@ import 'package:tracking_app/features/order_details/presentation/widgets/order_s
 
 import 'widgets/order_progress_indicator.dart';
 
-class CurrentOrderDetailsView extends StatelessWidget {
+class CurrentOrderDetailsView extends StatefulWidget {
   const CurrentOrderDetailsView({super.key});
+
+  @override
+  State<CurrentOrderDetailsView> createState() =>
+      _CurrentOrderDetailsViewState();
+}
+
+class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
+  StreamSubscription? _eventSubscription;
+  @override
+  void initState() {
+    super.initState();
+    _eventSubscription = context
+        .read<CurrentOrderDetailsCubit>()
+        .eventStream
+        .listen((event) {
+          if (event is ReciveNotificationEvent && mounted) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              AppRoutes.orderDeliverySuccessView,
+              (route) => false,
+            );
+          }
+        });
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    _eventSubscription?.cancel();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -65,7 +96,20 @@ class CurrentOrderDetailsView extends StatelessWidget {
 
           if (baseState.isLoaded && baseState.data != null) {
             final entity = baseState.data!;
-
+            final String currentStatus = switch (state.currentStep) {
+              0 => "picked",
+              1 => "out_for_delivery",
+              2 => "arrived",
+              3 => "delivered",
+              int() => 'awaiting',
+            };
+            final String buttonText = switch (state.currentStep) {
+              0 => "arrived_at_pickup_point",
+              1 => "start_deliver",
+              2 => "arrived_to_the_customer",
+              3 => "delivered_to_the_customer",
+              int() => "awaiting",
+            };
             return ListView(
               physics: const BouncingScrollPhysics(),
               children: [
@@ -76,7 +120,10 @@ class CurrentOrderDetailsView extends StatelessWidget {
 
                 context.h(AppSpacing.md),
 
-                CurrentOrderStatusCard(entity: entity),
+                CurrentOrderStatusCard(
+                  entity: entity,
+                  currentState: currentStatus,
+                ),
 
                 context.h(AppSpacing.md),
 
@@ -87,6 +134,9 @@ class CurrentOrderDetailsView extends StatelessWidget {
                   title: entity.storeName,
                   description: entity.storeAddress,
                   phoneNumber: entity.storePhone,
+                  onTap: () => Navigator.of(
+                    context,
+                  ).pushNamed(AppRoutes.mapOrderView, arguments: entity),
                 ),
 
                 context.h(AppSpacing.md),
@@ -119,8 +169,18 @@ class CurrentOrderDetailsView extends StatelessWidget {
                 context.h(AppSpacing.md),
 
                 ElevatedButton(
-                  onPressed: () => cubit.doIntent(ChangeStepIntent()),
-                  child: const Text("Next Step"),
+                  onPressed: () async {
+                    cubit.doIntent(ChangeStepIntent());
+                    cubit.doIntent(
+                      SendOrderStatusNotificationIntent(
+                        token: state.currentState.data!.userToken,
+                        status: state.currentState.data?.status ?? "",
+                      ),
+                    );
+                  },
+                  child: baseState.isLoading
+                      ? const CircularProgressIndicator()
+                      : const Text("Next Step"),
                 ),
               ],
             );

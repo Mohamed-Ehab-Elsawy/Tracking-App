@@ -16,4 +16,7 @@ abstract class ApiEndPointsConstants {
   static const String getAllDriverOrders = 'orders/driver-orders';
   static const String getSpecificProduct = 'products';
   static const String getAllVehicles = 'vehicles';
+  static const String getRoute =
+      "https://api.mapbox.com/directions/v5/mapbox/{profile}/{coordinates}";
+  static const String acceptOrder = 'orders/start';
 }

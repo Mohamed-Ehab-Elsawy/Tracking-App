@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
+import 'package:tracking_app/features/home/data/data_source/firebase_data_source.dart';
 import 'package:tracking_app/features/home/data/data_source/home_data_source.dart';
 import 'package:tracking_app/features/home/data/models/home_response_dto.dart';
 import 'package:tracking_app/features/home/data/models/orders_dto.dart';
@@ -10,15 +12,23 @@ import 'package:tracking_app/features/home/domain/entities/home_order_entity.dar
 
 import 'home_repo_impl_test.mocks.dart';
 
-@GenerateMocks([HomeDataSource])
+@GenerateMocks([HomeDataSource, FirebaseFirestore, FirebaseOrderDataSource])
 void main() {
-  late HomeDataSource dataSource;
+  late MockHomeDataSource dataSource;
   late HomeRepoImpl homeRepoImpl;
-  late HomeResponseDto homeResponseDto; // شيلنا الـ List من هنا
+  late HomeResponseDto homeResponseDto;
+  late MockFirebaseFirestore firebaseFirestore;
+  late MockFirebaseOrderDataSource firebaseOrderDataSource;
 
   setUp(() {
     dataSource = MockHomeDataSource();
-    homeRepoImpl = HomeRepoImpl(dataSource);
+    firebaseFirestore = MockFirebaseFirestore();
+    firebaseOrderDataSource = MockFirebaseOrderDataSource();
+    homeRepoImpl = HomeRepoImpl(
+      dataSource,
+      firebaseFirestore,
+      firebaseOrderDataSource,
+    );
 
     homeResponseDto = HomeResponseDto(
       orders: [

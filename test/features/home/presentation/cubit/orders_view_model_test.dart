@@ -5,21 +5,42 @@ import 'package:mockito/mockito.dart';
 import 'package:tracking_app/core/bloc/base_state.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/features/home/domain/entities/home_order_entity.dart';
+import 'package:tracking_app/features/home/domain/use_case/accept_order_use_case.dart';
 import 'package:tracking_app/features/home/domain/use_case/get_orders_use_case.dart';
+import 'package:tracking_app/features/home/domain/use_case/get_user_data_use_case.dart';
+import 'package:tracking_app/features/home/domain/use_case/save_accepted_order_use_case.dart';
 import 'package:tracking_app/features/home/presentation/cubit/orders_events.dart';
 import 'package:tracking_app/features/home/presentation/cubit/orders_state.dart';
 import 'package:tracking_app/features/home/presentation/cubit/orders_view_model.dart';
 
 import 'orders_view_model_test.mocks.dart';
 
-@GenerateMocks([GetOrdersUseCase])
+@GenerateMocks([
+  GetOrdersUseCase,
+  AcceptOrderUseCase,
+  GetUserDataUseCase,
+  SaveAcceptedOrderUseCase,
+])
 void main() {
   late MockGetOrdersUseCase mockUseCase;
   late OrdersViewModel viewModel;
+  late MockAcceptOrderUseCase acceptOrderUseCase;
+  late MockGetUserDataUseCase getUserDataUseCase;
+  late MockSaveAcceptedOrderUseCase saveAcceptedOrderUseCase;
 
   setUp(() {
     mockUseCase = MockGetOrdersUseCase();
-    viewModel = OrdersViewModel(mockUseCase);
+    acceptOrderUseCase = MockAcceptOrderUseCase();
+    getUserDataUseCase = MockGetUserDataUseCase();
+    saveAcceptedOrderUseCase = MockSaveAcceptedOrderUseCase();
+    // getOrdersUseCase = MockGetOrdersUseCase();
+
+    viewModel = OrdersViewModel(
+      mockUseCase,
+      acceptOrderUseCase,
+      saveAcceptedOrderUseCase,
+      getUserDataUseCase,
+    );
     provideDummy<Result<List<HomeOrderEntity>>>(Success([]));
   });
 
@@ -52,8 +73,8 @@ void main() {
 
         predicate<OrdersState>((state) {
           return state.ordersState!.isLoaded &&
-              state.order?.data?.length == 1 &&
-              state.order?.data?[0].orderId == '1';
+              state.orders?.data?.length == 1 &&
+              state.orders?.data?[0].orderId == '1';
         }),
       ],
       verify: (_) {
@@ -84,12 +105,12 @@ void main() {
       'removes order from list and emits RejectOrderEvent when RejectOrderIntent is called',
       seed: () => OrdersState(
         ordersState: BaseState.loaded(tOrders),
-        order: BaseState.loaded(tOrders),
+        order: BaseState.loaded(tOrders.first),
       ),
       build: () => viewModel,
       act: (cubit) => cubit.doIntent(RejectOrderIntent(orderId: '1')),
       expect: () => [
-        predicate<OrdersState>((state) => state.order?.data?.isEmpty ?? false),
+        predicate<OrdersState>((state) => state.orders?.data?.isEmpty ?? false),
       ],
     );
   });

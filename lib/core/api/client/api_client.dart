@@ -2,11 +2,13 @@ import 'package:dio/dio.dart' hide Headers;
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:tracking_app/core/api/models/requests/driver_login_request_dto.dart';
+import 'package:tracking_app/core/api/models/responses/directions_model.dart';
 import 'package:tracking_app/core/api/models/responses/driver_login_response_dto.dart';
 import 'package:tracking_app/core/api/utils/api_end_points_constants.dart';
 import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/services/notification_dto.dart';
 import 'package:tracking_app/features/home/data/models/home_response_dto.dart';
+import 'package:tracking_app/features/home/data/models/update_order_response.dart';
 import 'package:tracking_app/features/orders/data/models/response/order_response_dto.dart';
 import 'package:tracking_app/features/orders/data/models/response/product_response.dart';
 import 'package:tracking_app/features/auth/data/model/response/apply_response.dart';
@@ -100,4 +102,14 @@ abstract class ApiClient {
     @Field("password") required String password,
     @Field("newPassword") required String newPassword,
   });
+
+  @GET(ApiEndPointsConstants.getRoute)
+  Future<DirectionsResponse> getRoute(
+    @Path("profile") String profile, // driving, walking, etc.
+    @Path("coordinates") String coordinates, // "lng,lat;lng,lat"
+    @Query("geometries") String geometries, // Use "geojson"
+    @Query("access_token") String accessToken,
+  );
+  @PUT("${ApiEndPointsConstants.acceptOrder}/{id}")
+  Future<UpdateOrderResponse> acceptOrder(@Path("id") String orderId);
 }
