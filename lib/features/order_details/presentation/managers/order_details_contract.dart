@@ -38,3 +38,5 @@ class WhatsAppPressedIntent extends CurrentOrderDetailsIntent {
 }
 
 sealed class CurrentOrderDetailsEvent {}
+
+class ReciveNotificationEvent extends CurrentOrderDetailsEvent {}
