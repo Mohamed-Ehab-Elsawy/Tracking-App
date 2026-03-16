@@ -7,6 +7,8 @@ import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/get_current_order_use_case.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/update_order_status_use_case.dart';
+import 'package:tracking_app/features/order_details/domain/use_case/save_notification_to_fire_base_use_case.dart';
+import 'package:tracking_app/features/order_details/domain/use_case/send_notification_use_case.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_status.dart';
@@ -14,23 +16,34 @@ import 'package:tracking_app/features/order_details/presentation/managers/order_
 import 'order_details_cubit_test.mocks.dart';
 
 @GenerateNiceMocks([
-  MockSpec<GetCurrentOrderUseCase>(),
   MockSpec<UpdateOrderStatusUseCase>(),
+  MockSpec<GetCurrentOrderUseCase>(),
+  MockSpec<SaveNotificationToFireBaseUseCase>(),
+  MockSpec<SendNotificationUseCase>(),
 ])
 void main() {
   late CurrentOrderDetailsCubit cubit;
   late MockGetCurrentOrderUseCase mockGetCurrentOrderUseCase;
   late MockUpdateOrderStatusUseCase mockUpdateUseCase;
+  late MockSaveNotificationToFireBaseUseCase mockSaveNotificationUseCase;
+  late MockSendNotificationUseCase mockSendNotificationUseCase;
 
   final tOrderEntity = OrderEntity(id: "1", storeName: "Test Store");
 
   setUp(() {
     mockGetCurrentOrderUseCase = MockGetCurrentOrderUseCase();
     mockUpdateUseCase = MockUpdateOrderStatusUseCase();
+    mockUseCase = MockGetCurrentOrderUseCase();
+    mockSaveNotificationUseCase = MockSaveNotificationToFireBaseUseCase();
+    mockSendNotificationUseCase = MockSendNotificationUseCase();
     cubit = CurrentOrderDetailsCubit(
       mockGetCurrentOrderUseCase,
       mockUpdateUseCase,
+      mockUseCase,
+      mockSendNotificationUseCase,
+      mockSaveNotificationUseCase,
     );
+
   });
 
   tearDown(() => cubit.close());

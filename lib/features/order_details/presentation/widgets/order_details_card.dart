@@ -11,97 +11,102 @@ import 'package:tracking_app/features/order_details/presentation/managers/order_
 class CurrentOrderDetailsCard extends StatelessWidget {
   final String title, description;
   final String? phoneNumber, count;
-
+  final void Function()? onTap;
   const CurrentOrderDetailsCard({
     super.key,
     required this.title,
     required this.description,
     this.phoneNumber,
     this.count,
+    this.onTap,
   });
 
   @override
-  Widget build(BuildContext context) => Card(
-    color: Colors.white,
-    child: ListTile(
-      leading: CustomImageView(
-        imagePath: "assets/images/placeholder.png",
-        height: 50,
-        width: 50,
-        radius: BorderRadius.all(Radius.circular(50)),
-      ),
-      title: Text(
-        title,
-        style: context.textStyles.regular14.copyWith(
-          color: context.colors.grey,
+  Widget build(BuildContext context) => GestureDetector(
+    onTap: onTap,
+    child: Card(
+      elevation: 0.4,
+      color: Colors.white,
+      child: ListTile(
+        leading: CustomImageView(
+          imagePath: "assets/images/placeholder.png",
+          height: 50,
+          width: 50,
+          radius: BorderRadius.all(Radius.circular(50)),
         ),
-      ),
-      subtitle: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (phoneNumber != null)
-            CustomImageView(
-              imagePath: "assets/icons/location_icon.svg",
-              width: 16,
-              height: 16,
-            ),
-          if (phoneNumber != null) context.w(AppSpacing.xs),
-          Expanded(
-            child: Text(
-              description,
-              maxLines: 1,
-              style: context.textStyles.regular16.copyWith(
-                color: context.colors.surface,
-              ),
-              overflow: TextOverflow.ellipsis,
-            ),
+        title: Text(
+          title,
+          style: context.textStyles.regular14.copyWith(
+            color: context.colors.grey,
           ),
-        ],
-      ),
-      contentPadding: EdgeInsets.only(
-        left: AppSpacing.sm,
-        top: AppSpacing.sm,
-        bottom: AppSpacing.sm,
-      ),
-      trailing: phoneNumber != null
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  onPressed: () => context
-                      .read<CurrentOrderDetailsCubit>()
-                      .doIntent(PhoneCallPressedIntent(phoneNumber!)),
-                  icon: Icon(
-                    Icons.phone_outlined,
-                    size: 20,
+        ),
+        subtitle: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (phoneNumber != null)
+              CustomImageView(
+                imagePath: "assets/icons/location_icon.svg",
+                width: 16,
+                height: 16,
+              ),
+            if (phoneNumber != null) context.w(AppSpacing.xs),
+            Expanded(
+              child: Text(
+                description,
+                maxLines: 1,
+                style: context.textStyles.regular16.copyWith(
+                  color: context.colors.surface,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+        contentPadding: EdgeInsets.only(
+          left: AppSpacing.sm,
+          top: AppSpacing.sm,
+          bottom: AppSpacing.sm,
+        ),
+        trailing: phoneNumber != null
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => context
+                        .read<CurrentOrderDetailsCubit>()
+                        .doIntent(PhoneCallPressedIntent(phoneNumber!)),
+                    icon: Icon(
+                      Icons.phone_outlined,
+                      size: 20,
+                      color: context.colors.primary,
+                    ),
+                  ),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => context
+                        .read<CurrentOrderDetailsCubit>()
+                        .doIntent(WhatsAppPressedIntent(phoneNumber!)),
+                    icon: CustomImageView(
+                      imagePath: "assets/icons/whatsapp_icon.svg",
+                      height: 20,
+                      width: 20,
+                    ),
+                  ),
+                ],
+              )
+            : count != null
+            ? Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Text(
+                  'X $count',
+                  style: context.textStyles.medium16.copyWith(
                     color: context.colors.primary,
                   ),
                 ),
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  onPressed: () => context
-                      .read<CurrentOrderDetailsCubit>()
-                      .doIntent(WhatsAppPressedIntent(phoneNumber!)),
-                  icon: CustomImageView(
-                    imagePath: "assets/icons/whatsapp_icon.svg",
-                    height: 20,
-                    width: 20,
-                  ),
-                ),
-              ],
-            )
-          : count != null
-          ? Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: Text(
-                'X $count',
-                style: context.textStyles.medium16.copyWith(
-                  color: context.colors.primary,
-                ),
-              ),
-            )
-          : SizedBox.shrink(),
+              )
+            : SizedBox.shrink(),
+      ),
     ),
   );
 }

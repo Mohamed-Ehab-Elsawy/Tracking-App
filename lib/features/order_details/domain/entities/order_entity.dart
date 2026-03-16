@@ -3,6 +3,8 @@ import 'package:tracking_app/features/order_details/domain/entities/order_detail
 class OrderEntity {
   String id;
   String status;
+  final String driverToken;
+  final String userToken;
   String createdAt;
   String storeName, storeAddress, storePhone;
   String userName, userAddress, userPhone;
@@ -21,6 +23,8 @@ class OrderEntity {
     this.userPhone = "",
     this.details = const [],
     this.paymentMethod = "",
+    this.driverToken = "",
+    this.userToken = "",
   });
 
   factory OrderEntity.fromMap(Map<String, dynamic> map) => OrderEntity(
@@ -34,6 +38,8 @@ class OrderEntity {
     userAddress: map['userAddress'] ?? '',
     userPhone: map['userPhone'] ?? '',
     paymentMethod: map['paymentMethod'] ?? '',
+    driverToken: map['driverToken'] ?? '',
+    userToken: map['userToken'] ?? '',
     details: (map['details'] as List<dynamic>? ?? [])
         .map((e) => OrderDetailsEntity.fromMap(e as Map<String, dynamic>))
         .toList(),

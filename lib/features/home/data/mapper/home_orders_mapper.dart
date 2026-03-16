@@ -16,6 +16,11 @@ extension HomeOrdersMapper on OrdersDto {
       userAddress: shippingAddress != null
           ? '${shippingAddress?.street ?? ''}, ${shippingAddress?.city ?? ''}'
           : null,
+      street: shippingAddress?.street,
+      city: shippingAddress?.city,
+      phone: shippingAddress?.phone,
+      lat: shippingAddress?.lat,
+      long: shippingAddress?.long,
     );
   }
 }

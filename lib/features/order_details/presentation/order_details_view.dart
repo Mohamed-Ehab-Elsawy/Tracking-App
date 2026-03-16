@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tracking_app/core/extensions/context_spacing_extension.dart';
+import 'package:tracking_app/core/route/app_routes.dart';
 import 'package:tracking_app/core/theme/dimensions/app_insets.dart';
 import 'package:tracking_app/core/theme/dimensions/app_spacing.dart';
 import 'package:tracking_app/core/theme/typography/typography_extension.dart';
@@ -13,8 +15,37 @@ import 'package:tracking_app/features/order_details/presentation/widgets/order_s
 
 import 'widgets/order_progress_indicator.dart';
 
-class CurrentOrderDetailsView extends StatelessWidget {
+class CurrentOrderDetailsView extends StatefulWidget {
   const CurrentOrderDetailsView({super.key});
+
+  @override
+  State<CurrentOrderDetailsView> createState() =>
+      _CurrentOrderDetailsViewState();
+}
+
+class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
+  StreamSubscription? _eventSubscription;
+  @override
+  void initState() {
+    super.initState();
+    _eventSubscription = context
+        .read<CurrentOrderDetailsCubit>()
+        .eventStream
+        .listen((event) {
+          if (event is ReciveNotificationEvent && mounted) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              AppRoutes.orderDeliverySuccessView,
+              (route) => false,
+            );
+          }
+        });
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    _eventSubscription?.cancel();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -103,6 +134,9 @@ class CurrentOrderDetailsView extends StatelessWidget {
                   title: entity.storeName,
                   description: entity.storeAddress,
                   phoneNumber: entity.storePhone,
+                  onTap: () => Navigator.of(
+                    context,
+                  ).pushNamed(AppRoutes.mapOrderView, arguments: entity),
                 ),
 
                 context.h(AppSpacing.md),
@@ -113,7 +147,7 @@ class CurrentOrderDetailsView extends StatelessWidget {
                 CurrentOrderDetailsCard(
                   title: entity.userName,
                   description: entity.userAddress,
-                  phoneNumber: entity.userPhone,
+                  phoneNumber: entity.userAddress,
                 ),
 
                 context.h(AppSpacing.md),
@@ -135,11 +169,18 @@ class CurrentOrderDetailsView extends StatelessWidget {
                 context.h(AppSpacing.md),
 
                 ElevatedButton(
-                  key: Key('next_step_button'),
-                  onPressed: () => buttonText == "awaiting"
-                      ? null
-                      : cubit.doIntent(ChangeStepIntent()),
-                  child: Text(buttonText.tr()),
+                  onPressed: () async {
+                    cubit.doIntent(ChangeStepIntent());
+                    cubit.doIntent(
+                      SendOrderStatusNotificationIntent(
+                        token: state.currentState.data!.userToken,
+                        status: state.currentState.data?.status ?? "",
+                      ),
+                    );
+                  },
+                  child: baseState.isLoading
+                      ? const CircularProgressIndicator()
+                      : const Text("Next Step"),
                 ),
               ],
             );

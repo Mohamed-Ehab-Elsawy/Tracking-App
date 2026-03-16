@@ -9,4 +9,9 @@ class AppConstants {
   static const String scopeUrl =
       "https://www.googleapis.com/auth/firebase.messaging";
   static const String rememberMeKey = 'remember_me_key';
+  static const String userId = 'user_id';
+  static const String deviceToken = 'device_token';
+  static const String driverId = 'driver_id';
+  static const String driving = "driving";
+  static const String geometries = "geojson";
 }

@@ -172,9 +172,12 @@
     "ResetPasswordDesc": "كلمة المرور يجب ألا تكون فارغة ويجب أن تحتوي على \n6 أحرف على الأقل مع حرف كبير ورقم واحد \nعلى الأقل"
   },
   "order_details": "تفاصيل الطلب",
+  "status": "الحاله: ",
+  "order_id": "رقم الطلب: ",
+  "pickup_address": "عنوان الاستلام",
+  "user_address": "عنوان المستخدم",
   "egp": " جنية مصري",
   "confirm_logout_message": "تـأكيد تسجيل الخـروج!!",
-  "cancel": "إلغاء",
   "arrived_at_pickup_point": "وصلت إلي مكان الاستلام",
   "start_deliver": "بدأ التوصيل",
   "arrived_to_the_customer": "وصلت للعميل",
@@ -183,5 +186,9 @@
   "picked": "تم الاستلام",
   "out_for_delivery": "خرج للتوصيل",
   "arrived": "وصل",
-  "delivered": "تم التسليم"
+  "delivered": "تم التسليم",
+  "cancel": "إلغاء",
+  "thanks": "شكرا!!",
+  "success_delivered": "تم نوصيل\nالطلب",
+  "done": "تاكيد"
 }

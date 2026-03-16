@@ -4,7 +4,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tracking_app/core/bloc/base_state.dart';
+import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
+import 'package:tracking_app/core/local/app_local_storage.dart';
 import 'package:tracking_app/features/profile/domain/entity/driver_entity.dart';
 import 'package:tracking_app/features/profile/domain/use_cases/get_driver_data.dart';
 import 'package:tracking_app/features/profile/presentation/profile_view_model/profile_events.dart';
@@ -62,6 +64,10 @@ class ProfileViewModel extends Cubit<ProfileStates> with EquatableMixin {
                 data: result.data,
               ),
             ),
+          );
+          await AppLocalStorage.setSecuredString(
+            key: AppConstants.driverId,
+            value: result.data.id ?? "",
           );
         }
 

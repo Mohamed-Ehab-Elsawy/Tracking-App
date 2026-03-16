@@ -22,7 +22,7 @@ class StoreAndUserCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: context.theme.colors.secondary,
-      elevation: 3,
+      elevation: 1,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Padding(
         padding: const EdgeInsets.all(8.0),

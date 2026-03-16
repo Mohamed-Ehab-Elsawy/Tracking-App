@@ -194,5 +194,9 @@
   "picked": "Picked",
   "out_for_delivery": "Out for delivery",
   "arrived": "Arrived",
-  "delivered": "Delivered"
+  "delivered": "Delivered",
+  "enterNewPassword": "Enter New Password",
+  "thanks": "Thank you!!",
+  "success_delivered": "The order delivered \nsuccessfully",
+  "done": "Done"
 }

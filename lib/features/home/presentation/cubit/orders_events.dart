@@ -28,6 +28,11 @@ class AcceptOrderIntent extends OrdersIntent with EquatableMixin {
   List<Object?> get props => [orderId];
 }
 
+class GetUserDataIntent extends OrdersIntent {
+  final String orderId;
+  GetUserDataIntent({required this.orderId});
+}
+
 sealed class OrdersEvent {}
 
 class RejectOrderEvent extends OrdersEvent with EquatableMixin {
