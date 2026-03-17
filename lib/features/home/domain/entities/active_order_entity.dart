@@ -11,6 +11,8 @@ class ActiveOrderEntity extends Equatable {
   final String storeName;
   final String storeAddress;
   final String storeImage;
+  final String? storeLatLong;
+  final String? storePhoneNumber;
 
   final String userName;
   final String userImage;
@@ -40,6 +42,8 @@ class ActiveOrderEntity extends Equatable {
     this.storeName = '',
     this.storeAddress = '',
     this.storeImage = '',
+    this.storeLatLong,
+    this.storePhoneNumber,
     this.userName = '',
     this.userImage = '',
     this.userAddress = '',

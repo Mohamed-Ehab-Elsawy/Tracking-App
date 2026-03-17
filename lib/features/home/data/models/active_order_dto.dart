@@ -77,24 +77,20 @@ class ActiveOrderDto {
       storeName: storeName ?? "",
       storeAddress: storeAddress ?? "",
       storeImage: storeImage ?? "",
+      storeLatLong: storeLatLong ?? "",
+      storePhoneNumber: storePhoneNumber ?? "",
       userName: userName ?? "",
       userImage: userImage ?? "",
       userAddress: userAddress ?? "",
       totalPrice: totalPrice ?? 0,
       status: status ?? "",
       startedAt: startedAt,
-
-      /// تحويل String → double
       long: double.tryParse(long ?? ''),
       lat: double.tryParse(lat ?? ''),
 
       city: city ?? "",
       street: street ?? "",
-
-      /// توحيد phone
       phone: storePhoneNumber ?? phone ?? "",
-
-      /// أهم نقطة: mapping list
       details: details
           ?.map((e) => e.toEntity())
           .toList() ??
