@@ -12,22 +12,16 @@ import 'package:tracking_app/features/auth/presentation/forget_password/view_mod
 import 'package:tracking_app/features/auth/presentation/login/login_view.dart';
 import 'package:tracking_app/features/auth/presentation/login/managers/login_cubit.dart';
 import 'package:tracking_app/features/auth/presentation/logout/logout_cubit.dart';
+import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/home/presentation/cubit/orders_events.dart';
 import 'package:tracking_app/features/home/presentation/cubit/orders_view_model.dart';
 import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
 import 'package:tracking_app/features/order_details/presentation/order_details_view.dart';
-import 'package:tracking_app/features/home/presentation/cubit/orders_events.dart';
-import 'package:tracking_app/features/home/presentation/cubit/orders_view_model.dart';
-import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
-import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
-import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
 import 'package:tracking_app/features/order_details/presentation/map_view.dart';
 import 'package:tracking_app/features/order_details/presentation/order_delivery_success_view.dart';
-import 'package:tracking_app/features/order_details/presentation/order_details_view.dart';
 import 'package:tracking_app/features/orders/presentation/order_details/view/order_details_view.dart';
 import 'package:tracking_app/features/orders/presentation/order_details/view_model/order_details_view_model.dart';
 import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_cubit.dart';
@@ -69,14 +63,14 @@ Route? onGenerateRoute(RouteSettings settings) {
           create: (context) => getIt<MapOrderViewModel>(),
           child: MapOrderView(
             order:
-            settings.arguments as OrderEntity? ??
-                OrderEntity(
+                settings.arguments as ActiveOrderDto? ??
+                ActiveOrderDto(
                   userAddress: 'userAddress',
                   userName: 'userName',
-                  userPhone: 'userPhone',
+                  phone: 'userPhone',
                   storeAddress: 'storeAddress',
                   storeName: 'storeName',
-                  storePhone: 'storePhone',
+                  storePhoneNumber: 'storePhone',
                 ),
           ),
         ),
@@ -157,7 +151,6 @@ Route? onGenerateRoute(RouteSettings settings) {
         builder: (context) => const OrderDeliverySuccessView(),
       );
 
-
     case AppRoutes.orderDetails:
       {
         var cubit = getIt.get<OrderItemNameCubit>();
@@ -178,7 +171,6 @@ Route? onGenerateRoute(RouteSettings settings) {
           child: const CurrentOrderDetailsView(),
         ),
       );
-
   }
   return null;
 }

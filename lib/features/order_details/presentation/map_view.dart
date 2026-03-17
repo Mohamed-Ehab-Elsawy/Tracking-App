@@ -5,14 +5,15 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:tracking_app/core/theme/colors/color_extension.dart';
 import 'package:tracking_app/core/presentation/feedback/app_snackbar.dart';
 import 'package:tracking_app/core/widgets/loading_indicator.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
+import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/map_order_state.dart';
 import 'widgets/bottom_sheet_container.dart';
 
 class MapOrderView extends StatefulWidget {
-  const MapOrderView({super.key, required this.order});
-  final OrderEntity? order;
+  const MapOrderView({super.key, required this.order, this.isUser = false});
+  final ActiveOrderDto? order;
+  final bool isUser;
   @override
   State createState() => MapOrderViewState();
 }
@@ -26,7 +27,6 @@ class MapOrderViewState extends State<MapOrderView> {
     this.mapboxMap = mapboxMap;
     await _viewModel.initMap(mapboxMap);
 
-    //dummy data
     _viewModel.doIntent(
       GetDirectionsIntent(
         startLat: 30.0444,
@@ -99,7 +99,10 @@ class MapOrderViewState extends State<MapOrderView> {
     bottom: 0,
     left: 0,
     right: 0,
-    child: BottomSheetContainer(order: widget.order!, firstStore: true),
+    child: BottomSheetContainer(
+      order: widget.order!,
+      firstStore: widget.isUser,
+    ),
   );
   _buildBackButton() => Positioned(
     top: 68,

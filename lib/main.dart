@@ -11,6 +11,7 @@ import 'package:tracking_app/core/constants/asset_constants.dart';
 import 'package:tracking_app/core/constants/localization_constants.dart';
 import 'package:tracking_app/core/di/di.dart';
 import 'package:tracking_app/core/local/app_local_storage.dart';
+import 'package:tracking_app/core/services/event_bus_service.dart';
 import 'package:tracking_app/core/services/fcm_service.dart';
 import 'package:tracking_app/tracking_app.dart';
 
@@ -24,8 +25,7 @@ void main() async {
   FirebaseMessaging.onMessage.listen((RemoteMessage msg) {
     final type = msg.data['type'];
     if (type == 'silent') {
-      // todo find event bus
-      // EventBusService.eventBus.fire(SilentNotificationEvent());
+       EventBusService.eventBus.fire(SilentNotificationEvent());
     }
   });
   await FCMService.getAccessToken().then((fcmAccessToken) {

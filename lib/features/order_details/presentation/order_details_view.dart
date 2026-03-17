@@ -12,7 +12,6 @@ import 'package:tracking_app/features/order_details/presentation/managers/order_
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
 import 'package:tracking_app/features/order_details/presentation/widgets/order_details_card.dart';
 import 'package:tracking_app/features/order_details/presentation/widgets/order_status_card.dart';
-
 import 'widgets/order_progress_indicator.dart';
 
 class CurrentOrderDetailsView extends StatefulWidget {
