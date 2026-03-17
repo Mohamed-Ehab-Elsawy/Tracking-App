@@ -4,6 +4,8 @@ import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/home/data/models/firebase_user_dto.dart';
 import 'package:tracking_app/features/home/domain/entities/home_order_entity.dart';
+import 'package:tracking_app/features/order_details/presentation/managers/order_status.dart';
+
 import 'firebase_data_source.dart';
 
 @LazySingleton(as: FirebaseOrderDataSource)
@@ -35,19 +37,21 @@ class FirebaseOrderDataSourceImpl implements FirebaseOrderDataSource {
       "userImage": orderEntity.userImage,
       "userAddress": orderEntity.userAddress,
       "totalPrice": orderEntity.totalPrice,
-      "status": "started",
+      "status": OrderStatus.values[0],
       "street": orderEntity.street,
       "city": orderEntity.city,
       "phone": orderEntity.phone,
       "lat": orderEntity.lat,
       "long": orderEntity.long,
       "details": orderEntity.details
-          .map((e) => {
-        "id": e.id,
-        "title": e.title,
-        "price": e.price,
-        "count": e.count,
-      })
+          .map(
+            (e) => {
+              "id": e.id,
+              "title": e.title,
+              "price": e.price,
+              "count": e.count,
+            },
+          )
           .toList(),
       "startedAt": FieldValue.serverTimestamp(),
     };

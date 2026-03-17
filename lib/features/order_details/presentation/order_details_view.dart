@@ -173,14 +173,16 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
                 context.h(AppSpacing.md),
 
                 ElevatedButton(
-                  onPressed: () async {
-                    cubit.doIntent(
-                      ChangeStepIntent(
-                        token: entity.driverToken ?? "",
-                        status: entity.status ?? "",
-                      ),
-                    );
-                  },
+                  onPressed: buttonText != 'awaiting'
+                      ? () {
+                          cubit.doIntent(
+                            ChangeStepIntent(
+                              token: entity.driverToken ?? "",
+                              status: entity.status ?? "",
+                            ),
+                          );
+                        }
+                      : null,
                   child: Text(buttonText.tr()),
                 ),
               ],
