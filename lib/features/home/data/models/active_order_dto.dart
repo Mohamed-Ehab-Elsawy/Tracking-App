@@ -15,6 +15,8 @@ class ActiveOrderDto {
   final String? storeName;
   final String? storeAddress;
   final String? storeImage;
+  final String? storeLatLong;
+  final String? storePhoneNumber;
 
   final String? userName;
   final String? userImage;
@@ -25,11 +27,15 @@ class ActiveOrderDto {
   final String? status;
 
   final DateTime? startedAt;
+
   final String? long;
   final String? lat;
+
   final String? city;
   final String? street;
   final String? phone;
+
+  final List<OrderDetailsDto>? details;
 
   const ActiveOrderDto({
     this.orderId,
@@ -40,6 +46,8 @@ class ActiveOrderDto {
     this.storeName,
     this.storeAddress,
     this.storeImage,
+    this.storeLatLong,
+    this.storePhoneNumber,
     this.userName,
     this.userImage,
     this.userAddress,
@@ -51,12 +59,14 @@ class ActiveOrderDto {
     this.city,
     this.street,
     this.phone,
+    this.details,
   });
 
   factory ActiveOrderDto.fromJson(Map<String, dynamic> json) =>
       _$ActiveOrderDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$ActiveOrderDtoToJson(this);
+
   ActiveOrderEntity toEntity() {
     return ActiveOrderEntity(
       orderId: orderId ?? "",
@@ -73,10 +83,54 @@ class ActiveOrderDto {
       totalPrice: totalPrice ?? 0,
       status: status ?? "",
       startedAt: startedAt,
-      long: long ?? "",
-      lat: lat ?? "",
+
+      /// تحويل String → double
+      long: double.tryParse(long ?? ''),
+      lat: double.tryParse(lat ?? ''),
+
       city: city ?? "",
       street: street ?? "",
+
+      /// توحيد phone
+      phone: storePhoneNumber ?? phone ?? "",
+
+      /// أهم نقطة: mapping list
+      details: details
+          ?.map((e) => e.toEntity())
+          .toList() ??
+          const [],
+    );
+  }
+}
+
+class OrderDetailsDto {
+  final String id;
+  final String title;
+  final String price;
+  final int count;
+
+  const OrderDetailsDto(
+      this.id,
+      this.title,
+      this.price,
+      this.count,
+      );
+
+  factory OrderDetailsDto.fromMap(Map<String, dynamic> map) {
+    return OrderDetailsDto(
+      map['id'] ?? '',
+      map['title'] ?? '',
+      map['price'] ?? '',
+      map['count'] ?? 0,
+    );
+  }
+
+  OrderDetailsEntity toEntity() {
+    return OrderDetailsEntity(
+      id: id,
+      title: title,
+      price: price,
+      count: count,
     );
   }
 }

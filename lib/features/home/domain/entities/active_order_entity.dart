@@ -21,11 +21,15 @@ class ActiveOrderEntity extends Equatable {
   final String status;
 
   final DateTime? startedAt;
-  final String? long;
-  final String? lat;
+
+  final double? long;
+  final double? lat;
+
   final String? city;
   final String? street;
   final String? phone;
+
+  final List<OrderDetailsEntity> details;
 
   const ActiveOrderEntity({
     this.orderId = '',
@@ -47,6 +51,7 @@ class ActiveOrderEntity extends Equatable {
     this.city,
     this.street,
     this.phone,
+    this.details = const [],
   });
 
   @override
@@ -70,5 +75,23 @@ class ActiveOrderEntity extends Equatable {
     city,
     street,
     phone,
+    details,
   ];
+}
+
+class OrderDetailsEntity extends Equatable {
+  final String id;
+  final String title;
+  final String price;
+  final int count;
+
+  const OrderDetailsEntity({
+    this.id = '',
+    this.title = '',
+    this.price = '',
+    this.count = 0,
+  });
+
+  @override
+  List<Object?> get props => [id, title, price, count];
 }
