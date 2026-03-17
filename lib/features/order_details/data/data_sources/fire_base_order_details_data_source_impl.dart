@@ -20,12 +20,12 @@ class FirebaseOrderDetailsDataSourceImpl
 
   @override
   Future<Result<void>> sendNotification({
-    required SendNotificationRequest notificationDto,
+    required SendNotificationRequest sendNotificationRequest,
     required String authorization,
   }) {
     return executeApi(
       () => _apiClient.sendNotification(
-        notificationDto: notificationDto,
+        request: sendNotificationRequest,
         authorization: authorization,
       ),
     );

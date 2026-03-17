@@ -5,6 +5,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tracking_app/core/api/di/auth_interceptor.dart';
 import 'package:tracking_app/core/api/di/remote_module.dart';
 import 'package:tracking_app/core/constants/app_constants.dart';
 
@@ -37,44 +38,39 @@ void main() {
         });
   });
 
-  group('ApiModule', () {
-    group('provideDio', () {
-      test(
-        'adds logger to interceptors and sets auth header when token exists',
-        () async {
-          final options = BaseOptions();
-          final logger = PrettyDioLogger();
-          final interceptors = Interceptors();
-
-          when(mockDio.options).thenReturn(options);
-          when(mockDio.interceptors).thenReturn(interceptors);
-
-          final result = await module.provideDio(options, logger);
-
-          expect(result.interceptors.contains(logger), isTrue);
-          expect(
-            result.options.headers['Authorization'],
-            'Bearer test_token_123',
-          );
-        },
-      );
-
-      test('does not set Authorization header when token is empty', () async {
-        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-            .setMockMethodCallHandler(
-              channel,
-              (MethodCall methodCall) async => null,
-            );
-
+  group('provideDio', () {
+    test(
+      'adds logger to interceptors and sets auth header when token exists',
+      () async {
         final options = BaseOptions();
         final logger = PrettyDioLogger();
+        final interceptors = Interceptors();
+
         when(mockDio.options).thenReturn(options);
-        when(mockDio.interceptors).thenReturn(Interceptors());
+        when(mockDio.interceptors).thenReturn(interceptors);
 
-        final result = await module.provideDio(options, logger);
+        final result = module.provideDio(options, logger);
 
-        expect(result.options.headers['Authorization'], isNull);
-      });
+        expect(result.interceptors.any((i) => i is AuthInterceptor), isTrue);
+        expect(result.interceptors.contains(logger), isTrue);
+      },
+    );
+
+    test('does not set Authorization header when token is empty', () async {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+            channel,
+            (MethodCall methodCall) async => null,
+          );
+
+      final options = BaseOptions();
+      final logger = PrettyDioLogger();
+      when(mockDio.options).thenReturn(options);
+      when(mockDio.interceptors).thenReturn(Interceptors());
+
+      final result = module.provideDio(options, logger);
+
+      expect(result.options.headers['Authorization'], isNull);
     });
   });
 }

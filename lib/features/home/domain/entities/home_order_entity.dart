@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:tracking_app/features/home/domain/entities/active_order_entity.dart';
 
-
 class HomeOrderEntity extends Equatable {
   final String? orderId;
   final String? storeName;
@@ -37,7 +36,6 @@ class HomeOrderEntity extends Equatable {
     this.lat,
     this.long,
     this.details = const [],
-
   });
 
   @override
@@ -80,12 +78,14 @@ extension HomeOrderEntityX on HomeOrderEntity {
       "lat": lat,
       "long": long,
       "details": details
-          .map((e) => {
-        "id": e.id,
-        "title": e.title,
-        "price": e.price,
-        "count": e.count,
-      })
+          .map(
+            (e) => {
+              "id": e.id,
+              "title": e.title,
+              "price": e.price,
+              "count": e.count,
+            },
+          )
           .toList(),
     };
   }

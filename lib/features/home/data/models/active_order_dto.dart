@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tracking_app/features/home/data/models/order_details_dto.dart';
 import 'package:tracking_app/features/home/domain/entities/active_order_entity.dart';
@@ -6,7 +7,7 @@ import 'package:tracking_app/features/home/domain/entities/active_order_entity.d
 part 'active_order_dto.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class ActiveOrderDto {
+class ActiveOrderDto extends Equatable {
   final String? orderId;
   final String? driverId;
   final String? userId;
@@ -88,8 +89,8 @@ class ActiveOrderDto {
       totalPrice: totalPrice ?? 0,
       status: status ?? "",
       startedAt: startedAt,
-      long: long ,
-      lat: lat ,
+      long: long,
+      lat: lat,
       city: city ?? "",
       street: street ?? "",
       phone: storePhoneNumber ?? userPhoneNumber ?? "",
@@ -108,4 +109,30 @@ class ActiveOrderDto {
     if (date == null) return null;
     return Timestamp.fromDate(date);
   }
+
+  @override
+  List<Object?> get props => [
+    orderId,
+    driverId,
+    userId,
+    driverToken,
+    userToken,
+    storeName,
+    storeAddress,
+    storeImage,
+    storeLatLong,
+    storePhoneNumber,
+    userName,
+    userImage,
+    userAddress,
+    totalPrice,
+    status,
+    startedAt,
+    long,
+    lat,
+    city,
+    street,
+    userPhoneNumber,
+    details,
+  ];
 }

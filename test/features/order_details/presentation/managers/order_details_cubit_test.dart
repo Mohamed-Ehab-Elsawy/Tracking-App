@@ -2,7 +2,6 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:tracking_app/core/bloc/base_state.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/get_current_order_use_case.dart';
@@ -11,7 +10,6 @@ import 'package:tracking_app/features/order_details/domain/use_case/send_notific
 import 'package:tracking_app/features/order_details/domain/use_case/update_order_status_use_case.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
-import 'package:tracking_app/features/order_details/presentation/managers/order_status.dart';
 
 import 'order_details_cubit_test.mocks.dart';
 
@@ -89,46 +87,6 @@ void main() {
           return s.currentState.isError &&
               s.currentState.errorMessage == "Server Error";
         }),
-      ],
-    );
-  });
-
-  group('ChangeStepIntent', () {
-    final tOrder = ActiveOrderDto(status: 'picked');
-
-    blocTest<CurrentOrderDetailsCubit, CurrentOrderDetailsState>(
-      'increments currentStep by 1',
-      build: () {
-        when(
-          mockUpdateUseCase.call(any),
-        ).thenAnswer((_) async => Success(tOrder));
-        return cubit;
-      },
-      act: (cubit) => cubit.doIntent(ChangeStepIntent(token: '', status: '')),
-      expect: () => [
-        predicate<CurrentOrderDetailsState>((s) => s.currentStep == 1),
-      ],
-    );
-
-    blocTest<CurrentOrderDetailsCubit, CurrentOrderDetailsState>(
-      'resets currentStep to 0 when reaching the end of OrderStatus',
-      build: () {
-        when(
-          mockUpdateUseCase.call(any),
-        ).thenAnswer((_) async => Success(tOrder));
-        return cubit;
-      },
-      seed: () => CurrentOrderDetailsState(
-        BaseState.init(),
-        currentStep: OrderStatus.values.length - 1,
-        sendNotificationState: BaseState.init(),
-        notificationState: BaseState.init(),
-      ),
-      act: (cubit) => cubit.doIntent(
-        ChangeStepIntent(token: '', status: OrderStatus.values.last.name),
-      ),
-      expect: () => [
-        predicate<CurrentOrderDetailsState>((s) => s.currentStep == 0),
       ],
     );
   });

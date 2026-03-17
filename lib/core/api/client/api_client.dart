@@ -58,7 +58,7 @@ abstract class ApiClient {
 
   @POST(ApiEndPointsConstants.callFirebaseServer)
   Future<void> sendNotification({
-    @Body() required SendNotificationRequest notificationDto,
+    @Body() required SendNotificationRequest request,
     @Header(AppConstants.authorizationKey) required String authorization,
   });
 
@@ -104,10 +104,10 @@ abstract class ApiClient {
   });
 
   @GET(ApiEndPointsConstants.getRoute)
-  Future<DirectionsResponse> getRoute(@Path("profile") String profile,
-      // driving, walking, etc.
-    @Path("coordinates") String coordinates, // "lng,lat;lng,lat"
-    @Query("geometries") String geometries, // Use "geojson"
+  Future<DirectionsResponse> getRoute(
+    @Path("profile") String profile,
+    @Path("coordinates") String coordinates,
+    @Query("geometries") String geometries,
     @Query("access_token") String accessToken,
   );
 

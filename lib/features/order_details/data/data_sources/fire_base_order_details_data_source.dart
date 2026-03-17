@@ -6,7 +6,7 @@ import 'package:tracking_app/features/order_details/presentation/managers/order_
 
 abstract interface class FirebaseOrderDetailsDataSource {
   Future<Result<void>> sendNotification({
-    required SendNotificationRequest notificationDto,
+    required SendNotificationRequest sendNotificationRequest,
     required String authorization,
   });
 

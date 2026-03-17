@@ -1,7 +1,7 @@
 import 'package:tracking_app/features/home/data/models/orders_dto.dart';
+import 'package:tracking_app/features/home/domain/entities/active_order_entity.dart';
 import 'package:tracking_app/features/home/domain/entities/home_order_entity.dart';
 
-import 'package:tracking_app/features/home/domain/entities/active_order_entity.dart';
 extension HomeOrdersMapper on OrdersDto {
   HomeOrderEntity toEntity() {
     return HomeOrderEntity(
@@ -22,14 +22,17 @@ extension HomeOrdersMapper on OrdersDto {
       phone: shippingAddress?.phone,
       lat: shippingAddress?.lat,
       long: shippingAddress?.long,
-      details: orderItems
-          ?.map((e) => OrderDetailsEntity(
-        id: e.id ?? '',
-        title: e.product?.title ?? '',
-        price: (e.price ?? 0).toString(),
-        count: e.quantity ?? 0,
-      ))
-          .toList() ??
+      details:
+          orderItems
+              ?.map(
+                (e) => OrderDetailsEntity(
+                  id: e.id ?? '',
+                  title: e.product?.title ?? '',
+                  price: (e.price ?? 0).toString(),
+                  count: e.quantity ?? 0,
+                ),
+              )
+              .toList() ??
           [],
     );
   }

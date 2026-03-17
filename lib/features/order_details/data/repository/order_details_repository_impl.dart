@@ -23,7 +23,7 @@ class OrderDetailsRepositoryImpl implements OrderDetailsRepository {
   @override
   Future<Result<ActiveOrderDto>> updateOrderStatus(OrderStatus status) async {
     final orderId = await AppLocalStorage.getString(key: AppConstants.orderId);
-    return _dataSource.updateOrderStatus(orderId, status);
+    return await _dataSource.updateOrderStatus(orderId, status);
   }
 
   @override
@@ -35,9 +35,10 @@ class OrderDetailsRepositoryImpl implements OrderDetailsRepository {
   }
 
   @override
-  Future<Result<List<List<double>>>> getDirections(double startLat,
-      double startLng,
-      double endLat,
+  Future<Result<List<List<double>>>> getDirections(
+    double startLat,
+    double startLng,
+    double endLat,
     double endLng,
   ) async {
     final String coordinates = "$startLng,$startLat;$endLng,$endLat";
@@ -64,7 +65,7 @@ class OrderDetailsRepositoryImpl implements OrderDetailsRepository {
     required String authorization,
   }) {
     return _dataSource.sendNotification(
-      notificationDto: notificationDto,
+      sendNotificationRequest: notificationDto,
       authorization: authorization,
     );
   }
