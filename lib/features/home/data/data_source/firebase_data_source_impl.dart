@@ -37,7 +37,7 @@ class FirebaseOrderDataSourceImpl implements FirebaseOrderDataSource {
       "userImage": orderEntity.userImage,
       "userAddress": orderEntity.userAddress,
       "totalPrice": orderEntity.totalPrice,
-      "status": OrderStatus.values[0],
+      "status": OrderStatus.values[0].name.toString(),
       "street": orderEntity.street,
       "city": orderEntity.city,
       "phone": orderEntity.phone,
