@@ -24,8 +24,8 @@ class ActiveOrderEntity extends Equatable {
 
   final DateTime? startedAt;
 
-  final double? long;
-  final double? lat;
+  final String? long;
+  final String? lat;
 
   final String? city;
   final String? street;

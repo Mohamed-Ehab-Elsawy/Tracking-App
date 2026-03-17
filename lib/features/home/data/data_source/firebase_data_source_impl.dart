@@ -41,7 +41,14 @@ class FirebaseOrderDataSourceImpl implements FirebaseOrderDataSource {
       "phone": orderEntity.phone,
       "lat": orderEntity.lat,
       "long": orderEntity.long,
-
+      "details": orderEntity.details
+          .map((e) => {
+        "id": e.id,
+        "title": e.title,
+        "price": e.price,
+        "count": e.count,
+      })
+          .toList(),
       "startedAt": FieldValue.serverTimestamp(),
     };
 
