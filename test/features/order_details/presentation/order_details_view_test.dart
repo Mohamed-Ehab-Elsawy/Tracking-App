@@ -9,8 +9,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tracking_app/core/bloc/base_state.dart';
 import 'package:tracking_app/core/theme/app_theme.dart';
 import 'package:tracking_app/core/theme/light_theme.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_details_entity.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
+import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
 import 'package:tracking_app/features/order_details/presentation/order_details_view.dart';
@@ -21,19 +20,13 @@ import 'order_details_view_test.mocks.dart';
 @GenerateNiceMocks([MockSpec<CurrentOrderDetailsCubit>()])
 void main() {
   late MockCurrentOrderDetailsCubit mockCubit;
-  // late CurrentOrderDetailsState mockState;
 
-  final mockEntity = OrderEntity(
+  final mockEntity = ActiveOrderDto(
     storeName: "Test Store",
     storeAddress: "123 Store St",
-    storePhone: "1234567890",
+    userPhoneNumber: "1234567890",
     userName: "John Doe",
     userAddress: "456 User Ave",
-    userPhone: "0987654321",
-    details: [
-      OrderDetailsEntity("1", "Burger", "150", 2),
-      OrderDetailsEntity("2", "Fries", "50", 1),
-    ],
   );
 
   setUpAll(() async {

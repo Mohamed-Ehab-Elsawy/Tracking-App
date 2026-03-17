@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:tracking_app/features/home/data/models/order_details_dto.dart';
 import 'package:tracking_app/features/home/domain/entities/active_order_entity.dart';
 
 part 'active_order_dto.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ActiveOrderDto {
   final String? orderId;
   final String? driverId;
@@ -26,6 +28,7 @@ class ActiveOrderDto {
 
   final String? status;
 
+  @JsonKey(fromJson: _fromTimestamp, toJson: _toTimestamp)
   final DateTime? startedAt;
 
   final String? long;
@@ -33,7 +36,7 @@ class ActiveOrderDto {
 
   final String? city;
   final String? street;
-  final String? phone;
+  final String? userPhoneNumber;
 
   final List<OrderDetailsDto>? details;
 
@@ -58,7 +61,7 @@ class ActiveOrderDto {
     this.lat,
     this.city,
     this.street,
-    this.phone,
+    this.userPhoneNumber,
     this.details,
   });
 
@@ -87,46 +90,22 @@ class ActiveOrderDto {
       startedAt: startedAt,
       long: double.tryParse(long ?? ''),
       lat: double.tryParse(lat ?? ''),
-
       city: city ?? "",
       street: street ?? "",
-      phone: storePhoneNumber ?? phone ?? "",
-      details: details
-          ?.map((e) => e.toEntity())
-          .toList() ??
-          const [],
-    );
-  }
-}
-
-class OrderDetailsDto {
-  final String id;
-  final String title;
-  final String price;
-  final int count;
-
-  const OrderDetailsDto(
-      this.id,
-      this.title,
-      this.price,
-      this.count,
-      );
-
-  factory OrderDetailsDto.fromMap(Map<String, dynamic> map) {
-    return OrderDetailsDto(
-      map['id'] ?? '',
-      map['title'] ?? '',
-      map['price'] ?? '',
-      map['count'] ?? 0,
+      phone: storePhoneNumber ?? userPhoneNumber ?? "",
+      details: details?.map((e) => e.toEntity()).toList() ?? const [],
     );
   }
 
-  OrderDetailsEntity toEntity() {
-    return OrderDetailsEntity(
-      id: id,
-      title: title,
-      price: price,
-      count: count,
-    );
+  static DateTime? _fromTimestamp(dynamic value) {
+    if (value == null) return null;
+    if (value is Timestamp) return value.toDate();
+    if (value is String) return DateTime.tryParse(value);
+    return null;
+  }
+
+  static dynamic _toTimestamp(DateTime? date) {
+    if (date == null) return null;
+    return Timestamp.fromDate(date);
   }
 }

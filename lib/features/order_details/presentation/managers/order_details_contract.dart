@@ -1,9 +1,9 @@
 import 'package:tracking_app/core/bloc/base_state.dart';
+import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/order_details/data/models/notification_dto.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
 
 class CurrentOrderDetailsState {
-  final BaseState<OrderEntity> currentState;
+  final BaseState<ActiveOrderDto> currentState;
   final BaseState<void> sendNotificationState;
   final BaseState<NotificationDto> notificationState;
   final int currentStep;
@@ -23,8 +23,7 @@ class CurrentOrderDetailsState {
   );
 
   CurrentOrderDetailsState copyWith({
-    BaseState<OrderEntity>? state,
-    BaseState<OrderEntity>? currentState,
+    BaseState<ActiveOrderDto>? currentState,
     int? currentStep,
     BaseState<void>? sendNotificationState,
     BaseState<NotificationDto>? notificationState,
@@ -40,7 +39,12 @@ sealed class CurrentOrderDetailsIntent {}
 
 class GetCurrentOrderDetailsIntent extends CurrentOrderDetailsIntent {}
 
-class ChangeStepIntent extends CurrentOrderDetailsIntent {}
+class ChangeStepIntent extends CurrentOrderDetailsIntent {
+  final String token;
+  final String status;
+
+  ChangeStepIntent({required this.token, required this.status});
+}
 
 class PhoneCallPressedIntent extends CurrentOrderDetailsIntent {
   final String phoneNumber;
@@ -54,19 +58,10 @@ class WhatsAppPressedIntent extends CurrentOrderDetailsIntent {
   WhatsAppPressedIntent(this.phoneNumber);
 }
 
-class SendOrderStatusNotificationIntent extends CurrentOrderDetailsIntent {
-  final String token;
-  final String status;
-
-  SendOrderStatusNotificationIntent({
-    required this.token,
-    required this.status,
-  });
-}
-
 class SaveNotificationIntent extends CurrentOrderDetailsIntent {
   final NotificationDto notification;
   final String userId;
+
   SaveNotificationIntent({required this.notification, required this.userId});
 }
 

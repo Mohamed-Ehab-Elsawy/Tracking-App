@@ -11,7 +11,9 @@ import 'package:tracking_app/features/order_details/presentation/managers/order_
 class CurrentOrderDetailsCard extends StatelessWidget {
   final String title, description;
   final String? phoneNumber, count;
+  final String? image;
   final void Function()? onTap;
+
   const CurrentOrderDetailsCard({
     super.key,
     required this.title,
@@ -19,6 +21,7 @@ class CurrentOrderDetailsCard extends StatelessWidget {
     this.phoneNumber,
     this.count,
     this.onTap,
+    this.image,
   });
 
   @override
@@ -29,7 +32,7 @@ class CurrentOrderDetailsCard extends StatelessWidget {
       color: Colors.white,
       child: ListTile(
         leading: CustomImageView(
-          imagePath: "assets/images/placeholder.png",
+          imagePath: image,
           height: 50,
           width: 50,
           radius: BorderRadius.all(Radius.circular(50)),

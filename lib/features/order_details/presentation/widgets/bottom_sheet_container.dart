@@ -104,7 +104,7 @@ class _BottomSheetContainerState extends State<BottomSheetContainer>
     return CurrentOrderDetailsCard(
       title: widget.order.userName!,
       description: widget.order.userAddress!,
-      phoneNumber: widget.order.phone,
+      phoneNumber: widget.order.userPhoneNumber,
     );
   }
 }

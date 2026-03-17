@@ -5,12 +5,12 @@ import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/core/local/app_local_storage.dart';
 import 'package:tracking_app/core/services/notification_dto.dart';
+import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/order_details/data/models/notification_dto.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/get_current_order_use_case.dart';
-import 'package:tracking_app/features/order_details/domain/use_case/update_order_status_use_case.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/save_notification_to_fire_base_use_case.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/send_notification_use_case.dart';
+import 'package:tracking_app/features/order_details/domain/use_case/update_order_status_use_case.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_status.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,9 +25,9 @@ class CurrentOrderDetailsCubit
         > {
   final GetCurrentOrderUseCase _getCurrentOrderUseCase;
   final UpdateOrderStatusUseCase _updateOrderStatusUseCase;
-  final orderStatus = OrderStatus.accepted;
   final SendNotificationUseCase _sendNotificationUseCase;
   final SaveNotificationToFireBaseUseCase _saveNotificationToFireBaseUseCase;
+  final orderStatus = OrderStatus.accepted;
 
   CurrentOrderDetailsCubit(
     this._getCurrentOrderUseCase,
@@ -49,10 +49,8 @@ class CurrentOrderDetailsCubit
         _openWhatsApp(intent.phoneNumber);
 
       case ChangeStepIntent():
-        final nextStep = (state.currentStep + 1) % 5;
-        emit(state.copyWith(currentStep: nextStep));
-      case SendOrderStatusNotificationIntent():
-        _sendNotification(intent.token, intent.status);
+        _changeStatus(intent.token, intent.status);
+
       case SaveNotificationIntent():
         _saveNotificationToFireBase(intent.userId);
     }
@@ -62,7 +60,7 @@ class CurrentOrderDetailsCubit
     emit(state.copyWith(currentState: BaseState.loading()));
     var result = await _getCurrentOrderUseCase.call();
     switch (result) {
-      case Success<OrderEntity>():
+      case Success<ActiveOrderDto>():
         {
           final entity = result.data;
           final currentStep = switch (entity.status) {
@@ -72,6 +70,7 @@ class CurrentOrderDetailsCubit
             "arrived" => 3,
             "delivered" => 4,
             String() => 0,
+            null => 0,
           };
           emit(
             state.copyWith(
@@ -80,32 +79,33 @@ class CurrentOrderDetailsCubit
             ),
           );
         }
-      case Failure<OrderEntity>():
+      case Failure<ActiveOrderDto>():
         {
           emit(
-          state.copyWith(currentState: BaseState.error(result.errorMessage)),
-        );
+            state.copyWith(currentState: BaseState.error(result.errorMessage)),
+          );
+        }
     }
   }
 
-  Future<void> _changeStatus() async {
+  Future<void> _changeStatus(String token, String status) async {
     final nextStep = (state.currentStep + 1) % OrderStatus.values.length;
     final nextStatus = OrderStatus.values[nextStep];
 
     final result = await _updateOrderStatusUseCase.call(nextStatus);
     switch (result) {
-      case Success<OrderEntity>():
+      case Success<ActiveOrderDto>():
         emit(
           state.copyWith(
             currentStep: nextStep,
             currentState: BaseState.loaded(result.data),
           ),
         );
-      case Failure<OrderEntity>():
+        _sendNotification(token, status);
+      case Failure<ActiveOrderDto>():
         emit(
           state.copyWith(currentState: BaseState.error(result.errorMessage)),
         );
-        }
     }
   }
 
@@ -128,11 +128,15 @@ class CurrentOrderDetailsCubit
 
     switch (result) {
       case Success<void>():
-        final userId = state.currentState.data?.id;
+        final userId = state.currentState.data?.orderId;
         if (userId != null) {
           await _saveNotificationToFireBase(userId);
         }
-        emit(state.copyWith(state: BaseState.loaded(state.currentState.data)));
+        emit(
+          state.copyWith(
+            currentState: BaseState.loaded(state.currentState.data),
+          ),
+        );
 
       case Failure<void>():
         emit(
@@ -162,7 +166,6 @@ class CurrentOrderDetailsCubit
 
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
-  //=============================================================
 
   Future<void> _saveNotificationToFireBase(String userId) async {
     emit(state.copyWith(notificationState: BaseState.loading()));

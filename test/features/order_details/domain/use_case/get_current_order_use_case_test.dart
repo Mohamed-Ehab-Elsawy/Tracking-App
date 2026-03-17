@@ -2,8 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
-import 'package:tracking_app/features/order_details/domain/repository/order_details_repo.dart';
+import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/order_details/domain/repository/order_details_repository.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/get_current_order_use_case.dart';
 
@@ -19,8 +18,8 @@ void main() {
     useCase = GetCurrentOrderUseCase(mockRepo);
   });
 
-  final tOrderEntity = OrderEntity(
-    id: "123",
+  final tOrderEntity = ActiveOrderDto(
+    orderId: "123",
     storeName: "Senior Flutter Store",
   );
 
@@ -29,7 +28,7 @@ void main() {
       'should call getCurrentOrderDetails from repository and return Success',
       () async {
         // Arrange
-        provideDummy<Result<OrderEntity>>(Success(tOrderEntity));
+        provideDummy<Result<ActiveOrderDto>>(Success(tOrderEntity));
         when(
           mockRepo.getCurrentOrderDetails(),
         ).thenAnswer((_) async => Success(tOrderEntity));
@@ -38,7 +37,7 @@ void main() {
         final result = await useCase.call();
 
         // Assert
-        expect(result, isA<Success<OrderEntity>>());
+        expect(result, isA<Success<ActiveOrderDto>>());
         expect((result as Success).data, tOrderEntity);
 
         // Verify the repository was called exactly once
@@ -52,7 +51,7 @@ void main() {
       () async {
         // Arrange
         const errorMessage = "No internet connection";
-        provideDummy<Result<OrderEntity>>(Failure(errorMessage));
+        provideDummy<Result<ActiveOrderDto>>(Failure(errorMessage));
         when(
           mockRepo.getCurrentOrderDetails(),
         ).thenAnswer((_) async => Failure(errorMessage));
@@ -61,7 +60,7 @@ void main() {
         final result = await useCase.call();
 
         // Assert
-        expect(result, isA<Failure<OrderEntity>>());
+        expect(result, isA<Failure<ActiveOrderDto>>());
         expect((result as Failure).errorMessage, errorMessage);
 
         verify(mockRepo.getCurrentOrderDetails()).called(1);

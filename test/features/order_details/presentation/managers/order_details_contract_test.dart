@@ -46,7 +46,7 @@ void main() {
     });
 
     test('ChangeStepIntent can be instantiated', () {
-      final intent = ChangeStepIntent();
+      final intent = ChangeStepIntent(token: "token", status: "status");
       expect(intent, isA<ChangeStepIntent>());
     });
 

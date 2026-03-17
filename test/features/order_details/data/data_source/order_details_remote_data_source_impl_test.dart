@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:tracking_app/core/api/client/api_client.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
-import 'package:tracking_app/features/order_details/data/data_source/order_details_remote_data_source_impl.dart';
+import 'package:tracking_app/features/order_details/data/data_sources/fire_base_order_details_data_source.dart';
+import 'package:tracking_app/features/order_details/data/data_sources/fire_base_order_details_data_source_impl.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_status.dart';
 
 import 'order_details_remote_data_source_impl_test.mocks.dart';
@@ -13,10 +15,12 @@ import 'order_details_remote_data_source_impl_test.mocks.dart';
   CollectionReference,
   DocumentReference,
   DocumentSnapshot,
+  ApiClient,
 ])
 void main() {
-  late OrderDetailsRemoteDataSourceImpl dataSource;
+  late FirebaseOrderDetailsDataSource dataSource;
   late MockFirebaseFirestore mockFirestore;
+  late MockApiClient mockApiClient;
   late MockCollectionReference<Map<String, dynamic>> mockCollection;
   late MockDocumentReference<Map<String, dynamic>> mockDocRef;
   late MockDocumentSnapshot<Map<String, dynamic>> mockSnapshot;
@@ -26,8 +30,12 @@ void main() {
     mockCollection = MockCollectionReference();
     mockDocRef = MockDocumentReference();
     mockSnapshot = MockDocumentSnapshot();
+    mockApiClient = MockApiClient();
 
-    dataSource = OrderDetailsRemoteDataSourceImpl(mockFirestore);
+    dataSource = FirebaseOrderDetailsDataSourceImpl(
+      mockApiClient,
+      mockFirestore,
+    );
 
     when(mockFirestore.collection('active_orders')).thenReturn(mockCollection);
     when(mockCollection.doc(any)).thenReturn(mockDocRef);

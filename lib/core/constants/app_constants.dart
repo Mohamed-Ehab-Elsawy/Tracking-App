@@ -14,4 +14,6 @@ class AppConstants {
   static const String driverId = 'driver_id';
   static const String driving = "driving";
   static const String geometries = "geojson";
+  static const String activeOrdersKey = "active_orders";
+  static const String activeOrderStatusKey = "status";
 }

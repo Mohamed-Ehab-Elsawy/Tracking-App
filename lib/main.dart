@@ -25,7 +25,7 @@ void main() async {
   FirebaseMessaging.onMessage.listen((RemoteMessage msg) {
     final type = msg.data['type'];
     if (type == 'silent') {
-       EventBusService.eventBus.fire(SilentNotificationEvent());
+      EventBusService.eventBus.fire(SilentNotificationEvent());
     }
   });
   await FCMService.getAccessToken().then((fcmAccessToken) {

@@ -4,11 +4,11 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:tracking_app/core/bloc/base_state.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
+import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/get_current_order_use_case.dart';
-import 'package:tracking_app/features/order_details/domain/use_case/update_order_status_use_case.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/save_notification_to_fire_base_use_case.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/send_notification_use_case.dart';
+import 'package:tracking_app/features/order_details/domain/use_case/update_order_status_use_case.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_status.dart';
@@ -28,22 +28,19 @@ void main() {
   late MockSaveNotificationToFireBaseUseCase mockSaveNotificationUseCase;
   late MockSendNotificationUseCase mockSendNotificationUseCase;
 
-  final tOrderEntity = OrderEntity(id: "1", storeName: "Test Store");
+  final tOrderEntity = ActiveOrderDto(orderId: "1", storeName: "Test Store");
 
   setUp(() {
     mockGetCurrentOrderUseCase = MockGetCurrentOrderUseCase();
     mockUpdateUseCase = MockUpdateOrderStatusUseCase();
-    mockUseCase = MockGetCurrentOrderUseCase();
     mockSaveNotificationUseCase = MockSaveNotificationToFireBaseUseCase();
     mockSendNotificationUseCase = MockSendNotificationUseCase();
     cubit = CurrentOrderDetailsCubit(
       mockGetCurrentOrderUseCase,
       mockUpdateUseCase,
-      mockUseCase,
       mockSendNotificationUseCase,
       mockSaveNotificationUseCase,
     );
-
   });
 
   tearDown(() => cubit.close());
@@ -59,7 +56,7 @@ void main() {
     blocTest<CurrentOrderDetailsCubit, CurrentOrderDetailsState>(
       'emits [Loading, Loaded] when use case returns Success',
       build: () {
-        provideDummy<Result<OrderEntity>>(Success(tOrderEntity));
+        provideDummy<Result<ActiveOrderDto>>(Success(tOrderEntity));
         when(
           mockGetCurrentOrderUseCase.call(),
         ).thenAnswer((_) async => Success(tOrderEntity));
@@ -79,7 +76,7 @@ void main() {
     blocTest<CurrentOrderDetailsCubit, CurrentOrderDetailsState>(
       'emits [Loading, Error] when use case returns Failure',
       build: () {
-        provideDummy<Result<OrderEntity>>(Failure("Server Error"));
+        provideDummy<Result<ActiveOrderDto>>(Failure("Server Error"));
         when(
           mockGetCurrentOrderUseCase.call(),
         ).thenAnswer((_) async => Failure("Server Error"));
@@ -97,19 +94,17 @@ void main() {
   });
 
   group('ChangeStepIntent', () {
-    final tOrder = OrderEntity(status: 'picked'); // Mock entity
+    final tOrder = ActiveOrderDto(status: 'picked');
 
     blocTest<CurrentOrderDetailsCubit, CurrentOrderDetailsState>(
       'increments currentStep by 1',
       build: () {
-        // Stub the UseCase to return success
         when(
           mockUpdateUseCase.call(any),
         ).thenAnswer((_) async => Success(tOrder));
         return cubit;
       },
-      build: () => cubit,
-      act: (cubit) => cubit.doIntent(ChangeStepIntent()),
+      act: (cubit) => cubit.doIntent(ChangeStepIntent(token: '', status: '')),
       expect: () => [
         predicate<CurrentOrderDetailsState>((s) => s.currentStep == 1),
       ],
@@ -123,12 +118,15 @@ void main() {
         ).thenAnswer((_) async => Success(tOrder));
         return cubit;
       },
-      // Assuming OrderStatus.values.length is 5, step 4 + 1 % 5 = 0
       seed: () => CurrentOrderDetailsState(
         BaseState.init(),
         currentStep: OrderStatus.values.length - 1,
+        sendNotificationState: BaseState.init(),
+        notificationState: BaseState.init(),
       ),
-      act: (cubit) => cubit.doIntent(ChangeStepIntent()),
+      act: (cubit) => cubit.doIntent(
+        ChangeStepIntent(token: '', status: OrderStatus.values.last.name),
+      ),
       expect: () => [
         predicate<CurrentOrderDetailsState>((s) => s.currentStep == 0),
       ],

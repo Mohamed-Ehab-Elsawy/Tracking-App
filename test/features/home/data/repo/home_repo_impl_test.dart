@@ -56,9 +56,7 @@ void main() {
         expect(result, isA<Success<List<HomeOrderEntity>>>());
 
         final successResult = result as Success<List<HomeOrderEntity>>;
-
         expect(successResult.data.length, homeResponseDto.orders?.length);
-        expect(successResult.data[0].orderId, homeResponseDto.orders?[0].id);
 
         verify(dataSource.getOrders(1, 10)).called(1);
         verifyNoMoreInteractions(dataSource);

@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tracking_app/core/api/client/api_client.dart';
 import 'package:tracking_app/core/api/env/env.dart';
@@ -9,63 +7,48 @@ import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/core/local/app_local_storage.dart';
 import 'package:tracking_app/core/services/notification_dto.dart';
-import 'package:tracking_app/features/order_details/data/data_source/order_details_remote_data_source.dart';
+import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/order_details/data/data_sources/fire_base_order_details_data_source.dart';
 import 'package:tracking_app/features/order_details/data/models/notification_dto.dart';
-import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
 import 'package:tracking_app/features/order_details/domain/repository/order_details_repository.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_status.dart';
 
 @Injectable(as: OrderDetailsRepository)
 class OrderDetailsRepositoryImpl implements OrderDetailsRepository {
-  final OrderDetailsRemoteDataSource _orderDetailsRemoteDataSource;
-  final FirebaseFirestore _firestore;
   final FirebaseOrderDetailsDataSource _dataSource;
   final ApiClient _apiClient;
 
-
-  OrderDetailsRepositoryImpl(this._orderDetailsRemoteDataSource,
-      this._firestore, this._dataSource, this._apiClient);
+  OrderDetailsRepositoryImpl(this._dataSource, this._apiClient);
 
   @override
-  Future<Result<OrderEntity>> updateOrderStatus(OrderStatus status) async {
-    final id = await AppLocalStorage.getString(key: AppConstants.orderId);
-
-    return _orderDetailsRemoteDataSource.updateOrderStatus(id, status);
+  Future<Result<ActiveOrderDto>> updateOrderStatus(OrderStatus status) async {
+    final orderId = await AppLocalStorage.getString(key: AppConstants.orderId);
+    return _dataSource.updateOrderStatus(orderId, status);
   }
 
   @override
-  Future<Result<OrderEntity>> getCurrentOrderDetails({String? orderId}) async {
-    try {
-      final id =
-          orderId ??
-              await AppLocalStorage.getSecuredString(key: AppConstants.orderId);
-      orderId ?? await AppLocalStorage.getString(key: AppConstants.orderId);
-
-      ///
-      final doc = await _firestore.collection("active_orders").doc(id).get();
-
-      if (doc.data() == null) return Failure('not_found');
-
-      return Success(OrderEntity.fromMap(doc.data()!));
-    } on FirebaseException catch (e) {
-      return Failure(e.message ?? 'something_went_wrong');
-    } catch (e) {
-      return Failure(e.toString());
-    }
+  Future<Result<ActiveOrderDto>> getCurrentOrderDetails() async {
+    final id = await AppLocalStorage.getSecuredString(
+      key: AppConstants.orderId,
+    );
+    return _dataSource.getCurrentOrderDetails(id);
   }
 
   @override
-  Future<Result<List<List<double>>>> getDirections(
-      double startLat,
+  Future<Result<List<List<double>>>> getDirections(double startLat,
       double startLng,
       double endLat,
-      double endLng,
-      ) async {
+    double endLng,
+  ) async {
     final String coordinates = "$startLng,$startLat;$endLng,$endLat";
     final String token = Env.mapAccessToken;
     final response = await executeApi(
-          () => _apiClient.getRoute(AppConstants.driving, coordinates, AppConstants.geometries, token),
+      () => _apiClient.getRoute(
+        AppConstants.driving,
+        coordinates,
+        AppConstants.geometries,
+        token,
+      ),
     );
     switch (response) {
       case Success<DirectionsResponse>():

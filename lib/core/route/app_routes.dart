@@ -16,12 +16,12 @@ import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/home/presentation/cubit/orders_events.dart';
 import 'package:tracking_app/features/home/presentation/cubit/orders_view_model.dart';
 import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
+import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
-import 'package:tracking_app/features/order_details/presentation/order_details_view.dart';
-import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
 import 'package:tracking_app/features/order_details/presentation/map_view.dart';
 import 'package:tracking_app/features/order_details/presentation/order_delivery_success_view.dart';
+import 'package:tracking_app/features/order_details/presentation/order_details_view.dart';
 import 'package:tracking_app/features/orders/presentation/order_details/view/order_details_view.dart';
 import 'package:tracking_app/features/orders/presentation/order_details/view_model/order_details_view_model.dart';
 import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_cubit.dart';
@@ -67,7 +67,7 @@ Route? onGenerateRoute(RouteSettings settings) {
                 ActiveOrderDto(
                   userAddress: 'userAddress',
                   userName: 'userName',
-                  phone: 'userPhone',
+                  userPhoneNumber: 'userPhone',
                   storeAddress: 'storeAddress',
                   storeName: 'storeName',
                   storePhoneNumber: 'storePhone',
