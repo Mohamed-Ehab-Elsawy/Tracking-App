@@ -4,6 +4,7 @@ import 'package:tracking_app/core/bloc/base_state.dart';
 import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/core/local/app_local_storage.dart';
+import 'package:tracking_app/core/services/event_bus_service.dart';
 import 'package:tracking_app/core/services/notification_dto.dart';
 import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/order_details/data/models/notification_dto.dart';
@@ -49,7 +50,7 @@ class CurrentOrderDetailsCubit
         _openWhatsApp(intent.phoneNumber);
 
       case ChangeStepIntent():
-        _changeStatus(intent.token, intent.status);
+        changeStatus(intent.token, intent.status);
 
       case SaveNotificationIntent():
         _saveNotificationToFireBase(intent.userId);
@@ -88,7 +89,7 @@ class CurrentOrderDetailsCubit
     }
   }
 
-  Future<void> _changeStatus(String token, String status) async {
+  Future<void> changeStatus(String token, String status) async {
     final nextStep = (state.currentStep + 1) % OrderStatus.values.length;
     final nextStatus = OrderStatus.values[nextStep];
 
@@ -153,10 +154,9 @@ class CurrentOrderDetailsCubit
   }
 
   void listonOnSilentNotificationEvent() {
-    // todo find event bus
-    // EventBusService.eventBus.on<SilentNotificationEvent>().listen((event) {
-    //   emitEvent(ReciveNotificationEvent());
-    // });
+    EventBusService.eventBus.on<SilentNotificationEvent>().listen((event) {
+      emitEvent(ReciveNotificationEvent());
+    });
   }
 
   Future<void> _openWhatsApp(String phoneNumber) async {

@@ -98,6 +98,7 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
 
           if (baseState.isLoaded && baseState.data != null) {
             final entity = baseState.data!;
+
             final String currentStatus = switch (state.currentStep) {
               0 => "accepted",
               1 => "picked",
@@ -138,9 +139,10 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
                   description: entity.storeAddress ?? "",
                   phoneNumber: entity.userPhoneNumber,
                   image: entity.storeImage,
-                  onTap: () => Navigator.of(
-                    context,
-                  ).pushNamed(AppRoutes.mapOrderView, arguments: entity),
+                  onTap: () => Navigator.of(context).pushNamed(
+                    AppRoutes.mapOrderView,
+                    arguments: {'isUser': false, 'order': entity},
+                  ),
                 ),
 
                 context.h(AppSpacing.md),
@@ -153,6 +155,10 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
                   description: entity.userAddress ?? "",
                   image: entity.userImage,
                   phoneNumber: entity.userPhoneNumber,
+                  onTap: () => Navigator.of(context).pushNamed(
+                    AppRoutes.mapOrderView,
+                    arguments: {'isUser': true, 'order': entity},
+                  ),
                 ),
 
                 context.h(AppSpacing.md),

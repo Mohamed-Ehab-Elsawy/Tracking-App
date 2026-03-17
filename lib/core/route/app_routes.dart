@@ -16,12 +16,12 @@ import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/home/presentation/cubit/orders_events.dart';
 import 'package:tracking_app/features/home/presentation/cubit/orders_view_model.dart';
 import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
-import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
+import 'package:tracking_app/features/order_details/presentation/order_details_view.dart';
+import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
 import 'package:tracking_app/features/order_details/presentation/map_view.dart';
 import 'package:tracking_app/features/order_details/presentation/order_delivery_success_view.dart';
-import 'package:tracking_app/features/order_details/presentation/order_details_view.dart';
 import 'package:tracking_app/features/orders/presentation/order_details/view/order_details_view.dart';
 import 'package:tracking_app/features/orders/presentation/order_details/view_model/order_details_view_model.dart';
 import 'package:tracking_app/features/orders/presentation/orders_history/view_model/order_history_cubit.dart';
@@ -57,21 +57,14 @@ Route? onGenerateRoute(RouteSettings settings) {
     case AppRoutes.onboardingView:
       return MaterialPageRoute(builder: (context) => const OnboardingView());
     case AppRoutes.mapOrderView:
+      final args = settings.arguments as Map<String, dynamic>;
       return MaterialPageRoute(
         settings: settings,
         builder: (context) => BlocProvider(
           create: (context) => getIt<MapOrderViewModel>(),
           child: MapOrderView(
-            order:
-                settings.arguments as ActiveOrderDto? ??
-                ActiveOrderDto(
-                  userAddress: 'userAddress',
-                  userName: 'userName',
-                  userPhoneNumber: 'userPhone',
-                  storeAddress: 'storeAddress',
-                  storeName: 'storeName',
-                  storePhoneNumber: 'storePhone',
-                ),
+            isUser: args['isUser'] as bool? ?? false,
+            order: args['order'] as ActiveOrderDto,
           ),
         ),
       );

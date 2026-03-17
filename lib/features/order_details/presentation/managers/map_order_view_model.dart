@@ -48,6 +48,10 @@ class MapOrderViewModel
     required double endLat,
     required double endLng,
   }) async {
+    if ((endLat) == 0.0 || (endLng) == 0.0) {
+      emitEvent(MapOrderErrorEvent("the directions are not available"));
+      return;
+    }
     await _getDirections(
       startLat: startLat,
       startLng: startLng,
@@ -96,6 +100,7 @@ class MapOrderViewModel
   void doIntent(MapOrderIntent intent) {
     switch (intent) {
       case GetDirectionsIntent():
+      // Add this guard before calling
         _showRoute(
           startLat: intent.startLat,
           startLng: intent.startLng,
