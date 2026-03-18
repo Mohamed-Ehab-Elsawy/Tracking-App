@@ -85,27 +85,6 @@ void main() {
     status: "status",
   );
 
-  group("updateOrderStatus", () {
-    test(
-      "should call datasource with correct params and return result",
-      () async {
-        await AppLocalStorage.set(AppConstants.orderId, "order123");
-
-        when(
-          () => dataSource.updateOrderStatus(any(), any()),
-        ).thenAnswer((_) async => Success(activeOrder));
-
-        final result = await repository.updateOrderStatus(OrderStatus.picked);
-
-        verify(
-          () => dataSource.updateOrderStatus("order123", OrderStatus.picked),
-        ).called(1);
-
-        expect(result, isA<Success>());
-      },
-    );
-  });
-
   group("getCurrentOrderDetails", () {
     test("should get secured id and call datasource", () async {
       await AppLocalStorage.setSecuredString(

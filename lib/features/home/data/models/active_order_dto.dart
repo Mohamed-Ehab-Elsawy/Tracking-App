@@ -32,8 +32,8 @@ class ActiveOrderDto extends Equatable {
   @JsonKey(fromJson: _fromTimestamp, toJson: _toTimestamp)
   final DateTime? startedAt;
 
-  final String? long;
-  final String? lat;
+  final double? long;
+  final double? lat;
 
   final String? city;
   final String? street;
@@ -89,8 +89,8 @@ class ActiveOrderDto extends Equatable {
       totalPrice: totalPrice ?? 0,
       status: status ?? "",
       startedAt: startedAt,
-      long: long,
-      lat: lat,
+      long: long.toString(),
+      lat: lat.toString(),
       city: city ?? "",
       street: street ?? "",
       phone: storePhoneNumber ?? userPhoneNumber ?? "",

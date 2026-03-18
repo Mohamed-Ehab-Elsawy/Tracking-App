@@ -16,4 +16,6 @@ class AppConstants {
   static const String geometries = "geojson";
   static const String activeOrdersKey = "active_orders";
   static const String activeOrderStatusKey = "status";
+  static const String activeOrderLatKey = "lat";
+  static const String activeOrderLngKey = "long";
 }

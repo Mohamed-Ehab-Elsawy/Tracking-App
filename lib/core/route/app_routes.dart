@@ -57,22 +57,14 @@ Route? onGenerateRoute(RouteSettings settings) {
     case AppRoutes.onboardingView:
       return MaterialPageRoute(builder: (context) => const OnboardingView());
     case AppRoutes.mapOrderView:
+      final List<dynamic> args = settings.arguments as List<dynamic>;
+      final ActiveOrderDto order = args[0];
+      final bool isUser = args[1];
       return MaterialPageRoute(
         settings: settings,
         builder: (context) => BlocProvider(
           create: (context) => getIt<MapOrderViewModel>(),
-          child: MapOrderView(
-            order:
-                settings.arguments as ActiveOrderDto? ??
-                ActiveOrderDto(
-                  userAddress: 'userAddress',
-                  userName: 'userName',
-                  userPhoneNumber: 'userPhone',
-                  storeAddress: 'storeAddress',
-                  storeName: 'storeName',
-                  storePhoneNumber: 'storePhone',
-                ),
-          ),
+          child: MapOrderView(order: order, isUser: isUser),
         ),
       );
 

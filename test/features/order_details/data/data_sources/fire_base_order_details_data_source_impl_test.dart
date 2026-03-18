@@ -110,6 +110,8 @@ void main() {
 
     final result = await dataSource.updateOrderStatus(
       "order1",
+      0.0,
+      0.0,
       OrderStatus.accepted,
     );
 
@@ -123,6 +125,8 @@ void main() {
 
     final result = await dataSource.updateOrderStatus(
       "order1",
+      0.0,
+      0.0,
       OrderStatus.accepted,
     );
 
@@ -138,6 +142,8 @@ void main() {
 
     final result = await dataSource.updateOrderStatus(
       "order1",
+      0.0,
+      0.0,
       OrderStatus.accepted,
     );
 

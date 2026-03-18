@@ -58,12 +58,18 @@ class FirebaseOrderDetailsDataSourceImpl
   @override
   Future<Result<ActiveOrderDto>> updateOrderStatus(
     String orderId,
+    double lat,
+    double lng,
     OrderStatus status,
   ) async => executeApi(() async {
     await _firestore
         .collection(AppConstants.activeOrdersKey)
         .doc(orderId)
-        .update({AppConstants.activeOrderStatusKey: status.name});
+        .update({
+          AppConstants.activeOrderStatusKey: status.name,
+          AppConstants.activeOrderLatKey: lat,
+          AppConstants.activeOrderLngKey: lng,
+        });
 
     final docRef = await _firestore
         .collection(AppConstants.activeOrdersKey)

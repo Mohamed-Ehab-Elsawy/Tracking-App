@@ -10,6 +10,7 @@ class BottomSheetContainer extends StatefulWidget {
     required this.order,
     required this.firstStore,
   });
+
   final ActiveOrderDto order;
   final bool firstStore;
 
@@ -97,14 +98,16 @@ class _BottomSheetContainerState extends State<BottomSheetContainer>
       title: widget.order.storeName!,
       description: widget.order.storeAddress!,
       phoneNumber: widget.order.storePhoneNumber,
+      image: widget.order.storeImage,
     );
   }
 
   _user() {
     return CurrentOrderDetailsCard(
-      title: widget.order.userName!,
-      description: widget.order.userAddress!,
+      title: widget.order.userName ?? "",
+      description: widget.order.userAddress ?? "",
       phoneNumber: widget.order.userPhoneNumber,
+      image: widget.order.userImage,
     );
   }
 }

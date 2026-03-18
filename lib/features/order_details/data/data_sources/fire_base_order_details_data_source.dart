@@ -19,6 +19,8 @@ abstract interface class FirebaseOrderDetailsDataSource {
 
   Future<Result<ActiveOrderDto>> updateOrderStatus(
     String orderId,
+    double lat,
+    double lng,
     OrderStatus status,
   );
 }

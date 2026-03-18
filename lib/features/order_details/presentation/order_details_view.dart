@@ -138,9 +138,10 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
                   description: entity.storeAddress ?? "",
                   phoneNumber: entity.userPhoneNumber,
                   image: entity.storeImage,
-                  onTap: () => Navigator.of(
-                    context,
-                  ).pushNamed(AppRoutes.mapOrderView, arguments: entity),
+                  onTap: () => Navigator.of(context).pushNamed(
+                    AppRoutes.mapOrderView,
+                    arguments: [entity, false],
+                  ),
                 ),
 
                 context.h(AppSpacing.md),
@@ -153,6 +154,10 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
                   description: entity.userAddress ?? "",
                   image: entity.userImage,
                   phoneNumber: entity.userPhoneNumber,
+                  onTap: () => Navigator.of(context).pushNamed(
+                    AppRoutes.mapOrderView,
+                    arguments: [entity, true],
+                  ),
                 ),
 
                 context.h(AppSpacing.md),
