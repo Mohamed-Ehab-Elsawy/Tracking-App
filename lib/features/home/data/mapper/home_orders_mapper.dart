@@ -9,6 +9,8 @@ extension HomeOrdersMapper on OrdersDto {
       storeName: store?.name,
       storeAddress: store?.address,
       storeImage: store?.image,
+      storeLatLong: store?.latLong,
+      storePhoneNumber: store?.phoneNumber,
       userName: '${user?.firstName} ${user?.lastName}',
       totalPrice: (totalPrice ?? 0).toDouble(),
       status: state,

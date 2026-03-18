@@ -6,6 +6,8 @@ class HomeOrderEntity extends Equatable {
   final String? storeName;
   final String? storeAddress;
   final String? storeImage;
+  final String? storeLatLong;
+  final String? storePhoneNumber;
   final String? userName;
   final String? userImage;
   final String? userAddress;
@@ -24,6 +26,8 @@ class HomeOrderEntity extends Equatable {
     this.storeName,
     this.storeAddress,
     this.storeImage,
+    this.storeLatLong,
+    this.storePhoneNumber,
     this.userName,
     this.totalPrice,
     this.userImage,
@@ -66,6 +70,8 @@ extension HomeOrderEntityX on HomeOrderEntity {
       "storeName": storeName,
       "storeAddress": storeAddress,
       "storeImage": storeImage,
+      "storeLatLong": storeLatLong,
+      "storePhoneNumber": storePhoneNumber,
       "userName": userName,
       "userImage": userImage,
       "userAddress": userAddress,
