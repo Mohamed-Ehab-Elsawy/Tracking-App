@@ -52,7 +52,9 @@ class CurrentOrderDetailsCubit
         _changeStatus(intent.token, intent.status);
 
       case SaveNotificationIntent():
-        _saveNotificationToFireBase(intent.userId);
+        _saveNotificationToFireBase(intent.notification, intent.userId);
+      case SendNotificationIntent():
+        _sendNotification(intent.token, intent.status);
     }
   }
 
@@ -101,7 +103,7 @@ class CurrentOrderDetailsCubit
             currentState: BaseState.loaded(result.data),
           ),
         );
-        _sendNotification(token, status);
+        await _sendNotification(token, status);
       case Failure<ActiveOrderDto>():
         emit(
           state.copyWith(currentState: BaseState.error(result.errorMessage)),
@@ -130,7 +132,12 @@ class CurrentOrderDetailsCubit
       case Success<void>():
         final userId = state.currentState.data?.orderId;
         if (userId != null) {
-          await _saveNotificationToFireBase(userId);
+          final notification = NotificationDto(
+            title: "Order Update",
+            body: "Order status changed to $status",
+            status: status,
+          );
+          await _saveNotificationToFireBase(notification, userId);
         }
         emit(
           state.copyWith(
@@ -167,13 +174,11 @@ class CurrentOrderDetailsCubit
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
-  Future<void> _saveNotificationToFireBase(String userId) async {
+  Future<void> _saveNotificationToFireBase(
+    NotificationDto notification,
+    String userId,
+  ) async {
     emit(state.copyWith(notificationState: BaseState.loading()));
-    final notification = NotificationDto(
-      body: state.notificationState.data?.body,
-      title: state.notificationState.data?.title,
-      status: state.notificationState.data?.status,
-    );
 
     final result = await _saveNotificationToFireBaseUseCase.invoke(
       notification: notification,

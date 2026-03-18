@@ -177,8 +177,8 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
                       ? () {
                           cubit.doIntent(
                             ChangeStepIntent(
-                              token: entity.driverToken ?? "",
-                              status: entity.status ?? "",
+                              token: state.currentState.data?.userToken ?? "",
+                              status: state.currentState.data?.status ?? "",
                             ),
                           );
                         }

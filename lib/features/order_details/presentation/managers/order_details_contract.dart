@@ -58,6 +58,13 @@ class WhatsAppPressedIntent extends CurrentOrderDetailsIntent {
   WhatsAppPressedIntent(this.phoneNumber);
 }
 
+class SendNotificationIntent extends CurrentOrderDetailsIntent {
+  final String token;
+  final String status;
+
+  SendNotificationIntent({required this.token, required this.status});
+}
+
 class SaveNotificationIntent extends CurrentOrderDetailsIntent {
   final NotificationDto notification;
   final String userId;
