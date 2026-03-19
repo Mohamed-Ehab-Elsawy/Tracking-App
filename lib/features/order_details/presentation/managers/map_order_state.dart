@@ -3,20 +3,16 @@ import 'package:tracking_app/core/bloc/base_state.dart';
 
 class MapOrderState {
   final BaseState<List<Position>> directions;
-  final BaseState<void>? phoneCall;
 
-  const MapOrderState({required this.directions, this.phoneCall});
+  const MapOrderState({required this.directions});
 
   factory MapOrderState.initial() =>
       MapOrderState(directions: BaseState.init());
 
   MapOrderState copyWith({
     BaseState<List<Position>>? directions,
-    BaseState<void>? phoneCall,
-  }) => MapOrderState(
-    directions: directions ?? this.directions,
-    phoneCall: phoneCall ?? this.phoneCall,
-  );
+    bool? isUser,
+  }) => MapOrderState(directions: directions ?? this.directions);
 }
 
 sealed class MapOrderIntent {}

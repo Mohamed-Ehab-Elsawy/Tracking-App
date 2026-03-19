@@ -19,10 +19,10 @@ abstract interface class OrderDetailsRepository {
     required String userId,
   });
 
-  Future<Result<List<List<double>>>> getDirections(
-    double startLat,
-    double startLng,
-    double endLat,
-    double endLng,
-  );
+  Future<Result<List<List<double>>>> getDirections({
+    required double startLat,
+    required double startLng,
+    required double endLat,
+    required double endLng,
+  });
 }

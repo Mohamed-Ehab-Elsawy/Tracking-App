@@ -140,7 +140,7 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
                   image: entity.storeImage,
                   onTap: () => Navigator.of(context).pushNamed(
                     AppRoutes.mapOrderView,
-                    arguments: [entity, false],
+                    arguments: {'isUser': false, 'order': entity},
                   ),
                 ),
 
@@ -156,7 +156,7 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
                   phoneNumber: entity.userPhoneNumber,
                   onTap: () => Navigator.of(context).pushNamed(
                     AppRoutes.mapOrderView,
-                    arguments: [entity, true],
+                    arguments: {'isUser': true, 'order': entity},
                   ),
                 ),
 

@@ -73,18 +73,20 @@ class _BottomSheetContainerState extends State<BottomSheetContainer>
             ),
           ),
           context.h(24),
-          Text("pickup_address".tr()),
+
           context.h(8),
           if (widget.firstStore) ...[
+            Text("pickup_address".tr()),
             _store(),
             context.h(24),
             Text("user_address".tr()),
             context.h(8),
             _user(),
           ] else ...[
+            Text("user_address".tr()),
             _user(),
             context.h(24),
-            Text("user_address".tr()),
+            Text("pickup_address".tr()),
             context.h(8),
             _store(),
           ],

@@ -19,7 +19,11 @@ class OrderDetailsRepositoryImpl implements OrderDetailsRepository {
   final FirebaseOrderDetailsDataSource _dataSource;
   final ApiClient _apiClient;
 
-  OrderDetailsRepositoryImpl(this._dataSource, this._apiClient);
+  OrderDetailsRepositoryImpl(
+
+    this._dataSource,
+    this._apiClient,
+  );
 
   @override
   Future<Result<ActiveOrderDto>> updateOrderStatus(OrderStatus status) async {
@@ -47,18 +51,19 @@ class OrderDetailsRepositoryImpl implements OrderDetailsRepository {
 
   @override
   Future<Result<ActiveOrderDto>> getCurrentOrderDetails() async {
-    final id = await AppLocalStorage.getSecuredString(
+    final id =
+          await AppLocalStorage.getSecuredString(
       key: AppConstants.orderId,
     );
     return _dataSource.getCurrentOrderDetails(id);
   }
 
   @override
-  Future<Result<List<List<double>>>> getDirections(
-    double startLat,
-    double startLng,
-    double endLat,
-    double endLng,
+  Future<Result<List<List<double>>>> getDirections({
+    required double startLat,
+    required double startLng,
+    required double endLat,
+    required double endLng,}
   ) async {
     final String coordinates = "$startLng,$startLat;$endLng,$endLat";
     final String token = Env.mapAccessToken;
@@ -72,7 +77,11 @@ class OrderDetailsRepositoryImpl implements OrderDetailsRepository {
     );
     switch (response) {
       case Success<DirectionsResponse>():
-        return Success(response.data.routes[0].geometry.coordinates);
+        final routes = response.data.routes;
+        if (routes.isEmpty) {
+          return Failure('No route found between these coordinates');
+        }
+        return Success(routes[0].geometry.coordinates);
       case Failure<DirectionsResponse>():
         return Failure(response.errorMessage);
     }

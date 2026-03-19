@@ -1,20 +1,19 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:location/location.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:tracking_app/core/presentation/feedback/app_snackbar.dart';
+import 'package:tracking_app/core/services/location_manager.dart';
 import 'package:tracking_app/core/theme/colors/color_extension.dart';
+import 'package:tracking_app/core/presentation/feedback/app_snackbar.dart';
 import 'package:tracking_app/core/widgets/loading_indicator.dart';
 import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
-import 'package:tracking_app/features/order_details/presentation/managers/map_order_state.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
-
+import 'package:tracking_app/features/order_details/presentation/managers/map_order_state.dart';
 import 'widgets/bottom_sheet_container.dart';
 
 class MapOrderView extends StatefulWidget {
-  const MapOrderView({super.key, required this.order, this.isUser = false});
-
+  const MapOrderView({super.key, required this.order, required this.isUser});
   final ActiveOrderDto order;
   final bool isUser;
   @override
@@ -24,26 +23,45 @@ class MapOrderView extends StatefulWidget {
 class MapOrderViewState extends State<MapOrderView> {
   MapboxMap? mapboxMap;
   late MapOrderViewModel _viewModel;
+  late LocationManager _locationManager;
   late StreamSubscription<MapOrderEvent> _eventSubscription;
 
+
+  LocationData? _currentLocation;
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
     await _viewModel.initMap(mapboxMap);
 
+    _currentLocation = await _locationManager.getUserLocation();
+    print("''''current''''''''''''''''''''''''${_currentLocation?.latitude}''''''''''''''''''''''''''''");
+    print("''''current''''''''''''''''''''''''${_currentLocation?.longitude}''''''''''''''''''''''''''''");
+    double storeEndLat = widget.order.storeLat ;
+    double storeEndLng = widget.order.storeLng;
+    print("''''''store''''''''''''''''''''''$storeEndLng''''''''''''''''''''''''''''");
+    print("''''''store''''''''''''''''''''''$storeEndLat''''''''''''''''''''''''''''");
+    double userEndLat = double.parse(widget.order.lat!);
+    double userEndLng = double.parse(widget.order.long!);
+    print("''''''user''''''''''''''''''''''$userEndLat''''''''''''''''''''''''''''");
+    print("''''''user''''''''''''''''''''''$userEndLng''''''''''''''''''''''''''''");
+
     _viewModel.doIntent(
       GetDirectionsIntent(
-        startLat: 30.0444,
-        startLng: 31.2357,
-        endLat: 30.0626,
-        endLng: 31.2497,
+        startLat: _currentLocation?.latitude ?? 30.000,
+        startLng: _currentLocation?.longitude ?? 30.0626,
+        endLat: widget.isUser ? userEndLat : storeEndLat,
+        endLng: widget.isUser ? userEndLng : storeEndLng,
       ),
     );
+
+
   }
 
   @override
   void initState() {
     super.initState();
     _viewModel = context.read<MapOrderViewModel>();
+    _locationManager = LocationManager()..requestPermission();
+
     _eventSubscription = _viewModel.eventStream.listen((event) {
       if (!mounted) return;
       if (event is MapOrderErrorEvent) {
@@ -102,10 +120,7 @@ class MapOrderViewState extends State<MapOrderView> {
     bottom: 0,
     left: 0,
     right: 0,
-    child: BottomSheetContainer(
-      order: widget.order,
-      firstStore: widget.isUser,
-    ),
+    child: BottomSheetContainer(order: widget.order, firstStore: widget.isUser),
   );
   _buildBackButton() => Positioned(
     top: 68,
@@ -117,7 +132,12 @@ class MapOrderViewState extends State<MapOrderView> {
         color: context.colors.primary,
         shape: BoxShape.circle,
       ),
-      child: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pop();
+        },
+        child: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+      ),
     ),
   );
 }

@@ -31,7 +31,7 @@ class MapboxRoute {
 
 @JsonSerializable()
 class Geometry {
-  final List<List<double>> coordinates; // [ [lng, lat], [lng, lat] ]
+  final List<List<double>> coordinates;
   final String type;
 
   Geometry({required this.coordinates, required this.type});

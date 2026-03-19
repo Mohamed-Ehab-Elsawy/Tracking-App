@@ -19,6 +19,8 @@ import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
+import 'package:tracking_app/features/order_details/presentation/order_details_view.dart';
+import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
 import 'package:tracking_app/features/order_details/presentation/map_view.dart';
 import 'package:tracking_app/features/order_details/presentation/order_delivery_success_view.dart';
 import 'package:tracking_app/features/order_details/presentation/order_details_view.dart';
@@ -57,14 +59,15 @@ Route? onGenerateRoute(RouteSettings settings) {
     case AppRoutes.onboardingView:
       return MaterialPageRoute(builder: (context) => const OnboardingView());
     case AppRoutes.mapOrderView:
-      final List<dynamic> args = settings.arguments as List<dynamic>;
-      final ActiveOrderDto order = args[0];
-      final bool isUser = args[1];
+      final args = settings.arguments as Map<String, dynamic>;
       return MaterialPageRoute(
         settings: settings,
         builder: (context) => BlocProvider(
           create: (context) => getIt<MapOrderViewModel>(),
-          child: MapOrderView(order: order, isUser: isUser),
+          child: MapOrderView(
+            isUser: args['isUser'] as bool? ?? false,
+            order: args['order'] as ActiveOrderDto,
+          ),
         ),
       );
 
