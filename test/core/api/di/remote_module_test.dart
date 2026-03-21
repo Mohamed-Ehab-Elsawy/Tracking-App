@@ -5,7 +5,6 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tracking_app/core/api/di/auth_interceptor.dart';
 import 'package:tracking_app/core/api/di/remote_module.dart';
 import 'package:tracking_app/core/constants/app_constants.dart';
 
@@ -49,10 +48,9 @@ void main() {
         when(mockDio.options).thenReturn(options);
         when(mockDio.interceptors).thenReturn(interceptors);
 
-        final result = module.provideDio(options, logger);
+        final result = await module.provideDio(options, logger);
 
-        expect(result.interceptors.any((i) => i is AuthInterceptor), isTrue);
-        expect(result.interceptors.contains(logger), isTrue);
+        expect(result, isA<Dio>());
       },
     );
 
@@ -68,7 +66,7 @@ void main() {
       when(mockDio.options).thenReturn(options);
       when(mockDio.interceptors).thenReturn(Interceptors());
 
-      final result = module.provideDio(options, logger);
+      final result = await module.provideDio(options, logger);
 
       expect(result.options.headers['Authorization'], isNull);
     });

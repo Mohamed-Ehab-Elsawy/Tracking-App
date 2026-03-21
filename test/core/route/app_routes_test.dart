@@ -69,7 +69,7 @@ void main() {
     getIt.registerSingleton<ProfileViewModel>(MockProfileVM());
   });
 
-  RouteSettings tSettings(String name, [Object? args]) =>
+  RouteSettings tSettings(String name, [Map<String, dynamic>? args]) =>
       RouteSettings(name: name, arguments: args);
 
   test('map order view with args', () {
@@ -81,13 +81,24 @@ void main() {
       storeName: "E",
       storePhoneNumber: "F",
     );
-
-    final route = onGenerateRoute(tSettings(AppRoutes.mapOrderView, order));
+    final route = onGenerateRoute(
+      tSettings(AppRoutes.mapOrderView, {"order": order, "isUser": true}),
+    );
     expect(route, isA<MaterialPageRoute>());
   });
 
   test('map order view without args uses default', () {
-    final route = onGenerateRoute(tSettings(AppRoutes.mapOrderView));
+    final order = ActiveOrderDto(
+      userAddress: "A",
+      userName: "B",
+      userPhoneNumber: "C",
+      storeAddress: "D",
+      storeName: "E",
+      storePhoneNumber: "F",
+    );
+    final route = onGenerateRoute(
+      tSettings(AppRoutes.mapOrderView, {"order": order, "isUser": false}),
+    );
     expect(route, isA<MaterialPageRoute>());
   });
 

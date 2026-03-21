@@ -32,8 +32,8 @@ class ActiveOrderDto extends Equatable {
   @JsonKey(fromJson: _fromTimestamp, toJson: _toTimestamp)
   final DateTime? startedAt;
 
-  final double? long;
-  final double? lat;
+  final String? long;
+  final String? lat;
 
   final String? city;
   final String? street;
@@ -65,9 +65,6 @@ class ActiveOrderDto extends Equatable {
     this.userPhoneNumber,
     this.details,
   });
-
-  double get storeLat => double.tryParse(storeLatLong?.split(',')[0] ?? '') ?? 0.0;
-  double get storeLng => double.tryParse(storeLatLong?.split(',')[1] ?? '') ?? 0.0;
 
   factory ActiveOrderDto.fromJson(Map<String, dynamic> json) =>
       _$ActiveOrderDtoFromJson(json);

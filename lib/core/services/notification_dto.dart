@@ -4,7 +4,12 @@ class SendNotificationRequest {
   final String body;
   final Map<String, dynamic>? data;
 
-  SendNotificationRequest(this.targetToken, this.title, this.body, this.data);
+  SendNotificationRequest({
+    required this.targetToken,
+    required this.title,
+    required this.body,
+    this.data,
+  });
 
   Map<String, dynamic> toJson() => {
     'message': {

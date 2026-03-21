@@ -1,9 +1,9 @@
 import 'package:injectable/injectable.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:tracking_app/core/base/base_cubit.dart';
-import 'package:tracking_app/core/services/map_service.dart';
 import 'package:tracking_app/core/bloc/base_state.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
+import 'package:tracking_app/core/services/map_service.dart';
 import 'package:tracking_app/core/services/phone_service.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/get_directions_use_case.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/map_order_state.dart';
@@ -47,6 +47,7 @@ class MapOrderViewModel
     required double startLng,
     required double endLat,
     required double endLng,
+    bool isUser = true,
   }) async {
     if ((endLat) == 0.0 || (endLng) == 0.0) {
       emitEvent(MapOrderErrorEvent("the directions are not available"));
@@ -60,7 +61,13 @@ class MapOrderViewModel
     );
     final route = state.directions.data ?? [];
 
-    await _mapService.addMarkers(startLat, startLng, endLat, endLng);
+    await _mapService.addMarkers(
+      startLat,
+      startLng,
+      endLat,
+      endLng,
+      isUser: isUser,
+    );
 
     if (route.isNotEmpty) {
       await _mapService.drawRoute(route);
@@ -100,12 +107,13 @@ class MapOrderViewModel
   void doIntent(MapOrderIntent intent) {
     switch (intent) {
       case GetDirectionsIntent():
-      // Add this guard before calling
+        // Add this guard before calling
         _showRoute(
           startLat: intent.startLat,
           startLng: intent.startLng,
           endLat: intent.endLat,
           endLng: intent.endLng,
+          isUser: intent.isUser,
         );
       case PhoneCallPressedIntent():
         _call(intent.phoneNumber);

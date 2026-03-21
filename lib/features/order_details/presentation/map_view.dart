@@ -1,15 +1,17 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location/location.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:tracking_app/core/presentation/feedback/app_snackbar.dart';
 import 'package:tracking_app/core/services/location_manager.dart';
 import 'package:tracking_app/core/theme/colors/color_extension.dart';
-import 'package:tracking_app/core/presentation/feedback/app_snackbar.dart';
 import 'package:tracking_app/core/widgets/loading_indicator.dart';
 import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
-import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/map_order_state.dart';
+import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
+
 import 'widgets/bottom_sheet_container.dart';
 
 class MapOrderView extends StatefulWidget {
@@ -26,23 +28,16 @@ class MapOrderViewState extends State<MapOrderView> {
   late LocationManager _locationManager;
   late StreamSubscription<MapOrderEvent> _eventSubscription;
 
-
   LocationData? _currentLocation;
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
     await _viewModel.initMap(mapboxMap);
 
     _currentLocation = await _locationManager.getUserLocation();
-    print("''''current''''''''''''''''''''''''${_currentLocation?.latitude}''''''''''''''''''''''''''''");
-    print("''''current''''''''''''''''''''''''${_currentLocation?.longitude}''''''''''''''''''''''''''''");
-    double storeEndLat = widget.order.storeLat ;
-    double storeEndLng = widget.order.storeLng;
-    print("''''''store''''''''''''''''''''''$storeEndLng''''''''''''''''''''''''''''");
-    print("''''''store''''''''''''''''''''''$storeEndLat''''''''''''''''''''''''''''");
+    const double storeEndLat = 30.044428;
+    const double storeEndLng = 31.235764;
     double userEndLat = double.parse(widget.order.lat!);
     double userEndLng = double.parse(widget.order.long!);
-    print("''''''user''''''''''''''''''''''$userEndLat''''''''''''''''''''''''''''");
-    print("''''''user''''''''''''''''''''''$userEndLng''''''''''''''''''''''''''''");
 
     _viewModel.doIntent(
       GetDirectionsIntent(
@@ -50,10 +45,9 @@ class MapOrderViewState extends State<MapOrderView> {
         startLng: _currentLocation?.longitude ?? 30.0626,
         endLat: widget.isUser ? userEndLat : storeEndLat,
         endLng: widget.isUser ? userEndLng : storeEndLng,
+        isUser: widget.isUser,
       ),
     );
-
-
   }
 
   @override

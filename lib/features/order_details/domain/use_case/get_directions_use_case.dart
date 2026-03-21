@@ -19,12 +19,11 @@ class GetDirectionsUseCase {
     required double endLat,
     required double endLng,
   }) async {
-
     final result = await _orderDetailsRepo.getDirections(
       startLat: startLat,
       startLng: startLng,
       endLat: endLat,
-      endLng: endLng
+      endLng: endLng,
     );
     switch (result) {
       case Success<List<List<double>>>():

@@ -117,11 +117,11 @@ class CurrentOrderDetailsCubit
     final accessToken = await AppLocalStorage.getSecuredString(
       key: AppConstants.fcmAccessToken,
     );
+
     final notification = SendNotificationRequest(
-      token,
-      "Order Update",
-      "Order status changed to $status",
-      {"status": status},
+      targetToken: token,
+      title: "Order Update",
+      body: "Order status changed to $status",
     );
 
     final result = await _sendNotificationUseCase.call(
@@ -131,7 +131,7 @@ class CurrentOrderDetailsCubit
 
     switch (result) {
       case Success<void>():
-        final userId = state.currentState.data?.orderId;
+        final userId = state.currentState.data?.userId;
         if (userId != null) {
           final notification = NotificationDto(
             title: "Order Update",

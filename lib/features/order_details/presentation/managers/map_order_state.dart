@@ -22,24 +22,26 @@ class GetDirectionsIntent extends MapOrderIntent {
   final double startLng;
   final double endLat;
   final double endLng;
+  final bool isUser;
   GetDirectionsIntent({
     required this.startLat,
     required this.startLng,
     required this.endLat,
     required this.endLng,
+    required this.isUser,
   });
 }
 
 class PhoneCallPressedIntent extends MapOrderIntent {
   final String phoneNumber;
 
-  PhoneCallPressedIntent(this.phoneNumber);
+  PhoneCallPressedIntent({required this.phoneNumber});
 }
 
 class WhatsAppPressedIntent extends MapOrderIntent {
   final String phoneNumber;
 
-  WhatsAppPressedIntent(this.phoneNumber);
+  WhatsAppPressedIntent({required this.phoneNumber});
 }
 
 sealed class MapOrderEvent {}

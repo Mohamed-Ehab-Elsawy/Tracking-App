@@ -19,11 +19,7 @@ class OrderDetailsRepositoryImpl implements OrderDetailsRepository {
   final FirebaseOrderDetailsDataSource _dataSource;
   final ApiClient _apiClient;
 
-  OrderDetailsRepositoryImpl(
-
-    this._dataSource,
-    this._apiClient,
-  );
+  OrderDetailsRepositoryImpl(this._dataSource, this._apiClient);
 
   @override
   Future<Result<ActiveOrderDto>> updateOrderStatus(OrderStatus status) async {
@@ -51,8 +47,7 @@ class OrderDetailsRepositoryImpl implements OrderDetailsRepository {
 
   @override
   Future<Result<ActiveOrderDto>> getCurrentOrderDetails() async {
-    final id =
-          await AppLocalStorage.getSecuredString(
+    final id = await AppLocalStorage.getSecuredString(
       key: AppConstants.orderId,
     );
     return _dataSource.getCurrentOrderDetails(id);
@@ -63,8 +58,8 @@ class OrderDetailsRepositoryImpl implements OrderDetailsRepository {
     required double startLat,
     required double startLng,
     required double endLat,
-    required double endLng,}
-  ) async {
+    required double endLng,
+  }) async {
     final String coordinates = "$startLng,$startLat;$endLng,$endLat";
     final String token = Env.mapAccessToken;
     final response = await executeApi(

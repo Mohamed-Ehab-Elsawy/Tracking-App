@@ -1,6 +1,6 @@
+import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:flutter/services.dart';
 import 'package:tracking_app/core/constants/asset_constants.dart';
 
 @injectable
@@ -80,28 +80,50 @@ class MapService {
     double lat1,
     double lng1,
     double lat2,
-    double lng2,
-  ) async {
+    double lng2, {
+    bool isUser = true,
+  }) async {
     if (_markerManager == null) return;
 
-    final ByteData bytes = await rootBundle.load(AssetConstants.mapPin);
-    final Uint8List list = bytes.buffer.asUint8List();
+    final ByteData driverBytes = await rootBundle.load(
+      AssetConstants.driverLocation,
+    );
+    final Uint8List driver = driverBytes.buffer.asUint8List();
 
     await _markerManager!.create(
       PointAnnotationOptions(
         geometry: Point(coordinates: Position(lng1, lat1)),
-        image: list,
-        iconSize: 6,
+        image: driver,
+        iconSize: 3.6,
+        iconOpacity: 0.9,
       ),
     );
 
-    await _markerManager!.create(
-      PointAnnotationOptions(
-        geometry: Point(coordinates: Position(lng2, lat2)),
-        image: list,
-        iconSize: 6,
-      ),
-    );
+    if (isUser) {
+      final ByteData userBytes = await rootBundle.load(
+        AssetConstants.userLocation,
+      );
+      final Uint8List user = userBytes.buffer.asUint8List();
+      await _markerManager!.create(
+        PointAnnotationOptions(
+          geometry: Point(coordinates: Position(lng2, lat2)),
+          image: user,
+          iconSize: 3.4,
+        ),
+      );
+    } else {
+      final ByteData storeBytes = await rootBundle.load(
+        AssetConstants.storeLocation,
+      );
+      final Uint8List store = storeBytes.buffer.asUint8List();
+      await _markerManager!.create(
+        PointAnnotationOptions(
+          geometry: Point(coordinates: Position(lng2, lat2)),
+          image: store,
+          iconSize: 3.4,
+        ),
+      );
+    }
   }
 
   Future<void> clearMarkers() async {

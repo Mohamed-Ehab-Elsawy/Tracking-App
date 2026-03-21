@@ -67,8 +67,8 @@ class FirebaseOrderDetailsDataSourceImpl
         .doc(orderId)
         .update({
           AppConstants.activeOrderStatusKey: status.name,
-          AppConstants.activeOrderLatKey: lat,
-          AppConstants.activeOrderLngKey: lng,
+          AppConstants.activeOrderLatKey: lat.toString(),
+          AppConstants.activeOrderLngKey: lng.toString(),
         });
 
     final docRef = await _firestore

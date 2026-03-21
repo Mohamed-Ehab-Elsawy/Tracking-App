@@ -1,7 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking_app/core/extensions/context_spacing_extension.dart';
 import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
+import 'package:tracking_app/features/order_details/presentation/managers/map_order_state.dart';
+import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
 import 'package:tracking_app/features/order_details/presentation/widgets/order_details_card.dart';
 
 class BottomSheetContainer extends StatefulWidget {
@@ -75,7 +78,7 @@ class _BottomSheetContainerState extends State<BottomSheetContainer>
           context.h(24),
 
           context.h(8),
-          if (widget.firstStore) ...[
+          if (!widget.firstStore) ...[
             Text("pickup_address".tr()),
             _store(),
             context.h(24),
@@ -101,6 +104,14 @@ class _BottomSheetContainerState extends State<BottomSheetContainer>
       description: widget.order.storeAddress!,
       phoneNumber: widget.order.storePhoneNumber,
       image: widget.order.storeImage,
+      onTapPhoneCall: () => context.read<MapOrderViewModel>().doIntent(
+        PhoneCallPressedIntent(
+          phoneNumber: widget.order.storePhoneNumber ?? "",
+        ),
+      ),
+      onTapWhatsappChat: () => context.read<MapOrderViewModel>().doIntent(
+        WhatsAppPressedIntent(phoneNumber: widget.order.storePhoneNumber ?? ""),
+      ),
     );
   }
 
@@ -109,7 +120,14 @@ class _BottomSheetContainerState extends State<BottomSheetContainer>
       title: widget.order.userName ?? "",
       description: widget.order.userAddress ?? "",
       phoneNumber: widget.order.userPhoneNumber,
+
       image: widget.order.userImage,
+      onTapPhoneCall: () => context.read<MapOrderViewModel>().doIntent(
+        PhoneCallPressedIntent(phoneNumber: widget.order.userPhoneNumber ?? ""),
+      ),
+      onTapWhatsappChat: () => context.read<MapOrderViewModel>().doIntent(
+        WhatsAppPressedIntent(phoneNumber: widget.order.userPhoneNumber ?? ""),
+      ),
     );
   }
 }

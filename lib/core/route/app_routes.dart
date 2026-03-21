@@ -19,8 +19,6 @@ import 'package:tracking_app/features/onboarding/view/onboarding_view.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
-import 'package:tracking_app/features/order_details/presentation/order_details_view.dart';
-import 'package:tracking_app/features/order_details/presentation/managers/map_order_view_model.dart';
 import 'package:tracking_app/features/order_details/presentation/map_view.dart';
 import 'package:tracking_app/features/order_details/presentation/order_delivery_success_view.dart';
 import 'package:tracking_app/features/order_details/presentation/order_details_view.dart';

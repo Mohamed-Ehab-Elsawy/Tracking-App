@@ -12,4 +12,7 @@ class AssetConstants {
   static const String checkCircle = '$imagesPath/check_circle.png';
   static const String successCheck = 'assets/animations/success-check.json';
   static const String mapPin = "assets/icons/map-pin.png";
+  static const String driverLocation = "assets/images/driver_location.png";
+  static const String storeLocation = "assets/images/store_location.png";
+  static const String userLocation = "assets/images/user_location.png";
 }

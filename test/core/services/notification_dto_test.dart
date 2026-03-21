@@ -5,10 +5,10 @@ void main() {
   group("SendNotificationRequest.toJson()", () {
     test("serializes correctly with data", () {
       final request = SendNotificationRequest(
-        "target-token-123",
-        "Hello",
-        "This is body",
-        {"orderId": "789", "type": "delivery"},
+        targetToken: "target-token-123",
+        title: "Hello",
+        body: "This is body",
+        data: {"orderId": "789", "type": "delivery"},
       );
 
       final json = request.toJson();
@@ -31,10 +31,10 @@ void main() {
 
     test("serializes correctly when data is null (empty {})", () {
       final request = SendNotificationRequest(
-        "token-001",
-        "Title",
-        "Body",
-        null,
+        targetToken: "token-001",
+        title: "Title",
+        body: "Body",
+        data: null,
       );
 
       final json = request.toJson();
@@ -43,7 +43,12 @@ void main() {
     });
 
     test("ensures android & apns blocks are always included", () {
-      final request = SendNotificationRequest("token-aa", "Test", "Body", {});
+      final request = SendNotificationRequest(
+        targetToken: "token-aa",
+        title: "Test",
+        body: "Body",
+        data: {},
+      );
 
       final json = request.toJson();
 

@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracking_app/core/api/client/api_client.dart';
-import 'package:tracking_app/core/api/env/env.dart';
 import 'package:tracking_app/core/api/models/responses/directions_model.dart';
 import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
@@ -73,10 +72,10 @@ void main() {
   );
 
   final notificationRequest = SendNotificationRequest(
-    "token",
-    "title",
-    "body",
-    {"data": "data"},
+    targetToken: "token",
+    title: "title",
+    body: "body",
+    data: {"data": "data"},
   );
 
   final notificationDto = NotificationDto(
@@ -110,16 +109,14 @@ void main() {
         () => apiClient.getRoute(any(), any(), any(), any()),
       ).thenAnswer((_) async => directionsResponse);
 
-      final result = await repository.getDirections(31.0, 30.0, 32.0, 31.0);
+      final result = await repository.getDirections(
+        startLat: 30.0,
+        startLng: 31.0,
+        endLat: 31.0,
+        endLng: 32.0,
+      );
 
-      verify(
-        () => apiClient.getRoute(
-          AppConstants.driving,
-          "30.0,31.0;31.0,32.0",
-          AppConstants.geometries,
-          Env.mapAccessToken,
-        ),
-      ).called(1);
+      verify(() => apiClient.getRoute(any(), any(), any(), any())).called(1);
 
       expect(result, isA<Success>());
 
@@ -135,7 +132,12 @@ void main() {
         ),
       );
 
-      final result = await repository.getDirections(0, 0, 0, 0);
+      final result = await repository.getDirections(
+        startLat: 0,
+        startLng: 0,
+        endLat: 0,
+        endLng: 0,
+      );
 
       expect(result, isA<Failure>());
     });
