@@ -86,6 +86,7 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/translations/
+    - assets/animations/
     - assets/service-account.json
 
   fonts:

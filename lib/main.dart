@@ -23,8 +23,11 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseMessaging.instance.requestPermission();
   FirebaseMessaging.onMessage.listen((RemoteMessage msg) {
+    print("the silent Notification Receive========================");
     final type = msg.data['type'];
     if (type == 'silent') {
+      print(
+          "the silent Notification Receive===================================");
       EventBusService.eventBus.fire(SilentNotificationEvent());
     }
   });

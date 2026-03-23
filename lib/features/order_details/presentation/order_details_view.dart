@@ -1,11 +1,12 @@
-import 'dart:async';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/extensions/context_spacing_extension.dart';
+import 'package:tracking_app/core/local/app_local_storage.dart';
 import 'package:tracking_app/core/route/app_routes.dart';
+import 'package:tracking_app/core/services/event_bus_service.dart';
 import 'package:tracking_app/core/theme/dimensions/app_insets.dart';
 import 'package:tracking_app/core/theme/dimensions/app_spacing.dart';
 import 'package:tracking_app/core/theme/typography/typography_extension.dart';
@@ -25,28 +26,16 @@ class CurrentOrderDetailsView extends StatefulWidget {
 }
 
 class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
-  StreamSubscription? _eventSubscription;
-
   @override
-  void initState() {
-    super.initState();
-    _eventSubscription = context
-        .read<CurrentOrderDetailsCubit>()
-        .eventStream
-        .listen((event) {
-          if (event is ReciveNotificationEvent && mounted) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              AppRoutes.orderDeliverySuccessView,
-              (route) => false,
-            );
-          }
-        });
-  }
-
-  @override
-  dispose() {
-    super.dispose();
-    _eventSubscription?.cancel();
+  void didChangeDependencies() {
+    EventBusService.eventBus.on<SilentNotificationEvent>().listen((event) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRoutes.orderDeliverySuccessView,
+        (route) => false,
+      );
+      AppLocalStorage.removeData(AppConstants.orderId);
+    });
+    super.didChangeDependencies();
   }
 
   @override

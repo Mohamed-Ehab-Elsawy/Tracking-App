@@ -4,7 +4,6 @@ import 'package:tracking_app/core/bloc/base_state.dart';
 import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/core/local/app_local_storage.dart';
-import 'package:tracking_app/core/services/event_bus_service.dart';
 import 'package:tracking_app/core/services/notification_dto.dart';
 import 'package:tracking_app/features/home/data/models/active_order_dto.dart';
 import 'package:tracking_app/features/order_details/data/models/notification_dto.dart';
@@ -120,7 +119,7 @@ class CurrentOrderDetailsCubit
 
     final notification = SendNotificationRequest(
       targetToken: token,
-      title: "Order Update",
+      title: "your Order  Update",
       body: "Order status changed to $status",
     );
 
@@ -160,11 +159,6 @@ class CurrentOrderDetailsCubit
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
-  void listonOnSilentNotificationEvent() {
-    EventBusService.eventBus.on<SilentNotificationEvent>().listen((event) {
-      emitEvent(ReciveNotificationEvent());
-    });
-  }
 
   Future<void> _openWhatsApp(String phoneNumber) async {
     final cleaned = phoneNumber.replaceAll('+', '').replaceAll(' ', '');
