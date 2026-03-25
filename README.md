@@ -65,32 +65,20 @@ To get a local copy up and running, follow these simple steps.
     - For **Android**, place your `google-services.json` file in `android/app/`.
     - For **iOS**, place your `GoogleService-Info.plist` file in `ios/Runner/`.
 
-3.  **Create the environment file:**
-    The project uses the `envied` package to manage environment variables. Create a file named `.env` inside a new `env/` directory in the project root:
-    ```
-    Tracking-App/
-    ├── env/
-    │   └── .env
-    └── lib/
-        ...
-    ```
-    Add your API base URL to the `.env` file:
-    ```env
-    BASE_URL=https://your-api-base-url.com/api/v1/
-    ```
 
-4.  **Install dependencies:**
+
+3.  **Install dependencies:**
     ```sh
     flutter pub get
     ```
 
-5.  **Run the code generator:**
+4.  **Run the code generator:**
     This command generates necessary files for dependency injection, networking, and environment variables.
     ```sh
     dart run build_runner build --delete-conflicting-outputs
     ```
 
-6.  **Run the app:**
+5.  **Run the app:**
     ```sh
     flutter run
     ```
