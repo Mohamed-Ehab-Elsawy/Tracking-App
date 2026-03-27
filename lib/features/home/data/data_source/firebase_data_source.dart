@@ -12,6 +12,8 @@ abstract class FirebaseOrderDataSource {
     required String driverToken,
     required String orderId,
     required HomeOrderEntity orderEntity,
+    required String driverName,
+    required String driverPhone,
   });
   Future<FirebaseUserDto> getUserDetails(String userId);
 }

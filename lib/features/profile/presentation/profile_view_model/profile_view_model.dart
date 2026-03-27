@@ -16,7 +16,9 @@ import 'package:tracking_app/features/profile/presentation/profile_view_model/pr
 // ignore: must_be_immutable
 class ProfileViewModel extends Cubit<ProfileStates> with EquatableMixin {
   final GetDriverDataUseCase _getDriverDataUseCase;
+
   ProfileViewModel(this._getDriverDataUseCase) : super(ProfileStates());
+
   @override
   List<Object> get props {
     return [state];
@@ -68,6 +70,14 @@ class ProfileViewModel extends Cubit<ProfileStates> with EquatableMixin {
           await AppLocalStorage.setSecuredString(
             key: AppConstants.driverId,
             value: result.data.id ?? "",
+          );
+          await AppLocalStorage.set(
+            AppConstants.driverPhone,
+            result.data.phone ?? "",
+          );
+          await AppLocalStorage.set(
+            AppConstants.driverName,
+            "${result.data.firstName} ${result.data.lastName}",
           );
         }
 

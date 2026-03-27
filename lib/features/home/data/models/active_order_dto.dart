@@ -37,7 +37,7 @@ class ActiveOrderDto extends Equatable {
 
   final String? city;
   final String? street;
-  final String? userPhoneNumber;
+  final String? phone;
 
   final List<OrderDetailsDto>? details;
 
@@ -62,7 +62,7 @@ class ActiveOrderDto extends Equatable {
     this.lat,
     this.city,
     this.street,
-    this.userPhoneNumber,
+    this.phone,
     this.details,
   });
 
@@ -93,7 +93,7 @@ class ActiveOrderDto extends Equatable {
       lat: lat.toString(),
       city: city ?? "",
       street: street ?? "",
-      phone: storePhoneNumber ?? userPhoneNumber ?? "",
+      phone: phone ?? "",
       details: details?.map((e) => e.toEntity()).toList() ?? const [],
     );
   }
@@ -132,7 +132,7 @@ class ActiveOrderDto extends Equatable {
     lat,
     city,
     street,
-    userPhoneNumber,
+    phone,
     details,
   ];
 }

@@ -99,6 +99,8 @@ class HomeRepoImpl implements HomeRepo {
     required String driverToken,
     required String orderId,
     required HomeOrderEntity orderEntity,
+    required String driverName,
+    required String driverPhone,
   }) async {
     final response = await firebaseOrderDataSource.saveAcceptedOrder(
       userId: userId,
@@ -107,6 +109,8 @@ class HomeRepoImpl implements HomeRepo {
       driverToken: driverToken,
       orderId: orderId,
       orderEntity: orderEntity,
+      driverName: driverName,
+      driverPhone: driverPhone,
     );
 
     switch (response) {

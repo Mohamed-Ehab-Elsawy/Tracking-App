@@ -16,5 +16,7 @@ abstract interface class HomeRepo {
     required String driverToken,
     required String orderId,
     required HomeOrderEntity orderEntity,
+    required String driverName,
+    required String driverPhone,
   });
 }

@@ -12,6 +12,7 @@ import 'package:tracking_app/core/theme/dimensions/app_spacing.dart';
 import 'package:tracking_app/core/theme/typography/typography_extension.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_cubit.dart';
+import 'package:tracking_app/features/order_details/presentation/managers/order_status.dart';
 import 'package:tracking_app/features/order_details/presentation/widgets/order_details_card.dart';
 import 'package:tracking_app/features/order_details/presentation/widgets/order_status_card.dart';
 
@@ -29,10 +30,12 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
   @override
   void didChangeDependencies() {
     EventBusService.eventBus.on<SilentNotificationEvent>().listen((event) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRoutes.orderDeliverySuccessView,
-        (route) => false,
-      );
+      mounted
+          ? Navigator.of(context).pushNamedAndRemoveUntil(
+              AppRoutes.orderDeliverySuccessView,
+              (route) => false,
+            )
+          : null;
       AppLocalStorage.removeData(AppConstants.orderId);
     });
     super.didChangeDependencies();
@@ -50,6 +53,11 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
         builder: (context, state) {
           final cubit = context.read<CurrentOrderDetailsCubit>();
           final baseState = state.currentState;
+
+          debugPrint('userPhoneNumber: ${baseState.data?.phone}');
+          debugPrint('userAddress: ${baseState.data?.userAddress}');
+          debugPrint('storePhoneNumber: ${baseState.data?.storePhoneNumber}');
+          debugPrint('userAddress: ${baseState.data?.storeAddress}');
 
           if (baseState.isLoading) {
             return Skeletonizer(
@@ -107,7 +115,7 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
               children: [
                 CurrentOrderProgressIndicator(
                   currentStep: cubit.state.currentStep,
-                  totalSteps: 5,
+                  totalSteps: OrderStatus.values.length,
                 ),
 
                 context.h(AppSpacing.md),
@@ -125,7 +133,7 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
                 CurrentOrderDetailsCard(
                   title: entity.storeName ?? "",
                   description: entity.storeAddress ?? "",
-                  phoneNumber: entity.userPhoneNumber,
+                  phoneNumber: entity.storePhoneNumber,
                   image: entity.storeImage,
                   onTap: () => Navigator.of(context).pushNamed(
                     AppRoutes.mapOrderView,
@@ -142,7 +150,7 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
                   title: entity.userName ?? "",
                   description: entity.userAddress ?? "",
                   image: entity.userImage,
-                  phoneNumber: entity.userPhoneNumber,
+                  phoneNumber: entity.phone,
                   onTap: () => Navigator.of(context).pushNamed(
                     AppRoutes.mapOrderView,
                     arguments: {'isUser': true, 'order': entity},

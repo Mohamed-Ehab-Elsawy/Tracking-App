@@ -27,12 +27,14 @@ class OrdersViewModel
   final int _limit = 10;
   bool _hasMore = true;
   bool _isLoadingMore = false;
+
   OrdersViewModel(
     this._getOrdersUseCase,
     this._acceptOrderUseCase,
     this._saveAcceptedOrderUseCase,
     this._getUserDataUseCase,
   ) : super(OrdersState(ordersState: BaseState.init()));
+
   @override
   Future<void> doIntent(OrdersIntent intent) {
     switch (intent) {
@@ -93,6 +95,7 @@ class OrdersViewModel
 
     _isLoadingMore = false;
   }
+
   //=============================================================
 
   Future<void> _handleRejectOrder(String orderId) async {
@@ -109,6 +112,7 @@ class OrdersViewModel
 
     emitEvent(RejectOrderEvent(orderId: orderId));
   }
+
   //=============================================================
 
   Future<void> _handleAcceptOrder(String orderId) async {
@@ -195,6 +199,12 @@ class OrdersViewModel
     final String driverId = await AppLocalStorage.getSecuredString(
       key: AppConstants.driverId,
     );
+    final String driverName = await AppLocalStorage.getString(
+      key: AppConstants.driverName,
+    );
+    final String driverPhone = await AppLocalStorage.getString(
+      key: AppConstants.driverPhone,
+    );
 
     var result = await _saveAcceptedOrderUseCase.call(
       userId: userId,
@@ -203,6 +213,8 @@ class OrdersViewModel
       orderId: orderId,
       orderEntity: orderEntity,
       driverToken: driverToken,
+      driverName: driverName,
+      driverPhone: driverPhone,
     );
 
     switch (result) {

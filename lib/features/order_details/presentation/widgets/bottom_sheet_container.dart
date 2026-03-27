@@ -98,36 +98,32 @@ class _BottomSheetContainerState extends State<BottomSheetContainer>
     ),
   );
 
-  _store() {
-    return CurrentOrderDetailsCard(
-      title: widget.order.storeName!,
-      description: widget.order.storeAddress!,
-      phoneNumber: widget.order.storePhoneNumber,
-      image: widget.order.storeImage,
-      onTapPhoneCall: () => context.read<MapOrderViewModel>().doIntent(
-        PhoneCallPressedIntent(
-          phoneNumber: widget.order.storePhoneNumber ?? "",
-        ),
-      ),
-      onTapWhatsappChat: () => context.read<MapOrderViewModel>().doIntent(
-        WhatsAppPressedIntent(phoneNumber: widget.order.storePhoneNumber ?? ""),
-      ),
-    );
-  }
+  _store() => CurrentOrderDetailsCard(
+    title: widget.order.storeName!,
+    description: widget.order.storeAddress!,
+    phoneNumber: widget.order.storePhoneNumber,
+    image: widget.order.storeImage,
+    onTapPhoneCall: () => context.read<MapOrderViewModel>().doIntent(
+      PhoneCallPressedIntent(phoneNumber: widget.order.storePhoneNumber ?? ""),
+    ),
+    onTapWhatsappChat: () => context.read<MapOrderViewModel>().doIntent(
+      WhatsAppPressedIntent(phoneNumber: widget.order.storePhoneNumber ?? ""),
+    ),
+  );
 
-  _user() {
-    return CurrentOrderDetailsCard(
-      title: widget.order.userName ?? "",
-      description: widget.order.userAddress ?? "",
-      phoneNumber: widget.order.userPhoneNumber,
+  _user() => CurrentOrderDetailsCard(
+    title: widget.order.userName ?? "",
+    description: widget.order.userAddress ?? "",
+    phoneNumber: widget.order.phone,
 
-      image: widget.order.userImage,
-      onTapPhoneCall: () => context.read<MapOrderViewModel>().doIntent(
-        PhoneCallPressedIntent(phoneNumber: widget.order.userPhoneNumber ?? ""),
-      ),
-      onTapWhatsappChat: () => context.read<MapOrderViewModel>().doIntent(
-        WhatsAppPressedIntent(phoneNumber: widget.order.userPhoneNumber ?? ""),
-      ),
-    );
-  }
+    image: widget.order.userImage,
+        onTapPhoneCall: () =>
+            context.read<MapOrderViewModel>().doIntent(
+              PhoneCallPressedIntent(phoneNumber: widget.order.phone ?? ""),
+            ),
+        onTapWhatsappChat: () =>
+            context.read<MapOrderViewModel>().doIntent(
+              WhatsAppPressedIntent(phoneNumber: widget.order.phone ?? ""),
+            ),
+      );
 }

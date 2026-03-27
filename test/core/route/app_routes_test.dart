@@ -76,7 +76,7 @@ void main() {
     final order = ActiveOrderDto(
       userAddress: "A",
       userName: "B",
-      userPhoneNumber: "C",
+      phone: "C",
       storeAddress: "D",
       storeName: "E",
       storePhoneNumber: "F",
@@ -91,7 +91,7 @@ void main() {
     final order = ActiveOrderDto(
       userAddress: "A",
       userName: "B",
-      userPhoneNumber: "C",
+      phone: "C",
       storeAddress: "D",
       storeName: "E",
       storePhoneNumber: "F",

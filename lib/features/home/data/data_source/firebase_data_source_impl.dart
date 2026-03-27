@@ -22,6 +22,8 @@ class FirebaseOrderDataSourceImpl implements FirebaseOrderDataSource {
     required String userId,
     required String driverId,
     required HomeOrderEntity orderEntity,
+    required String driverName,
+    required String driverPhone,
   }) async {
     final data = {
       "userToken": userToken,
@@ -55,6 +57,8 @@ class FirebaseOrderDataSourceImpl implements FirebaseOrderDataSource {
           )
           .toList(),
       "startedAt": FieldValue.serverTimestamp(),
+      "driverName": driverName,
+      "driverPhoneNumber": driverPhone,
     };
 
     await _firestore.collection("active_orders").doc(orderId).set(data);
