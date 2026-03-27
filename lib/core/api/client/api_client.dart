@@ -19,6 +19,9 @@ import 'package:tracking_app/features/profile/data/model/request/update_profile_
 import 'package:tracking_app/features/profile/data/model/response/driver_data_response.dart';
 import 'package:tracking_app/features/profile/data/model/response/upload_photo_response.dart';
 
+import '../../../features/order_details/data/models/update_order_state_request.dart';
+import '../../../features/order_details/data/models/update_order_state_response.dart';
+
 part 'api_client.g.dart';
 
 @RestApi()
@@ -113,4 +116,13 @@ abstract class ApiClient {
 
   @PUT("${ApiEndPointsConstants.acceptOrder}/{id}")
   Future<UpdateOrderResponse> acceptOrder(@Path("id") String orderId);
+
+
+
+
+  @PUT(ApiEndPointsConstants.updateOrderStatus)
+  Future<UpdateOrderStateResponse> updateOrderStatus(
+      @Body() UpdateOrderStateRequest updateOrderStateRequest,
+      @Path("id") String orderId,
+      );
 }

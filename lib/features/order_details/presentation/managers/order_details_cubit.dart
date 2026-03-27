@@ -11,9 +11,13 @@ import 'package:tracking_app/features/order_details/domain/use_case/get_current_
 import 'package:tracking_app/features/order_details/domain/use_case/save_notification_to_fire_base_use_case.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/send_notification_use_case.dart';
 import 'package:tracking_app/features/order_details/domain/use_case/update_order_status_use_case.dart';
+import 'package:tracking_app/features/order_details/domain/use_case/update_order_status_use_case_api.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_details_contract.dart';
 import 'package:tracking_app/features/order_details/presentation/managers/order_status.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../data/models/update_order_state_request.dart';
+import '../../data/models/update_order_state_response.dart';
 
 @injectable
 class CurrentOrderDetailsCubit
@@ -25,16 +29,18 @@ class CurrentOrderDetailsCubit
         > {
   final GetCurrentOrderUseCase _getCurrentOrderUseCase;
   final UpdateOrderStatusUseCase _updateOrderStatusUseCase;
+  final UpdateOrderStatusUseCaseApi _updateOrderStatusUseCaseApi;
+
   final SendNotificationUseCase _sendNotificationUseCase;
   final SaveNotificationToFireBaseUseCase _saveNotificationToFireBaseUseCase;
   final orderStatus = OrderStatus.accepted;
 
-  CurrentOrderDetailsCubit(
-    this._getCurrentOrderUseCase,
-    this._updateOrderStatusUseCase,
-    this._sendNotificationUseCase,
-    this._saveNotificationToFireBaseUseCase,
-  ) : super(CurrentOrderDetailsState.initial());
+  CurrentOrderDetailsCubit(this._getCurrentOrderUseCase,
+      this._updateOrderStatusUseCase,
+      this._sendNotificationUseCase,
+      this._saveNotificationToFireBaseUseCase,
+      this._updateOrderStatusUseCaseApi,)
+      : super(CurrentOrderDetailsState.initial());
 
   @override
   void doIntent(CurrentOrderDetailsIntent intent) {
@@ -55,6 +61,8 @@ class CurrentOrderDetailsCubit
         _saveNotificationToFireBase(intent.notification, intent.userId);
       case SendNotificationIntent():
         _sendNotification(intent.token, intent.status);
+      case UpdateOrderStatusIntent():
+        _updateOrderStatus();
     }
   }
 
@@ -168,10 +176,8 @@ class CurrentOrderDetailsCubit
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
-  Future<void> _saveNotificationToFireBase(
-    NotificationDto notification,
-    String userId,
-  ) async {
+  Future<void> _saveNotificationToFireBase(NotificationDto notification,
+      String userId,) async {
     emit(state.copyWith(notificationState: BaseState.loading()));
 
     final result = await _saveNotificationToFireBaseUseCase.invoke(
@@ -189,5 +195,19 @@ class CurrentOrderDetailsCubit
           ),
         );
     }
+  }
+
+  Future<void> _updateOrderStatus() async {
+    String orderId = await AppLocalStorage.getSecuredString(
+      key: AppConstants.orderId,
+    );
+
+    UpdateOrderStateRequest updateOrderStateRequest = UpdateOrderStateRequest(
+      state: "completed",
+    );
+    await _updateOrderStatusUseCaseApi.call(
+      updateOrderStateRequest,
+      orderId,
+    );
   }
 }

@@ -8,6 +8,7 @@ class CurrentOrderDetailsState {
   final BaseState<NotificationDto> notificationState;
   final int currentStep;
 
+
   const CurrentOrderDetailsState(
     this.currentState, {
     this.currentStep = 0,
@@ -38,6 +39,11 @@ class CurrentOrderDetailsState {
 sealed class CurrentOrderDetailsIntent {}
 
 class GetCurrentOrderDetailsIntent extends CurrentOrderDetailsIntent {}
+
+class UpdateOrderStatusIntent extends CurrentOrderDetailsIntent {
+
+}
+
 
 class ChangeStepIntent extends CurrentOrderDetailsIntent {
   final String token;

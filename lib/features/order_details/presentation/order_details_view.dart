@@ -36,6 +36,8 @@ class _CurrentOrderDetailsViewState extends State<CurrentOrderDetailsView> {
               (route) => false,
             )
           : null;
+      context.read<CurrentOrderDetailsCubit>().doIntent(UpdateOrderStatusIntent());
+
       AppLocalStorage.removeData(AppConstants.orderId);
     });
     super.didChangeDependencies();
