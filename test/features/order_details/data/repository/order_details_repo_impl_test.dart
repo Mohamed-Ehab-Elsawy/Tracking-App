@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:tracking_app/core/api/client/api_client.dart';
 import 'package:tracking_app/core/error_handling/result.dart';
 import 'package:tracking_app/features/order_details/data/repository/order_details_repo_impl.dart';
 import 'package:tracking_app/features/order_details/domain/entities/order_entity.dart';
@@ -13,22 +14,24 @@ import 'order_details_repo_impl_test.mocks.dart';
   CollectionReference,
   DocumentReference,
   DocumentSnapshot,
+  ApiClient,
 ])
 void main() {
   late OrderDetailsRepoImpl repo;
   late MockFirebaseFirestore mockFirestore;
+  late MockApiClient mockApiClient;
   late MockCollectionReference<Map<String, dynamic>> mockCollection;
   late MockDocumentReference<Map<String, dynamic>> mockDocument;
   late MockDocumentSnapshot<Map<String, dynamic>> mockSnapshot;
 
   setUp(() {
     mockFirestore = MockFirebaseFirestore();
+    mockApiClient = MockApiClient();
     mockCollection = MockCollectionReference();
     mockDocument = MockDocumentReference();
     mockSnapshot = MockDocumentSnapshot();
 
-    // Inject the mock here
-    repo = OrderDetailsRepoImpl(mockFirestore);
+    repo = OrderDetailsRepoImpl(mockFirestore, mockApiClient);
 
     when(mockFirestore.collection(any)).thenReturn(mockCollection);
     when(mockCollection.doc(any)).thenReturn(mockDocument);
