@@ -86,22 +86,21 @@ void main() {
 
     testWidgets('home view test loaded case', (tester) async {
       final String testImageUrl = 'https://www.elevateegy.com/elevate.png';
-      final mockOrders = [
-        HomeOrderEntity(
-          orderId: '1',
-          userName: 'abdo',
-          status: 'pending',
-          storeName: 'elevate',
-          storeAddress: 'cairo store',
-          storeImage: testImageUrl,
-          totalPrice: 100.0,
-          userImage: testImageUrl,
-          userAddress: 'cairo user',
-        ),
-      ];
+      final mockOrders = HomeOrderEntity(
+        orderId: '1',
+        userName: 'abdo',
+        status: 'pending',
+        storeName: 'elevate',
+        storeAddress: 'cairo store',
+        storeImage: testImageUrl,
+        totalPrice: 100.0,
+        userImage: testImageUrl,
+        userAddress: 'cairo user',
+      );
       when(mockViewModel.state).thenReturn(
         OrdersState(
-          ordersState: BaseState.loaded(mockOrders),
+          ordersState: BaseState.loaded([mockOrders]),
+          orders: BaseState.loaded([mockOrders]),
           order: BaseState.loaded(mockOrders),
         ),
       );

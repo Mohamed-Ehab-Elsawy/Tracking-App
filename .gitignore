@@ -27,7 +27,9 @@
 /dev/docs/pubspec.yaml
 /dev/integration_tests/**/xcuserdata
 /dev/integration_tests/**/Pods
+assets/service-account.json
 /packages/flutter/coverage/
+
 version
 analysis_benchmark.json
 

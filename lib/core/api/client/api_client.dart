@@ -7,6 +7,16 @@ import 'package:tracking_app/core/api/utils/api_end_points_constants.dart';
 import 'package:tracking_app/core/constants/app_constants.dart';
 import 'package:tracking_app/core/services/notification_dto.dart';
 import 'package:tracking_app/features/home/data/models/home_response_dto.dart';
+import 'package:tracking_app/features/home/data/models/update_order_response.dart';
+import 'package:tracking_app/features/orders/data/models/response/order_response_dto.dart';
+import 'package:tracking_app/features/orders/data/models/response/product_response.dart';
+import 'package:tracking_app/features/auth/data/model/response/apply_response.dart';
+import 'package:tracking_app/features/auth/data/model/response/get_all_vehicles_response.dart';
+import 'package:tracking_app/features/auth/data/models/change_password/change_password_response.dart';
+import 'package:tracking_app/features/auth/data/models/forget_password_dto.dart';
+import 'package:tracking_app/features/profile/data/model/request/update_profile_request.dart';
+import 'package:tracking_app/features/profile/data/model/response/driver_data_response.dart';
+import 'package:tracking_app/features/profile/data/model/response/upload_photo_response.dart';
 import 'package:tracking_app/features/orders/data/models/response/order_response_dto.dart';
 import 'package:tracking_app/features/orders/data/models/response/product_response.dart';
 import 'package:tracking_app/features/auth/data/model/response/apply_response.dart';
@@ -100,4 +110,6 @@ abstract class ApiClient {
     @Field("password") required String password,
     @Field("newPassword") required String newPassword,
   });
+  @PUT("${ApiEndPointsConstants.acceptOrder}/{id}")
+  Future<UpdateOrderResponse> acceptOrder(@Path("id") String orderId);
 }

@@ -451,7 +451,7 @@ void main() {
           ),
         ).called(1);
 
-        verifyNever(mockPrefs.setBool(AppConstants.rememberMeKey, true));
+        verify(mockPrefs.setBool(AppConstants.rememberMeKey, true)).called(1);
         verify(
           mockSecureStorage.write(key: AppConstants.userToken, value: "token"),
         ).called(1);

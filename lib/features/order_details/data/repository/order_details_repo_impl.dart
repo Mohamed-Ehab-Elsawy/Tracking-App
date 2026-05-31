@@ -16,9 +16,11 @@ class OrderDetailsRepoImpl implements OrderDetailsRepo {
   Future<Result<OrderEntity>> getCurrentOrderDetails({String? orderId}) async {
     try {
       final id =
-          orderId ?? await AppLocalStorage.getString(key: AppConstants.orderId);
+          orderId ??
+          await AppLocalStorage.getSecuredString(key: AppConstants.orderId);
 
-      final doc = await _firestore.collection('orders').doc(id).get();
+      ///
+      final doc = await _firestore.collection("active_orders").doc(id).get();
 
       if (doc.data() == null) return Failure('not_found');
 

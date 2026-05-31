@@ -36,11 +36,19 @@ class _HomeViewState extends State<HomeView> {
             );
 
           case AcceptOrderEvent():
-            // TODO: Handle this case.
-            throw UnimplementedError();
+            if (!mounted) return;
+            AppSnackBar.show(
+              context,
+              "Order Accepted Successfully",
+              isError: false,
+            );
           case NavigateToOrderDetailsEvent():
-            // TODO: Handle this case.
-            throw UnimplementedError();
+            if (!mounted) return;
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              '/order_details_view',
+              (route) => false,
+              arguments: event.orderId,
+            );
           case ShowSnackBarEvent():
             if (!mounted) return;
             AppSnackBar.show(context, event.message, isError: event.isError);
@@ -67,7 +75,7 @@ class _HomeViewState extends State<HomeView> {
         bloc: _ordersViewModel,
         builder: (context, state) {
           final orders = state.ordersState;
-          final hasData = state.order?.data?.isNotEmpty ?? false;
+          final hasData = state.orders?.data?.isNotEmpty ?? false;
 
           if (orders!.isLoading && !hasData) {
             return OrderCardLoading();

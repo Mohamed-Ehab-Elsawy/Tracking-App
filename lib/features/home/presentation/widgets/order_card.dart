@@ -5,6 +5,7 @@ import 'package:tracking_app/core/extensions/context_theme_extension.dart';
 import 'package:tracking_app/core/theme/typography/typography_extension.dart';
 import 'package:tracking_app/features/home/domain/entities/home_order_entity.dart';
 import 'package:tracking_app/features/home/presentation/cubit/orders_events.dart';
+import 'package:tracking_app/features/home/presentation/cubit/orders_state.dart';
 import 'package:tracking_app/features/home/presentation/cubit/orders_view_model.dart';
 import 'package:tracking_app/features/home/presentation/widgets/store_and_user_card.dart';
 
@@ -91,15 +92,53 @@ class OrderCard extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 SizedBox(
                   width: 111,
                   height: 36,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text('accept'.tr()),
+                  child: BlocBuilder<OrdersViewModel, OrdersState>(
+                    builder: (context, state) {
+                      final isLoading = state.ordersState?.isLoading ?? false;
+
+                      return ElevatedButton(
+                        onPressed: isLoading
+                            ? null
+                            : () {
+                                if (order != null) {
+                                  context.read<OrdersViewModel>().doIntent(
+                                    AcceptOrderIntent(orderId: order!.orderId!),
+                                  );
+                                }
+                              },
+                        child: isLoading
+                            ? SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text('accept'.tr()),
+                      );
+                    },
                   ),
                 ),
+                // Expanded(
+                //   child: ElevatedButton(
+                //     onPressed: () {
+                //       if (order != null) {
+                //         AppLocalStorage.set(
+                //           KeysConstants.orderId,
+                //           order!.orderId!,
+                //         );
+                //         context.read<OrdersViewModel>().doIntent(
+                //           AcceptOrderIntent(orderId: order!.orderId!),
+                //         );
+                //       }
+                //     },
+                //     child: Text('accept'.tr()),
+                //   ),
+                // ),
               ],
             ),
           ],
